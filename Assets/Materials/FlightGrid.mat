@@ -243,7 +243,7 @@ Material:
     - _ZTestGBuffer: 4
     - _ZTestModeDistortion: 4
     - _ZTestTransparent: 4
-    - _ZWrite: 1
+    - _ZWrite: 0
     - _fadeEffect: 0
     m_Colors:
     - Color_291A9E44: {r: 891.4439, g: 891.4439, b: 891.4439, a: 0.7294118}

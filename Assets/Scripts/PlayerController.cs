@@ -12,9 +12,13 @@ public class PlayerController : MonoBehaviour
     private CapsuleCollider coll;
     [SerializeField]
     private MeshRenderer flightGrid;
+    [SerializeField]
+    private MeshRenderer fadeOut;
     private Material flightGridEffect;
+    private Material fadeOutEffect;
 
     private bool grounded = true;
+    private bool teleporting = false;
     private float gridFade = 0f;
     private float fadeTime = 0.5f;
 
@@ -31,6 +35,7 @@ public class PlayerController : MonoBehaviour
         body = GetComponent<Rigidbody>();
         coll = GetComponent<CapsuleCollider>();
         flightGridEffect = flightGrid.material;
+        fadeOutEffect = fadeOut.material;
     }
 
     // Update is called once per frame
@@ -38,7 +43,11 @@ public class PlayerController : MonoBehaviour
     {
         float x = Input.GetAxis("Mouse X");
         float y = Input.GetAxis("Mouse Y");
-        bool reset = Input.GetButton("Fire1");
+        bool teleport = Input.GetButton("Fire1");
+        bool reset = Input.GetButton("Fire2");
+
+        if (teleport && !teleporting)
+            StartCoroutine(Teleport(Vector3.up, Quaternion.identity));
 
         if (grounded)
         {
@@ -69,6 +78,7 @@ public class PlayerController : MonoBehaviour
 
         //Apply camera orientation to player orientation, and re-sync camera with object
         //This will mean that a player, like any object in the game, will update at the same fixed rate, so the behavior will be very predictable, while retaining a smooth visual behavior
+        //Don't forget to set the Rigidbody to Interpolate!
         if (cameraHolder != null)
         {
             transform.Rotate(transform.up, cameraHolder.localEulerAngles.y);
@@ -79,9 +89,41 @@ public class PlayerController : MonoBehaviour
         Vector3 move = (transform.right * h + transform.forward * v + transform.up * u);
         move *= speed / Mathf.Max(1f, move.magnitude);
 
-        body.AddForce(move + slow, ForceMode.VelocityChange);
+        if(!teleporting)
+            body.AddForce(move + slow, ForceMode.VelocityChange);
+        else body.AddForce(slow, ForceMode.VelocityChange);
 
         grounded = Physics.Raycast(body.transform.position, -transform.up, coll.bounds.extents.y + 0.1f, ~(1 << 8));
 
+    }
+
+    static private Color blackZero = new Color(0f, 0f, 0f, 0f);
+    static private Color blackOne = new Color(0f, 0f, 0f, 1f);
+
+    IEnumerator Teleport(Vector3 targetPosition, Quaternion targetRotation)
+    {
+        teleporting = true;
+
+        float fade = 0f;
+        while (fade < 1f)
+        {
+            fade = Mathf.Clamp01(fade + Time.unscaledDeltaTime / fadeTime);
+            fadeOutEffect.SetColor("_UnlitColor", Color.Lerp(blackZero, blackOne, fade));
+            yield return null;
+        }
+
+        yield return new WaitForSecondsRealtime(0.05f);
+        transform.position = targetPosition;
+        transform.localRotation = targetRotation;
+        yield return new WaitForSecondsRealtime(0.05f);
+
+        while (fade > 0f)
+        {
+            fade = Mathf.Clamp01(fade - Time.unscaledDeltaTime / fadeTime);
+            fadeOutEffect.SetColor("_UnlitColor", Color.Lerp(blackZero, blackOne, fade));
+            yield return null;
+        }
+
+        teleporting = false;
     }
 }
