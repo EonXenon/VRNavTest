@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     private MeshRenderer fadeOut;
     private Material flightGridEffect;
     private Material fadeOutEffect;
+    [SerializeField]
+    private Transform head;
 
     private bool grounded = true;
     private bool teleporting = false;
@@ -24,6 +26,8 @@ public class PlayerController : MonoBehaviour
 
     public float sensitivity = 25.0f;
     public float speed = 5.0f;
+
+    private Vector3 dragged = Vector3.zero;
 
     void Start()
     {
@@ -41,10 +45,14 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        float x = Input.GetAxis("Mouse X");
+        float x = 0f;//Input.GetAxis("Mouse X");
         float y = Input.GetAxis("Mouse Y");
-        bool teleport = Input.GetButton("Fire1");
+        bool teleport = false;
         bool reset = Input.GetButton("Fire2");
+        bool dragging = Input.GetButton("Fire1");
+
+        if (dragging)
+            dragged += head.forward * -y * sensitivity * Time.unscaledDeltaTime;
 
         if (teleport && !teleporting)
             StartCoroutine(Teleport(Vector3.up, Quaternion.identity));
@@ -62,7 +70,8 @@ public class PlayerController : MonoBehaviour
 
         //Rotate the camera independently of body for maximum smoothness, just remember to sync the body!
         if (cameraHolder != null)
-            cameraHolder.localEulerAngles = cameraHolder.transform.localEulerAngles + Vector3.up * sensitivity * x * Time.deltaTime;
+            cameraHolder.localEulerAngles = cameraHolder.transform.localEulerAngles + Vector3.up * Vector3.SignedAngle(cameraHolder.forward,Vector3.Scale(head.forward, Vector3.one - Vector3.up),cameraHolder.up) * Time.unscaledDeltaTime;
+            //cameraHolder.localEulerAngles = cameraHolder.transform.localEulerAngles + Vector3.up * sensitivity * x * Time.unscaledDeltaTime;
 
         if (reset)
         {
@@ -90,8 +99,10 @@ public class PlayerController : MonoBehaviour
         move *= speed / Mathf.Max(1f, move.magnitude);
 
         if(!teleporting)
-            body.AddForce(move + slow, ForceMode.VelocityChange);
+            body.AddForce(move + slow + dragged, ForceMode.VelocityChange);
         else body.AddForce(slow, ForceMode.VelocityChange);
+
+        dragged = Vector3.zero;
 
         grounded = Physics.Raycast(body.transform.position, -transform.up, coll.bounds.extents.y + 0.1f, ~(1 << 8));
 
