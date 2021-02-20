@@ -18,6 +18,7 @@ public class DynamicResolutionTest : MonoBehaviour
     private float smoothed = 0f;
     private float oldTime = 0f;
 
+    public bool debugMode = false;
     public Text screenText;
 
     public float SetDynamicResolutionScale()
@@ -56,9 +57,10 @@ public class DynamicResolutionTest : MonoBehaviour
             resScale = Mathf.Clamp(resScale - scaleIncrement * framerate, minScale, maxScale);
         }
 
-        screenText.text = string.Format("Scale: {0:F3}\nFrameTime: {1:F2}/{2:F2}",
-            resScale,
-            smoothed * 1000f,
-            target * 1000f);
+        if (debugMode)
+            screenText.text = string.Format("Scale: {0:F3}\nFrameTime: {1:F2}/{2:F2}",
+                resScale,
+                smoothed * 1000f,
+                target * 1000f);
     }
 }

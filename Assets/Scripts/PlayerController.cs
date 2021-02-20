@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField]
-    private Transform cameraHolder = null;
+    private Transform cameraHolder;
     private Rigidbody body;
     private CapsuleCollider coll;
     [SerializeField]
@@ -19,10 +19,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Transform head;
 
+    [SerializeField]
+    private InputLayer inputLayer;
+
     private bool grounded = true;
     private bool teleporting = false;
     private float gridFade = 0f;
-    private float fadeTime = 0.5f;
+
+    public float fadeTime = 0.5f;
 
     public float sensitivity = 25.0f;
     public float speed = 5.0f;
@@ -45,7 +49,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        float x = 0f;//Input.GetAxis("Mouse X");
+        float x = Input.GetAxis("Mouse X");
         float y = Input.GetAxis("Mouse Y");
         bool teleport = false;
         bool reset = Input.GetButton("Fire2");
@@ -68,10 +72,7 @@ public class PlayerController : MonoBehaviour
 
         flightGridEffect.SetFloat("_fadeEffect", gridFade);
 
-        //Rotate the camera independently of body for maximum smoothness, just remember to sync the body!
-        if (cameraHolder != null)
-            cameraHolder.localEulerAngles = cameraHolder.transform.localEulerAngles + Vector3.up * Vector3.SignedAngle(cameraHolder.forward,Vector3.Scale(head.forward, Vector3.one - Vector3.up),cameraHolder.up) * Time.unscaledDeltaTime;
-            //cameraHolder.localEulerAngles = cameraHolder.transform.localEulerAngles + Vector3.up * sensitivity * x * Time.unscaledDeltaTime;
+        inputLayer.ResolveRotation(in head, ref cameraHolder);
 
         if (reset)
         {
@@ -88,11 +89,8 @@ public class PlayerController : MonoBehaviour
         //Apply camera orientation to player orientation, and re-sync camera with object
         //This will mean that a player, like any object in the game, will update at the same fixed rate, so the behavior will be very predictable, while retaining a smooth visual behavior
         //Don't forget to set the Rigidbody to Interpolate!
-        if (cameraHolder != null)
-        {
-            transform.Rotate(transform.up, cameraHolder.localEulerAngles.y);
-            cameraHolder.localEulerAngles = Vector3.zero;
-        }
+        transform.Rotate(transform.up, cameraHolder.localEulerAngles.y);
+        cameraHolder.localEulerAngles = Vector3.zero;
 
         Vector3 slow = -body.velocity;
         Vector3 move = (transform.right * h + transform.forward * v + transform.up * u);
