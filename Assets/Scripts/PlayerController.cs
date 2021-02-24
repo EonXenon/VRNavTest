@@ -24,14 +24,11 @@ public class PlayerController : MonoBehaviour
 
     private bool grounded = true;
     private bool teleporting = false;
-    private float gridFade = 0f;
+    private float gridOpacity = 0f;
 
     public float fadeTime = 0.5f;
 
-    public float sensitivity = 25.0f;
     public float speed = 5.0f;
-
-    private Vector3 dragged = Vector3.zero;
 
     void Start()
     {
@@ -44,63 +41,36 @@ public class PlayerController : MonoBehaviour
         coll = GetComponent<CapsuleCollider>();
         flightGridEffect = flightGrid.material;
         fadeOutEffect = fadeOut.material;
+
+        inputLayer.Initialize(this);
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
-        float x = Input.GetAxis("Mouse X");
-        float y = Input.GetAxis("Mouse Y");
-        bool teleport = false;
-        bool reset = Input.GetButton("Fire2");
-        bool dragging = Input.GetButton("Fire1");
+        //Resolve Input
+        inputLayer.ResolveInput(in head, in cameraHolder);
 
-        if (dragging)
-            dragged += head.forward * -y * sensitivity * Time.unscaledDeltaTime;
+        //Apply camera orientation to camera, NOT body!
+        cameraHolder.localEulerAngles += inputLayer.GetCumulativeRotationInput();
 
-        if (teleport && !teleporting)
-            StartCoroutine(Teleport(Vector3.up, Quaternion.identity));
-
-        if (grounded)
-        {
-            gridFade = Mathf.Clamp01(gridFade - Time.unscaledDeltaTime / fadeTime);
-        }
-        else
-        {
-            gridFade = Mathf.Clamp01(gridFade + Time.unscaledDeltaTime / fadeTime);
-        }
-
-        flightGridEffect.SetFloat("_fadeEffect", gridFade);
-
-        inputLayer.ResolveRotation(in head, ref cameraHolder);
-
-        if (reset)
-        {
-            InputTracking.Recenter();
-        }
+        //Grid effect code
+        gridOpacity = Mathf.Clamp01(gridOpacity - (grounded ? 1 : -1) * Time.unscaledDeltaTime / fadeTime);
+        flightGridEffect.SetFloat("_fadeEffect", gridOpacity);
     }
 
     void FixedUpdate()
     {
-        float v = Input.GetAxis("Vertical");
-        float h = Input.GetAxis("Horizontal");
-        float u = Input.GetAxis("Upward");
-
         //Apply camera orientation to player orientation, and re-sync camera with object
         //This will mean that a player, like any object in the game, will update at the same fixed rate, so the behavior will be very predictable, while retaining a smooth visual behavior
         //Don't forget to set the Rigidbody to Interpolate!
         transform.Rotate(transform.up, cameraHolder.localEulerAngles.y);
         cameraHolder.localEulerAngles = Vector3.zero;
 
-        Vector3 slow = -body.velocity;
-        Vector3 move = (transform.right * h + transform.forward * v + transform.up * u);
-        move *= speed / Mathf.Max(1f, move.magnitude);
+        Vector3 stop = -body.velocity;
+        Vector3 move = inputLayer.GetCumulativeTranslationInput() * speed;
 
-        if(!teleporting)
-            body.AddForce(move + slow + dragged, ForceMode.VelocityChange);
-        else body.AddForce(slow, ForceMode.VelocityChange);
-
-        dragged = Vector3.zero;
+        body.AddForce(move + stop, ForceMode.VelocityChange);
 
         grounded = Physics.Raycast(body.transform.position, -transform.up, coll.bounds.extents.y + 0.1f, ~(1 << 8));
 
