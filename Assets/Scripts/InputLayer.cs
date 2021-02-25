@@ -106,13 +106,13 @@ public class InputLayer
         {
             float headAngle = Vector3.SignedAngle(controllerTransform.forward, Vector3.Scale(headTransform.forward, Vector3.one - Vector3.up), controllerTransform.up);
             float resultInput = (headAngle - Mathf.Clamp(headAngle, -headSetttings.deadzoneDegrees, headSetttings.deadzoneDegrees)) * headSetttings.sensitivity;
-            targetRotation += Vector3.up * resultInput * Time.unscaledDeltaTime;
+            targetRotation = Vector3.up * resultInput * Time.unscaledDeltaTime;
             return;
         }
         else if (rotationType == RotationType.DirectionalContinuous)
         {
             float x = Input.GetAxis("TurnAxis");
-            targetRotation += Vector3.up * directionalSettings.sensitivity * x * Time.unscaledDeltaTime;
+            targetRotation = Vector3.up * directionalSettings.sensitivity * x * Time.unscaledDeltaTime;
             return;
         }
         else if (rotationType == RotationType.DirectionalStep)
@@ -122,6 +122,15 @@ public class InputLayer
             if (x != 0f && !rotating)
                 mono.StartCoroutine(DoRotateStep(x * directionalSettings.stepSize, controllerTransform));
 
+            return;
+        }
+        else if (rotationType == RotationType.HeadStep)
+        {
+            float headAngle = Vector3.SignedAngle(controllerTransform.forward, Vector3.Scale(headTransform.forward, Vector3.one - Vector3.up), controllerTransform.up);
+            float resultInput = (headAngle - Mathf.Clamp(headAngle, -headSetttings.deadzoneDegrees, headSetttings.deadzoneDegrees));
+
+            if (resultInput != 0f && !rotating)
+                mono.StartCoroutine(DoRotateStep(Mathf.Sign(resultInput) * headSetttings.stepSize, controllerTransform));
             return;
         }
 
@@ -159,6 +168,7 @@ public class InputLayer
             float u = Input.GetAxis("Upward");
 
             targetTranslation = (controllerTransform.right * h + controllerTransform.forward * v + controllerTransform.up * u);
+            return;
         }
         else if (translationType == TranslationType.DragTowardsGaze)
         {
@@ -167,6 +177,8 @@ public class InputLayer
 
             if (dragging)
                 targetTranslation += headTransform.forward * -y * mouseSetttings.sensitivity * Time.unscaledDeltaTime;
+
+            return;
         }
         else if (translationType == TranslationType.Teleport)
         {
@@ -176,6 +188,8 @@ public class InputLayer
             //StartCoroutine(Teleport(Vector3.up, Quaternion.identity));
 
             Debug.LogError("Teleport is not yet functional!");
+
+            return;
         }
 
         Debug.LogError("The requested configuration scheme does not exist!");
