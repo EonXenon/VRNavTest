@@ -188,7 +188,7 @@ MonoBehaviour:
     maximumLODLevelQualityLevel: 0
     materialQuality: 0
   m_RenderPipelineSettings:
-    supportShadowMask: 1
+    supportShadowMask: 0
     supportSSR: 0
     supportSSAO: 1
     supportSubsurfaceScattering: 0
@@ -212,7 +212,7 @@ MonoBehaviour:
     supportCustomPass: 0
     customBufferFormat: 12
     supportedLitShaderMode: 2
-    supportDecals: 1
+    supportDecals: 0
     msaaSampleCount: 1
     supportMotionVectors: 0
     supportRuntimeDebugDisplay: 0
@@ -227,22 +227,22 @@ MonoBehaviour:
       cubeCookieTexArraySize: 16
       planarReflectionProbeCacheSize: 2
       planarReflectionTextureSize: 1024
-      reflectionProbeCacheSize: 64
+      reflectionProbeCacheSize: 16
       reflectionCubemapSize: 256
-      reflectionCacheCompressed: 0
-      planarReflectionCacheCompressed: 0
+      reflectionCacheCompressed: 1
+      planarReflectionCacheCompressed: 1
       skyReflectionSize: 256
       skyLightingOverrideLayerMask:
         serializedVersion: 2
         m_Bits: 0
       supportFabricConvolution: 0
-      maxDirectionalLightsOnScreen: 16
-      maxPunctualLightsOnScreen: 512
-      maxAreaLightsOnScreen: 64
-      maxEnvLightsOnScreen: 64
+      maxDirectionalLightsOnScreen: 1
+      maxPunctualLightsOnScreen: 64
+      maxAreaLightsOnScreen: 8
+      maxEnvLightsOnScreen: 16
       maxDecalsOnScreen: 512
     hdShadowInitParams:
-      maxShadowRequests: 64
+      maxShadowRequests: 16
       directionalShadowsDepthBits: 16
       shadowFilteringQuality: 1
       punctualLightShadowAtlas:
@@ -308,7 +308,7 @@ MonoBehaviour:
       DoFHighQualityFiltering: 000101
       MotionBlurSampleCount: 04000000080000000c000000
       BloomRes: 040000000200000002000000
-      BloomHighQualityFiltering: 000101
+      BloomHighQualityFiltering: 000001
       ChromaticAberrationMaxSamples: 03000000060000000c000000
     lightSettings:
       useContactShadow:
@@ -337,7 +337,7 @@ MonoBehaviour:
   allowShaderVariantStripping: 1
   enableSRPBatcher: 1
   shaderVariantLogLevel: 0
-  availableMaterialQualityLevels: -1
+  availableMaterialQualityLevels: 4
   m_DefaultMaterialQualityLevel: 4
   diffusionProfileSettings: {fileID: 0}
   diffusionProfileSettingsList: []

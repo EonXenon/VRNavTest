@@ -16,7 +16,6 @@ public class InputLayer
         MouseContinuous,
         DirectionalContinuous,
         HeadStep,
-        MouseStep,
         DirectionalStep,
         ClickAndChoose
     }
@@ -26,8 +25,7 @@ public class InputLayer
         Directional,
         DragTowardsGaze,
         DragToPoint,
-        Teleport,
-        LinearMotion
+        Teleport
     }
 
     public enum InputType
@@ -197,7 +195,10 @@ public class InputLayer
 
     public Vector3 GetCumulativeTranslationInput()
     {
-        Vector3 normalizedResult = targetTranslation / Mathf.Max(1f, targetTranslation.magnitude);
+        Vector3 normalizedResult = targetTranslation;
+        if (translationType != TranslationType.DragTowardsGaze)
+            normalizedResult /= Mathf.Max(1f, targetTranslation.magnitude);
+
         targetTranslation = Vector3.zero;
         return normalizedResult;
     }
