@@ -10,6 +10,8 @@ public class InputLayer
 
     private MonoBehaviour mono;
 
+    public Transform lastPickup;
+
     public enum RotationType
     {
         HeadContinuous,
@@ -72,6 +74,13 @@ public class InputLayer
 
     public float transitionTime = 0.15f;
     private bool rotating = false;
+
+    private Vector3 targetPos = Vector3.zero;
+    private Vector3 startPos = Vector3.zero;
+    private bool wasDragging = false;
+    private float cumulativeY = 0f;
+    private bool hasShot = false;
+    private bool hasHit = false;
 
     public void Initialize(MonoBehaviour mono)
     {
@@ -178,6 +187,50 @@ public class InputLayer
 
             return;
         }
+        else if (translationType == TranslationType.DragToPoint)
+        {
+            float y = Input.GetAxis("Mouse Y");
+            bool dragging = Input.GetButton("Fire1");
+
+            if (dragging)
+            {
+                RaycastHit hit;
+
+                if(!hasShot)
+                {
+                    hasHit = Physics.Raycast(headTransform.position, headTransform.forward, out hit, 500f);
+                    if (hasHit)
+                    {
+                        startPos = controllerTransform.position;
+                        targetPos = hit.point;
+                        lastPickup.position = hit.point;
+                    }
+
+                    hasShot = true;
+                }
+
+                if(!wasDragging)
+                {
+                    wasDragging = true;
+                }
+                else if(hasHit)
+                {
+                    targetTranslation = Vector3.Lerp(startPos, targetPos, cumulativeY) - controllerTransform.position;
+                }
+                
+                cumulativeY = Mathf.Clamp01(cumulativeY + Time.unscaledDeltaTime);
+            }
+            else
+            {
+                wasDragging = false;
+                cumulativeY = 0f;
+                hasShot = false;
+            }
+
+            return;
+
+
+        }
         else if (translationType == TranslationType.Teleport)
         {
             //bool teleport = false;
@@ -196,7 +249,7 @@ public class InputLayer
     public Vector3 GetCumulativeTranslationInput()
     {
         Vector3 normalizedResult = targetTranslation;
-        if (translationType != TranslationType.DragTowardsGaze)
+        if (translationType == TranslationType.Directional)
             normalizedResult /= Mathf.Max(1f, targetTranslation.magnitude);
 
         targetTranslation = Vector3.zero;

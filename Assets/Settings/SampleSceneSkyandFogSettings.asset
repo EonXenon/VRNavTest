@@ -31,11 +31,11 @@ MonoBehaviour:
     min: 0
   upperHemisphereLuxValue:
     m_OverrideState: 0
-    m_Value: 0.8506495
+    m_Value: 0.8432637
     min: 0
   upperHemisphereLuxColor:
     m_OverrideState: 0
-    m_Value: {x: 0.24750666, y: 0.33484882, z: 0.5}
+    m_Value: {x: 0.24606848, y: 0.33390024, z: 0.5}
   desiredLuxValue:
     m_OverrideState: 0
     m_Value: 20000
@@ -117,6 +117,7 @@ MonoBehaviour:
   - {fileID: 3912485203739470195}
   - {fileID: -1658960478407648048}
   - {fileID: 5321722785694334585}
+  - {fileID: 8718164853941609924}
 --- !u!114 &3912485203739470195
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -162,7 +163,7 @@ MonoBehaviour:
     m_Value: 0
   color:
     m_OverrideState: 1
-    m_Value: {r: 251.65651, g: 208.24576, b: 187.98743, a: 1}
+    m_Value: {r: 267.28564, g: 213.32735, b: 199.1278, a: 1}
     hdr: 1
     showAlpha: 0
     showEyeDropper: 1
@@ -224,3 +225,25 @@ MonoBehaviour:
   filter:
     m_OverrideState: 0
     m_Value: 0
+--- !u!114 &8718164853941609924
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f034cba68ab55e046ae1445a42f18c0e, type: 3}
+  m_Name: IndirectLightingController
+  m_EditorClassIdentifier: 
+  active: 1
+  m_AdvancedMode: 0
+  indirectSpecularIntensity:
+    m_OverrideState: 0
+    m_Value: 1
+    min: 0
+  indirectDiffuseIntensity:
+    m_OverrideState: 1
+    m_Value: 2
+    min: 0
