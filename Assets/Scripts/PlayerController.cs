@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     private InputLayer inputLayer;
 
     private bool grounded = true;
+    private bool movedLastFrame = true;
     private bool teleporting = false;
     private float gridOpacity = 0f;
 
@@ -55,7 +56,7 @@ public class PlayerController : MonoBehaviour
         cameraHolder.localEulerAngles += inputLayer.GetCumulativeRotationInput();
 
         //Grid effect code
-        gridOpacity = Mathf.Clamp01(gridOpacity - (grounded ? 1 : -1) * Time.unscaledDeltaTime / fadeTime);
+        gridOpacity = Mathf.Clamp01(gridOpacity - (grounded||!movedLastFrame ? 1 : -1) * Time.unscaledDeltaTime / fadeTime);
         flightGridEffect.SetFloat("_fadeEffect", gridOpacity);
     }
 
@@ -72,6 +73,7 @@ public class PlayerController : MonoBehaviour
 
         body.AddForce(move + stop, ForceMode.VelocityChange);
 
+        movedLastFrame = stop.magnitude != 0f;
         grounded = Physics.Raycast(body.transform.position, -transform.up, coll.bounds.extents.y + 0.1f, ~(1 << 8));
 
     }
