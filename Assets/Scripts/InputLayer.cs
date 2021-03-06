@@ -202,7 +202,7 @@ public class InputLayer
                     if (hasHit)
                     {
                         startPos = controllerTransform.position;
-                        targetPos = hit.point;
+                        targetPos = hit.point - headTransform.localPosition; //Correct for head height
                         lastPickup.position = hit.point;
                     }
 
@@ -225,6 +225,7 @@ public class InputLayer
                 wasDragging = false;
                 cumulativeY = 0f;
                 hasShot = false;
+                lastPickup.position = Vector3.one * 99999f;
             }
 
             return;
