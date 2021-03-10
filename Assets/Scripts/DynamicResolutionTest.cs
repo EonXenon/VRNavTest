@@ -18,6 +18,9 @@ public class DynamicResolutionTest : MonoBehaviour
     private float smoothed = 0f;
     private float oldTime = 0f;
 
+    private float currentFrameTime;
+    private float lastDelta;
+
     public bool debugMode = false;
     public Text screenText;
 
@@ -33,8 +36,24 @@ public class DynamicResolutionTest : MonoBehaviour
         if (target < 60) target = 120f;
         target = (1f / target);
         smoothed = target;
+        Application.targetFrameRate = 9999;
         oldTime = Time.unscaledTime;
         DynamicResolutionHandler.SetDynamicResScaler(SetDynamicResolutionScale, DynamicResScalePolicyType.ReturnsMinMaxLerpFactor);
+
+        currentFrameTime = Time.realtimeSinceStartup;
+        lastDelta = Time.unscaledDeltaTime;
+        StartCoroutine("WaitForNextFrame");
+    }
+
+    IEnumerator WaitForNextFrame()
+    {
+        while (true)
+        {
+            yield return new WaitForEndOfFrame();
+            float newTime = Time.realtimeSinceStartup;
+            lastDelta = currentFrameTime - newTime;
+            currentFrameTime = newTime;
+        }
     }
 
     // Update is called once per frame
@@ -58,9 +77,10 @@ public class DynamicResolutionTest : MonoBehaviour
         }
 
         if (debugMode)
-            screenText.text = string.Format("Scale: {0:F3}\nFrameTime: {1:F2}/{2:F2}",
+            screenText.text = string.Format("Scale: {0:F3}\nFrameTime: {1:F2}/{2:F2}/{3:F2}",
                 resScale,
                 smoothed * 1000f,
-                target * 1000f);
+                target * 1000f,
+                lastDelta * 1000f);
     }
 }

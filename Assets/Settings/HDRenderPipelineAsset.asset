@@ -164,7 +164,7 @@ MonoBehaviour:
     maximumLODLevel: 0
     maximumLODLevelMode: 0
     maximumLODLevelQualityLevel: 0
-    materialQuality: 0
+    materialQuality: 4
   m_RenderingPathDefaultBakedOrCustomReflectionFrameSettings:
     bitDatas:
       data1: 69373911135005
@@ -188,7 +188,7 @@ MonoBehaviour:
     maximumLODLevelQualityLevel: 0
     materialQuality: 0
   m_RenderPipelineSettings:
-    supportShadowMask: 0
+    supportShadowMask: 1
     supportSSR: 0
     supportSSAO: 1
     supportSubsurfaceScattering: 0
@@ -225,10 +225,10 @@ MonoBehaviour:
       cookieTexArraySize: 16
       pointCookieSize: 128
       cubeCookieTexArraySize: 16
-      planarReflectionProbeCacheSize: 2
+      planarReflectionProbeCacheSize: 1
       planarReflectionTextureSize: 1024
-      reflectionProbeCacheSize: 16
-      reflectionCubemapSize: 256
+      reflectionProbeCacheSize: 1
+      reflectionCubemapSize: 2048
       reflectionCacheCompressed: 1
       planarReflectionCacheCompressed: 1
       skyReflectionSize: 256
@@ -239,7 +239,7 @@ MonoBehaviour:
       maxDirectionalLightsOnScreen: 1
       maxPunctualLightsOnScreen: 64
       maxAreaLightsOnScreen: 8
-      maxEnvLightsOnScreen: 16
+      maxEnvLightsOnScreen: 1
       maxDecalsOnScreen: 512
     hdShadowInitParams:
       maxShadowRequests: 16
@@ -276,8 +276,8 @@ MonoBehaviour:
       atlasHeight: 4096
       perChannelMask: 0
     postProcessSettings:
-      m_LutSize: 32
-      lutFormat: 48
+      m_LutSize: 16
+      lutFormat: 74
     dynamicResolutionSettings:
       enabled: 1
       maxPercentage: 100
@@ -285,7 +285,7 @@ MonoBehaviour:
       dynResType: 1
       upsampleFilter: 0
       forceResolution: 0
-      forcedPercentage: 75
+      forcedPercentage: 50
     lowresTransparentSettings:
       enabled: 0
       checkerboardDepthBuffer: 1
@@ -330,8 +330,8 @@ MonoBehaviour:
       AOStepCount: 040000000600000010000000
       AOFullRes: 000001
       AOMaximumRadiusPixels: 200000002800000050000000
-      AOBilateralUpsample: 000101
-      AODirectionCount: 010000000200000004000000
+      AOBilateralUpsample: 010101
+      AODirectionCount: 020000000200000004000000
       ContactShadowSampleCount: 060000000a00000010000000
       SSRMaxRaySteps: 100000002000000040000000
   allowShaderVariantStripping: 1
