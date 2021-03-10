@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.HighDefinition;
 using UnityEngine.XR;
 
 public class PlayerController : MonoBehaviour
@@ -12,6 +14,9 @@ public class PlayerController : MonoBehaviour
     private CapsuleCollider coll;
     [SerializeField]
     private MeshRenderer flightGrid;
+    [SerializeField]
+    private Volume postVolume;
+    private Vignette vignetteEffect;
     [SerializeField]
     private MeshRenderer fadeOut;
     private Material flightGridEffect;
@@ -29,6 +34,8 @@ public class PlayerController : MonoBehaviour
 
     public float fadeTime = 0.5f;
 
+    public float comfortVignetteStrength = 0.5f;
+
     public float speed = 5.0f;
 
     void Start()
@@ -42,6 +49,7 @@ public class PlayerController : MonoBehaviour
         coll = GetComponent<CapsuleCollider>();
         flightGridEffect = flightGrid.material;
         fadeOutEffect = fadeOut.material;
+        postVolume.profile.TryGet<Vignette>(out vignetteEffect);
 
         inputLayer.Initialize(this);
     }
@@ -58,6 +66,7 @@ public class PlayerController : MonoBehaviour
         //Grid effect code
         gridOpacity = Mathf.Clamp01(gridOpacity - (grounded||!movedLastFrame ? 1 : -1) * Time.unscaledDeltaTime / fadeTime);
         flightGridEffect.SetFloat("_fadeEffect", gridOpacity);
+        vignetteEffect.intensity.value = gridOpacity * comfortVignetteStrength;
     }
 
     void FixedUpdate()
