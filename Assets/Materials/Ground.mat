@@ -23,8 +23,7 @@ Material:
   m_Name: Ground
   m_Shader: {fileID: -6465566751694194690, guid: 9b47b2ef9892bdd4c8f1a68321d67e26,
     type: 3}
-  m_ShaderKeywords: _DISABLE_SSR _MAPPING_TRIPLANAR _NORMALMAP _NORMALMAP_TANGENT_SPACE
-    _SPECULAR_OCCLUSION_NONE
+  m_ShaderKeywords: _DISABLE_SSR
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -125,6 +124,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_51EE8E8B: 0
+    - Vector1_CA42EC2B: 1
+    - Vector1_EB0E1A30: 0
     - _AORemapMax: 0.14160663
     - _AORemapMin: 0
     - _ATDistance: 1

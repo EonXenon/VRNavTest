@@ -38,20 +38,26 @@ public class PlayerController : MonoBehaviour
 
     public float speed = 5.0f;
 
-    void Start()
+    void RecenterCamera()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-
+        //TODO: Replace this with a proper system
         XRDevice.SetTrackingSpaceType(TrackingSpaceType.Stationary);
         InputTracking.Recenter();
-        
+    }
+
+    void Start()
+    {
+        //Cursor.lockState = CursorLockMode.Locked;
+
+        RecenterCamera();
+
         body = GetComponent<Rigidbody>();
         coll = GetComponent<CapsuleCollider>();
         flightGridEffect = flightGrid.material;
         fadeOutEffect = fadeOut.material;
         postVolume.profile.TryGet<Vignette>(out vignetteEffect);
 
-        inputLayer.Initialize(this);
+        inputLayer.Initialize(this, RecenterCamera);
     }
 
     // Update is called once per frame

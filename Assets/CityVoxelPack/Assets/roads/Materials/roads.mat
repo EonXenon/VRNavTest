@@ -21,13 +21,15 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: roads
-  m_Shader: {fileID: 4800000, guid: 6e4ae4064600d784cac1e41a9e6f2e59, type: 3}
-  m_ShaderKeywords: _DISABLE_DECALS _DISABLE_SSR _NORMALMAP_TANGENT_SPACE _SPECULAR_OCCLUSION_NONE
+  m_Shader: {fileID: -6465566751694194690, guid: a9030c9b1f4b1a34a93101bbdeab33c7,
+    type: 3}
+  m_ShaderKeywords: _DISABLE_SSR
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 2000
-  stringTagMap: {}
+  stringTagMap:
+    MotionVector: User
   disabledShaderPasses:
   - DistortionVectors
   - MOTIONVECTORS
@@ -37,12 +39,16 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_3A6A2BDF:
+        m_Texture: {fileID: 2800000, guid: 48bdd92bcb84f6442a9fe6d7e347f21f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _AnisotropyMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseColorMap:
-        m_Texture: {fileID: 2800000, guid: 48bdd92bcb84f6442a9fe6d7e347f21f, type: 3}
+        m_Texture: {fileID: 2800000, guid: 42a8aa3c8e4e53d4787e964bb3624fa2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BentNormalMap:
@@ -102,7 +108,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 48bdd92bcb84f6442a9fe6d7e347f21f, type: 3}
+        m_Texture: {fileID: 2800000, guid: 42a8aa3c8e4e53d4787e964bb3624fa2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskMap:
@@ -114,7 +120,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 49e159f1007724e4cb3b26914e83adff, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMapOS:
@@ -154,6 +160,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_51EE8E8B: 0
+    - Vector1_CA42EC2B: 2
+    - Vector1_EB0E1A30: 0
     - _AORemapMax: 1
     - _AORemapMin: 0
     - _ATDistance: 1
@@ -240,8 +249,10 @@ Material:
     - _Parallax: 0.02
     - _ReceivesSSR: 0
     - _RefractionModel: 0
+    - _RenderQueueType: 1
+    - _RequireSplitLighting: 0
     - _SSRefractionProjectionModel: 0
-    - _Smoothness: 0.1
+    - _Smoothness: 0
     - _SmoothnessRemapMax: 0.1
     - _SmoothnessRemapMin: 0
     - _SmoothnessTextureChannel: 0
@@ -263,7 +274,7 @@ Material:
     - _SubsurfaceMask: 1
     - _SupportDecals: 0
     - _SurfaceType: 0
-    - _TexWorldScale: 1
+    - _TexWorldScale: 0.06125
     - _TexWorldScaleEmissive: 1
     - _Thickness: 1
     - _TransmissionEnable: 1

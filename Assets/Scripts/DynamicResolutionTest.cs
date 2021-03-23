@@ -14,6 +14,7 @@ public class DynamicResolutionTest : MonoBehaviour
     public float deadzone = 0.05f;
 
     float resScale = 1.0f;
+    private float targetFramerate = 0f;
     private float target = 0f;
     private float smoothed = 0f;
     private float oldTime = 0f;
@@ -32,9 +33,9 @@ public class DynamicResolutionTest : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        target = XRDevice.refreshRate;
-        if (target < 60) target = 120f;
-        target = (1f / target);
+        targetFramerate = XRDevice.refreshRate;
+        if (targetFramerate < 60) targetFramerate = 120f;
+        target = (1f / targetFramerate);
         smoothed = target;
         Application.targetFrameRate = 9999;
         oldTime = Time.unscaledTime;
@@ -64,7 +65,7 @@ public class DynamicResolutionTest : MonoBehaviour
         float framerate = curTime - oldTime;
         oldTime = curTime;
 
-        smoothed = (119f/120f) * smoothed + (1f/120f) * framerate;
+        smoothed = ((targetFramerate - 1f)/ targetFramerate) * smoothed + (1f/ targetFramerate) * framerate;
         float ratio = target / smoothed;
 
         if (ratio > 1.0f - deadzone)
