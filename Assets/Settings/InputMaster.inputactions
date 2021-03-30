@@ -47,7 +47,7 @@
                 },
                 {
                     "name": "Turn Axis",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "ed5da7f1-ed02-4185-8d35-a699d333fe5f",
                     "expectedControlType": "Axis",
                     "processors": "",
@@ -93,7 +93,7 @@
                 {
                     "name": "",
                     "id": "9e8bfc4d-ebbb-4ca8-8c54-1e780eeb2d31",
-                    "path": "<XRInputV1::Oculus::OpenVRControllerOculusRiftSRightControllerRight>{RightHand}/primarybutton",
+                    "path": "<XRInputV1::Oculus::OculusTouchControllerOpenXR>{RightHand}/primarybutton",
                     "interactions": "",
                     "processors": "",
                     "groups": "VR Controllers",
@@ -115,7 +115,7 @@
                 {
                     "name": "",
                     "id": "f0d2a67b-3b40-4dfd-a99d-65f1be033d9e",
-                    "path": "<XRInputV1::Oculus::OpenVRControllerOculusRiftSLeftControllerLeft>{LeftHand}/triggerpressed",
+                    "path": "<OculusTouchController>{LeftHand}/triggerPressed",
                     "interactions": "",
                     "processors": "",
                     "groups": "VR Controllers",
@@ -137,7 +137,7 @@
                 {
                     "name": "",
                     "id": "b7fea13d-193e-4071-8d88-e6b7dab54cb5",
-                    "path": "<XRInputV1::Oculus::OpenVRControllerOculusRiftSRightControllerRight>{RightHand}/triggerpressed",
+                    "path": "<XRInputV1::Oculus::OculusTouchControllerOpenXR>{RightHand}/triggerpressed",
                     "interactions": "",
                     "processors": "",
                     "groups": "VR Controllers",
@@ -203,7 +203,7 @@
                 {
                     "name": "",
                     "id": "00840d8b-4427-4689-9093-f7792ae27bf5",
-                    "path": "<XRInputV1::Oculus::OpenVRControllerOculusRiftSLeftControllerLeft>{LeftHand}/primary2daxis",
+                    "path": "<XRInputV1::Oculus::OculusTouchControllerOpenXR>{LeftHand}/thumbstick",
                     "interactions": "",
                     "processors": "",
                     "groups": "VR Controllers",
@@ -258,7 +258,7 @@
                 {
                     "name": "negative",
                     "id": "c6e843e0-5c33-4b68-b5d3-123361b30608",
-                    "path": "<XRInputV1::Oculus::OpenVRControllerOculusRiftSLeftControllerLeft>{LeftHand}/primarybutton",
+                    "path": "<OculusTouchController>{LeftHand}/primaryButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "VR Controllers",
@@ -269,7 +269,7 @@
                 {
                     "name": "positive",
                     "id": "f898e32d-712f-48cb-af91-9d412ab6695c",
-                    "path": "<XRInputV1::Oculus::OpenVRControllerOculusRiftSLeftControllerLeft>{LeftHand}/secondarybutton",
+                    "path": "<OculusTouchController>{LeftHand}/secondaryButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "VR Controllers",
@@ -280,7 +280,7 @@
                 {
                     "name": "",
                     "id": "80d7a74c-bd83-4c18-8c06-0c7f26083930",
-                    "path": "<XRInputV1::Oculus::OpenVRControllerOculusRiftSRightControllerRight>{RightHand}/primary2daxis/x",
+                    "path": "<OculusTouchController>{RightHand}/thumbstick/x",
                     "interactions": "",
                     "processors": "",
                     "groups": "VR Controllers",
@@ -346,7 +346,7 @@
                 {
                     "name": "",
                     "id": "256788fa-996a-4399-b662-00ce1e2f230f",
-                    "path": "<XRInputV1::Oculus::OpenVRControllerOculusRiftSLeftControllerLeft>{LeftHand}/devicePosition/z",
+                    "path": "<OculusTouchController>{LeftHand}/pointer/velocity/z",
                     "interactions": "",
                     "processors": "",
                     "groups": "VR Controllers",
@@ -368,11 +368,38 @@
                 {
                     "name": "",
                     "id": "a7b02f9b-7b36-4e7d-9190-b0dcc793d800",
-                    "path": "<XRInputV1::Oculus::OpenVRControllerOculusRiftSRightControllerRight>{RightHand}/primary2daxis",
+                    "path": "<XRInputV1::Oculus::OculusTouchControllerOpenXR>{RightHand}/thumbstick",
                     "interactions": "",
                     "processors": "",
                     "groups": "VR Controllers",
                     "action": "AnalogLook",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Touch",
+            "id": "88af9920-1506-45f6-bb84-8e8e141b7151",
+            "actions": [
+                {
+                    "name": "Touch",
+                    "type": "Value",
+                    "id": "4d3be37e-52b1-4a11-b2f6-f41c7f2c0d51",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "b3269c7f-9924-463f-9720-c8464891c6fd",
+                    "path": "<Touchscreen>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Touch Surface;Keyboard and Mouse;VR Controllers",
+                    "action": "Touch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -399,13 +426,7 @@
         {
             "name": "Touch Surface",
             "bindingGroup": "Touch Surface",
-            "devices": [
-                {
-                    "devicePath": "<Touchscreen>",
-                    "isOptional": false,
-                    "isOR": false
-                }
-            ]
+            "devices": []
         },
         {
             "name": "VR Controllers",

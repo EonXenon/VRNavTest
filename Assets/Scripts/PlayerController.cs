@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour
     private Material fadeOutEffect;
     [SerializeField]
     private Transform head;
+    [SerializeField]
+    private Transform trackingOffset;
 
     [SerializeField]
     private InputLayer inputLayer;
@@ -38,15 +40,21 @@ public class PlayerController : MonoBehaviour
 
     public float speed = 5.0f;
 
+    private float intendedHeight = 0f;
+
     void RecenterCamera()
     {
         //TODO: Replace this with a proper system
-        XRDevice.SetTrackingSpaceType(TrackingSpaceType.Stationary);
-        InputTracking.Recenter();
+        //XRDevice.SetTrackingSpaceType(TrackingSpaceType.Stationary);
+        //InputTracking.Recenter();
+        trackingOffset.localEulerAngles = -head.localEulerAngles.y * Vector3.up;
+        trackingOffset.localPosition = -head.localPosition.x * Vector3.right - head.localPosition.z * Vector3.forward + (intendedHeight - head.localPosition.y) * Vector3.up;
     }
 
     void Start()
     {
+
+        intendedHeight = 1.75f; //trackingOffset.localPosition.y; //TODO: get a better solution that isn't hardcoded
         //Cursor.lockState = CursorLockMode.Locked;
 
         RecenterCamera();
@@ -84,7 +92,7 @@ public class PlayerController : MonoBehaviour
         cameraHolder.localEulerAngles = Vector3.zero;
 
         Vector3 stop = -body.velocity;
-        Vector3 move = inputLayer.GetCumulativeTranslationInput() * speed;
+        Vector3 move = inputLayer.GetCumulativeTranslationInput() * inputLayer.GetIntendedSpeedMultiplier(speed, speed * 5f);
 
         body.AddForce(move + stop, ForceMode.VelocityChange);
 

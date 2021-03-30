@@ -60,7 +60,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Turn Axis"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""ed5da7f1-ed02-4185-8d35-a699d333fe5f"",
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
@@ -106,7 +106,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""9e8bfc4d-ebbb-4ca8-8c54-1e780eeb2d31"",
-                    ""path"": ""<XRInputV1::Oculus::OpenVRControllerOculusRiftSRightControllerRight>{RightHand}/primarybutton"",
+                    ""path"": ""<XRInputV1::Oculus::OculusTouchControllerOpenXR>{RightHand}/primarybutton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""VR Controllers"",
@@ -128,7 +128,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""f0d2a67b-3b40-4dfd-a99d-65f1be033d9e"",
-                    ""path"": ""<XRInputV1::Oculus::OpenVRControllerOculusRiftSLeftControllerLeft>{LeftHand}/triggerpressed"",
+                    ""path"": ""<OculusTouchController>{LeftHand}/triggerPressed"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""VR Controllers"",
@@ -150,7 +150,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""b7fea13d-193e-4071-8d88-e6b7dab54cb5"",
-                    ""path"": ""<XRInputV1::Oculus::OpenVRControllerOculusRiftSRightControllerRight>{RightHand}/triggerpressed"",
+                    ""path"": ""<XRInputV1::Oculus::OculusTouchControllerOpenXR>{RightHand}/triggerpressed"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""VR Controllers"",
@@ -216,7 +216,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""00840d8b-4427-4689-9093-f7792ae27bf5"",
-                    ""path"": ""<XRInputV1::Oculus::OpenVRControllerOculusRiftSLeftControllerLeft>{LeftHand}/primary2daxis"",
+                    ""path"": ""<XRInputV1::Oculus::OculusTouchControllerOpenXR>{LeftHand}/thumbstick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""VR Controllers"",
@@ -271,7 +271,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": ""negative"",
                     ""id"": ""c6e843e0-5c33-4b68-b5d3-123361b30608"",
-                    ""path"": ""<XRInputV1::Oculus::OpenVRControllerOculusRiftSLeftControllerLeft>{LeftHand}/primarybutton"",
+                    ""path"": ""<OculusTouchController>{LeftHand}/primaryButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""VR Controllers"",
@@ -282,7 +282,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": ""positive"",
                     ""id"": ""f898e32d-712f-48cb-af91-9d412ab6695c"",
-                    ""path"": ""<XRInputV1::Oculus::OpenVRControllerOculusRiftSLeftControllerLeft>{LeftHand}/secondarybutton"",
+                    ""path"": ""<OculusTouchController>{LeftHand}/secondaryButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""VR Controllers"",
@@ -293,7 +293,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""80d7a74c-bd83-4c18-8c06-0c7f26083930"",
-                    ""path"": ""<XRInputV1::Oculus::OpenVRControllerOculusRiftSRightControllerRight>{RightHand}/primary2daxis/x"",
+                    ""path"": ""<OculusTouchController>{RightHand}/thumbstick/x"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""VR Controllers"",
@@ -359,7 +359,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""256788fa-996a-4399-b662-00ce1e2f230f"",
-                    ""path"": ""<XRInputV1::Oculus::OpenVRControllerOculusRiftSLeftControllerLeft>{LeftHand}/devicePosition/z"",
+                    ""path"": ""<OculusTouchController>{LeftHand}/pointer/velocity/z"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""VR Controllers"",
@@ -381,11 +381,38 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a7b02f9b-7b36-4e7d-9190-b0dcc793d800"",
-                    ""path"": ""<XRInputV1::Oculus::OpenVRControllerOculusRiftSRightControllerRight>{RightHand}/primary2daxis"",
+                    ""path"": ""<XRInputV1::Oculus::OculusTouchControllerOpenXR>{RightHand}/thumbstick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""VR Controllers"",
                     ""action"": ""AnalogLook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Touch"",
+            ""id"": ""88af9920-1506-45f6-bb84-8e8e141b7151"",
+            ""actions"": [
+                {
+                    ""name"": ""Touch"",
+                    ""type"": ""Value"",
+                    ""id"": ""4d3be37e-52b1-4a11-b2f6-f41c7f2c0d51"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""b3269c7f-9924-463f-9720-c8464891c6fd"",
+                    ""path"": ""<Touchscreen>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Touch Surface;Keyboard and Mouse;VR Controllers"",
+                    ""action"": ""Touch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -412,13 +439,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         {
             ""name"": ""Touch Surface"",
             ""bindingGroup"": ""Touch Surface"",
-            ""devices"": [
-                {
-                    ""devicePath"": ""<Touchscreen>"",
-                    ""isOptional"": false,
-                    ""isOR"": false
-                }
-            ]
+            ""devices"": []
         },
         {
             ""name"": ""VR Controllers"",
@@ -438,6 +459,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player_TurnDirect = m_Player.FindAction("Turn Direct", throwIfNotFound: true);
         m_Player_DragDirect = m_Player.FindAction("Drag Direct", throwIfNotFound: true);
         m_Player_AnalogLook = m_Player.FindAction("AnalogLook", throwIfNotFound: true);
+        // Touch
+        m_Touch = asset.FindActionMap("Touch", throwIfNotFound: true);
+        m_Touch_Touch = m_Touch.FindAction("Touch", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -580,6 +604,39 @@ public class @InputMaster : IInputActionCollection, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // Touch
+    private readonly InputActionMap m_Touch;
+    private ITouchActions m_TouchActionsCallbackInterface;
+    private readonly InputAction m_Touch_Touch;
+    public struct TouchActions
+    {
+        private @InputMaster m_Wrapper;
+        public TouchActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Touch => m_Wrapper.m_Touch_Touch;
+        public InputActionMap Get() { return m_Wrapper.m_Touch; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(TouchActions set) { return set.Get(); }
+        public void SetCallbacks(ITouchActions instance)
+        {
+            if (m_Wrapper.m_TouchActionsCallbackInterface != null)
+            {
+                @Touch.started -= m_Wrapper.m_TouchActionsCallbackInterface.OnTouch;
+                @Touch.performed -= m_Wrapper.m_TouchActionsCallbackInterface.OnTouch;
+                @Touch.canceled -= m_Wrapper.m_TouchActionsCallbackInterface.OnTouch;
+            }
+            m_Wrapper.m_TouchActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Touch.started += instance.OnTouch;
+                @Touch.performed += instance.OnTouch;
+                @Touch.canceled += instance.OnTouch;
+            }
+        }
+    }
+    public TouchActions @Touch => new TouchActions(this);
     private int m_KeyboardandMouseSchemeIndex = -1;
     public InputControlScheme KeyboardandMouseScheme
     {
@@ -618,5 +675,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnTurnDirect(InputAction.CallbackContext context);
         void OnDragDirect(InputAction.CallbackContext context);
         void OnAnalogLook(InputAction.CallbackContext context);
+    }
+    public interface ITouchActions
+    {
+        void OnTouch(InputAction.CallbackContext context);
     }
 }

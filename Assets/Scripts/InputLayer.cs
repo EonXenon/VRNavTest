@@ -388,6 +388,16 @@ public class InputLayer : IPlayerActions
         return result;
     }
 
+    public float GetIntendedSpeedMultiplier(float baseSpeed, float topSpeed)
+    {
+        if (translationType == TranslationType.Directional)
+        {
+            if (abstractedInput.translationFunction) return topSpeed;
+            else return baseSpeed;
+        }
+        else return 1f;
+    }
+
     public void OnTranslationXZAxis(InputAction.CallbackContext context)
     {
         Vector2 temp = context.ReadValue<Vector2>();
