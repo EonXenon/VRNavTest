@@ -20,8 +20,14 @@ public class TouchTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        var look = new Vector2();
+
+        var gamepad = Touchscreen.current;
+        if (gamepad != null)
+            look = gamepad.touches[0].delta.ReadValue();
+
         if (debugMode)
             screenText.text = string.Format("Touches Detected: {0}",
-                Input.touchCount);
+                look);
     }
 }

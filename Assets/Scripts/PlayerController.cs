@@ -27,6 +27,9 @@ public class PlayerController : MonoBehaviour
     private Transform trackingOffset;
 
     [SerializeField]
+    private TouchController touch;
+
+    [SerializeField]
     private InputLayer inputLayer;
 
     private bool grounded = true;
@@ -65,7 +68,7 @@ public class PlayerController : MonoBehaviour
         fadeOutEffect = fadeOut.material;
         postVolume.profile.TryGet<Vignette>(out vignetteEffect);
 
-        inputLayer.Initialize(this, RecenterCamera);
+        inputLayer.Initialize(this, RecenterCamera, touch.GetHandInfo);
     }
 
     // Update is called once per frame

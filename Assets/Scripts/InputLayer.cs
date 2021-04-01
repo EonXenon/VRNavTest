@@ -11,6 +11,7 @@ public class InputLayer : IPlayerActions
     private MonoBehaviour mono;
 
     private Action recenterAction;
+    private Func<SimpleHandTouch> handInfoAction;
 
     private InputMaster config;
 
@@ -54,6 +55,15 @@ public class InputLayer : IPlayerActions
     }
 
     public MouseSettings mouseSetttings;
+
+    [Serializable]
+    public struct TouchSettings
+    {
+        public float rotationSensitivity;
+        public float dragSensitivity;
+    }
+
+    public TouchSettings touchSettings;
 
     [Serializable]
     public struct HeadSettings
@@ -106,10 +116,11 @@ public class InputLayer : IPlayerActions
 
     private AbstractedInput abstractedInput;
 
-    public void Initialize(MonoBehaviour mono, Action action)
+    public void Initialize(MonoBehaviour mono, Action resetAction, Func<SimpleHandTouch> handAction)
     {
         this.mono = mono;
-        this.recenterAction = action;
+        this.recenterAction = resetAction;
+        this.handInfoAction = handAction;
 
         config = new InputMaster();
         config.Enable();
@@ -159,8 +170,17 @@ public class InputLayer : IPlayerActions
         {
             case RotationType.MouseContinuous:
                 {
-                    float x = abstractedInput.turnDirect;
-                    targetRotation = Vector3.up * mouseSetttings.sensitivity * x * Time.unscaledDeltaTime;
+                    if (inputType == InputType.TouchSurface)
+                    {
+                        float x = handInfoAction().leftHandDelta.x + handInfoAction().rightHandDelta.x;
+                        if (handInfoAction().leftHandPress && handInfoAction().rightHandPress) x /= 2f;
+                        targetRotation = Vector3.up * touchSettings.rotationSensitivity * -x * Time.unscaledDeltaTime;
+                    }
+                    else
+                    {
+                        float x = abstractedInput.turnDirect;
+                        targetRotation = Vector3.up * mouseSetttings.sensitivity * x * Time.unscaledDeltaTime;
+                    }
                     return;
                 }
 
@@ -279,10 +299,19 @@ public class InputLayer : IPlayerActions
 
             case TranslationType.DragTowardsGaze:
                 {
-                    float y = abstractedInput.dragDirect;
+                    if (inputType == InputType.TouchSurface)
+                    {
+                        float y = handInfoAction().leftHandDelta.y + handInfoAction().rightHandDelta.y;
+                        if (handInfoAction().leftHandPress && handInfoAction().rightHandPress) y /= 2f;
+                        targetTranslation += headTransform.forward * -y * touchSettings.dragSensitivity * Time.unscaledDeltaTime;
+                    }
+                    else
+                    {
+                        float y = abstractedInput.dragDirect;
 
-                    if (abstractedInput.translationFunction)
-                        targetTranslation += headTransform.forward * -y * mouseSetttings.sensitivity * Time.unscaledDeltaTime;
+                        if (abstractedInput.translationFunction)
+                            targetTranslation += headTransform.forward * -y * mouseSetttings.sensitivity * Time.unscaledDeltaTime;
+                    }
 
                     return;
                 }
