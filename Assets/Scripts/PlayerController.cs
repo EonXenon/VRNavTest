@@ -107,7 +107,7 @@ public class PlayerController : MonoBehaviour
     static private Color blackZero = new Color(0f, 0f, 0f, 0f);
     static private Color blackOne = new Color(0f, 0f, 0f, 1f);
 
-    IEnumerator Teleport(Vector3 targetPosition, Quaternion targetRotation)
+    public IEnumerator Teleport(Vector3 targetPosition, Quaternion targetRotation)
     {
         teleporting = true;
 
