@@ -112,6 +112,7 @@ public class InputLayer : IPlayerActions
         public float turnDirect;
         public float dragDirect;
         public Vector2 analogLook;
+        public Quaternion handDirection;
     }
 
     private AbstractedInput abstractedInput;
@@ -156,6 +157,11 @@ public class InputLayer : IPlayerActions
         config.Player.DragDirect.started += OnDragDirect;
         config.Player.DragDirect.performed += OnDragDirect;
         config.Player.DragDirect.canceled += OnDragDirect;
+
+
+        config.Player.HandOrientation.started += OnHandOrientation;
+        config.Player.HandOrientation.performed += OnHandOrientation;
+        config.Player.HandOrientation.canceled += OnHandOrientation;
     }
 
     public void ResolveInput(in Transform headTransform, in Transform controllerTransform)
@@ -293,7 +299,14 @@ public class InputLayer : IPlayerActions
         {
             case TranslationType.Directional:
                 {
-                    targetTranslation = (controllerTransform.right * abstractedInput.directionalInput.x + controllerTransform.forward * abstractedInput.directionalInput.z + controllerTransform.up * abstractedInput.directionalInput.y);
+                    if (inputType == InputType.HandheldControllers)
+                    {
+                        Quaternion finalTransformation = controllerTransform.rotation * abstractedInput.handDirection;
+                        targetTranslation = (finalTransformation  * Vector3.right * abstractedInput.directionalInput.x
+                            + finalTransformation * Vector3.forward * abstractedInput.directionalInput.z
+                            + finalTransformation * Vector3.up * abstractedInput.directionalInput.y);
+                    }
+                    else targetTranslation = (controllerTransform.right * abstractedInput.directionalInput.x + controllerTransform.forward * abstractedInput.directionalInput.z + controllerTransform.up * abstractedInput.directionalInput.y);
                     return;
                 }
 
@@ -448,4 +461,6 @@ public class InputLayer : IPlayerActions
         if (inputType == InputType.KeyboardAndMouse)
             abstractedInput.analogLook = (abstractedInput.analogLook - Vector2.one * 0.5f) * 2f;
     }
+
+    public void OnHandOrientation(InputAction.CallbackContext context) => abstractedInput.handDirection = context.ReadValue<Quaternion>();
 }

@@ -28,10 +28,13 @@ public class CourseController : MonoBehaviour
 
     float countStartTime;
 
+    bool preStart = false;
+
     // Start is called before the first frame update
     void Start()
     {
         this.gameObject.SetActive(false);
+        preStart = true;
     }
 
     // Update is called once per frame
@@ -59,6 +62,7 @@ public class CourseController : MonoBehaviour
         inProgress = true;
         currentCheckpoint = 0;
         countStartTime = Time.unscaledTime;
+        player.SetNextCheckpoint(checkpoints[0].transform.position);
     }
 
     void OnCourseComplete()
@@ -75,7 +79,11 @@ public class CourseController : MonoBehaviour
         checkpoints[currentCheckpoint].SetColor(previousCheckpointColor);
 
         if (++currentCheckpoint >= checkpoints.Length) OnCourseComplete();
-        else checkpoints[currentCheckpoint].SetColor(currentCheckpointColor);
+        else
+        {
+            checkpoints[currentCheckpoint].SetColor(currentCheckpointColor);
+            player.SetNextCheckpoint(checkpoints[currentCheckpoint].transform.position);
+        }
     }
 
     private void OnDisable()
@@ -84,13 +92,23 @@ public class CourseController : MonoBehaviour
         {
             c.transform.gameObject.SetActive(false);
         }
+        player.DisableCheckpoint();
     }
 
     private void OnEnable()
     {
+        if (!preStart) return;
+
+        if (player.IsMoveLocked()) return;
+
         ResetCourse();
-        StartCoroutine(player.Teleport(startingLine.position, startingLine.rotation));
-        //TODO: ADD TIMER TO START
+        StartCoroutine(player.Teleport(startingLine.position, startingLine.rotation, true, OnPlayerReady));
+    }
+
+    private void OnPlayerReady()
+    {
+        //TODO: WAIT FOR INPUT
+        player.ReleaseMoveLock();
         StartCourse();
     }
 }

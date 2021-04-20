@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -27,6 +28,10 @@ public class PlayerController : MonoBehaviour
     private Transform trackingOffset;
 
     [SerializeField]
+    private Transform checkpointGuide;
+    private Vector3 nextCheckpoint;
+
+    [SerializeField]
     private TouchController touch;
 
     [SerializeField]
@@ -34,7 +39,7 @@ public class PlayerController : MonoBehaviour
 
     private bool grounded = true;
     private bool movedLastFrame = true;
-    private bool teleporting = false;
+    private bool moveLocked = false;
     private float gridOpacity = 0f;
 
     public float fadeTime = 0.5f;
@@ -82,8 +87,10 @@ public class PlayerController : MonoBehaviour
 
         //Grid effect code
         gridOpacity = Mathf.Clamp01(gridOpacity - (grounded||!movedLastFrame ? 1 : -1) * Time.unscaledDeltaTime / fadeTime);
-        flightGridEffect.SetFloat("_fadeEffect", gridOpacity);
-        vignetteEffect.intensity.value = gridOpacity * comfortVignetteStrength;
+
+        checkpointGuide.LookAt(nextCheckpoint, Vector3.up);
+        //flightGridEffect.SetFloat("_fadeEffect", gridOpacity);
+        //vignetteEffect.intensity.value = gridOpacity * comfortVignetteStrength;
     }
 
     void FixedUpdate()
@@ -97,7 +104,8 @@ public class PlayerController : MonoBehaviour
         Vector3 stop = -body.velocity;
         Vector3 move = inputLayer.GetCumulativeTranslationInput() * inputLayer.GetIntendedSpeedMultiplier(speed, speed * 5f);
 
-        body.AddForce(move + stop, ForceMode.VelocityChange);
+        if (!moveLocked)
+            body.AddForce(move + stop, ForceMode.VelocityChange);
 
         movedLastFrame = stop.magnitude != 0f;
         grounded = Physics.Raycast(body.transform.position, -transform.up, coll.bounds.extents.y + 0.1f, ~(1 << 8));
@@ -107,9 +115,11 @@ public class PlayerController : MonoBehaviour
     static private Color blackZero = new Color(0f, 0f, 0f, 0f);
     static private Color blackOne = new Color(0f, 0f, 0f, 1f);
 
-    public IEnumerator Teleport(Vector3 targetPosition, Quaternion targetRotation)
+    public IEnumerator Teleport(Vector3 targetPosition, Quaternion targetRotation, bool keepOnHold = false, Action action = null)
     {
-        teleporting = true;
+        if (moveLocked) yield break;
+
+        moveLocked = true;
 
         float fade = 0f;
         while (fade < 1f)
@@ -131,6 +141,21 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
 
-        teleporting = false;
+        if (!keepOnHold)
+            moveLocked = false;
+
+        action?.Invoke();
     }
+
+    public void ReleaseMoveLock() => moveLocked = false;
+
+    public bool IsMoveLocked() => moveLocked;
+
+    public void SetNextCheckpoint(Vector3 targetPosition)
+    {
+        nextCheckpoint = targetPosition;
+        checkpointGuide.gameObject.SetActive(true);
+    }
+
+    public void DisableCheckpoint() => checkpointGuide.gameObject.SetActive(false);
 }

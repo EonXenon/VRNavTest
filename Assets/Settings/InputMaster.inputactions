@@ -76,6 +76,14 @@
                     "expectedControlType": "Vector2",
                     "processors": "NormalizeVector2",
                     "interactions": ""
+                },
+                {
+                    "name": "HandOrientation",
+                    "type": "PassThrough",
+                    "id": "3e8e51da-590f-4c32-a363-7858b5ff2613",
+                    "expectedControlType": "Quaternion",
+                    "processors": "NormalizeVector2",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -373,6 +381,17 @@
                     "processors": "",
                     "groups": "VR Controllers",
                     "action": "AnalogLook",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7130ea3b-9c38-402e-98f0-ce9e1f687093",
+                    "path": "<XRController>{LeftHand}/deviceRotation",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "VR Controllers",
+                    "action": "HandOrientation",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -159,8 +159,8 @@ MonoBehaviour:
     type: 2}
   m_RenderingPathDefaultCameraFrameSettings:
     bitDatas:
-      data1: 140118943586333
-      data2: 4539628425422307352
+      data1: 111213791664157
+      data2: 4539628425346809880
     lodBias: 1
     lodBiasMode: 0
     lodBiasQualityLevel: 0
@@ -200,17 +200,17 @@ MonoBehaviour:
     sssCustomSampleBudget: 20
     materialQuality: 0
   m_RenderPipelineSettings:
-    supportShadowMask: 1
-    supportSSR: 0
+    supportShadowMask: 0
+    supportSSR: 1
     supportSSRTransparent: 0
-    supportSSAO: 1
+    supportSSAO: 0
     supportSSGI: 0
     supportSubsurfaceScattering: 0
     sssSampleBudget:
       m_Values: 140000002800000050000000
       m_SchemaId:
         m_Id: With3Levels
-    supportVolumetrics: 1
+    supportVolumetrics: 0
     supportLightLayers: 0
     lightLayerName0: Light Layer default
     lightLayerName1: Light Layer 1
@@ -229,7 +229,7 @@ MonoBehaviour:
     customBufferFormat: 12
     supportedLitShaderMode: 2
     planarReflectionResolution:
-      m_Values: 000100000004000000080000
+      m_Values: 400000004000000040000000
       m_SchemaId:
         m_Id: With3Levels
     supportDecals: 0
@@ -259,12 +259,12 @@ MonoBehaviour:
       cookieFormat: 74
       cookieAtlasLastValidMip: 0
       cookieTexArraySize: 16
-      planarReflectionAtlasSize: 4096
+      planarReflectionAtlasSize: 64
       reflectionProbeCacheSize: 1
-      reflectionCubemapSize: 2048
+      reflectionCubemapSize: 128
       reflectionCacheCompressed: 1
       reflectionProbeFormat: 74
-      skyReflectionSize: 256
+      skyReflectionSize: 128
       skyLightingOverrideLayerMask:
         serializedVersion: 2
         m_Bits: 0
@@ -274,12 +274,12 @@ MonoBehaviour:
       maxAreaLightsOnScreen: 8
       maxEnvLightsOnScreen: 1
       maxDecalsOnScreen: 512
-      maxPlanarReflectionOnScreen: 16
+      maxPlanarReflectionOnScreen: 1
       maxLightsPerClusterCell: 8
     hdShadowInitParams:
       maxShadowRequests: 16
       directionalShadowsDepthBits: 16
-      shadowFilteringQuality: 1
+      shadowFilteringQuality: 0
       punctualLightShadowAtlas:
         shadowAtlasResolution: 2048
         shadowAtlasDepthBits: 16

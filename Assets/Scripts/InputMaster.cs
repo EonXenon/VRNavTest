@@ -89,6 +89,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": ""NormalizeVector2"",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""HandOrientation"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""3e8e51da-590f-4c32-a363-7858b5ff2613"",
+                    ""expectedControlType"": ""Quaternion"",
+                    ""processors"": ""NormalizeVector2"",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -388,6 +396,17 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""AnalogLook"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7130ea3b-9c38-402e-98f0-ce9e1f687093"",
+                    ""path"": ""<XRController>{LeftHand}/deviceRotation"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""VR Controllers"",
+                    ""action"": ""HandOrientation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -459,6 +478,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player_TurnDirect = m_Player.FindAction("Turn Direct", throwIfNotFound: true);
         m_Player_DragDirect = m_Player.FindAction("Drag Direct", throwIfNotFound: true);
         m_Player_AnalogLook = m_Player.FindAction("AnalogLook", throwIfNotFound: true);
+        m_Player_HandOrientation = m_Player.FindAction("HandOrientation", throwIfNotFound: true);
         // Touch
         m_Touch = asset.FindActionMap("Touch", throwIfNotFound: true);
         m_Touch_Touch = m_Touch.FindAction("Touch", throwIfNotFound: true);
@@ -520,6 +540,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_TurnDirect;
     private readonly InputAction m_Player_DragDirect;
     private readonly InputAction m_Player_AnalogLook;
+    private readonly InputAction m_Player_HandOrientation;
     public struct PlayerActions
     {
         private @InputMaster m_Wrapper;
@@ -533,6 +554,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @TurnDirect => m_Wrapper.m_Player_TurnDirect;
         public InputAction @DragDirect => m_Wrapper.m_Player_DragDirect;
         public InputAction @AnalogLook => m_Wrapper.m_Player_AnalogLook;
+        public InputAction @HandOrientation => m_Wrapper.m_Player_HandOrientation;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -569,6 +591,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @AnalogLook.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAnalogLook;
                 @AnalogLook.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAnalogLook;
                 @AnalogLook.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAnalogLook;
+                @HandOrientation.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHandOrientation;
+                @HandOrientation.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHandOrientation;
+                @HandOrientation.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHandOrientation;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -600,6 +625,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @AnalogLook.started += instance.OnAnalogLook;
                 @AnalogLook.performed += instance.OnAnalogLook;
                 @AnalogLook.canceled += instance.OnAnalogLook;
+                @HandOrientation.started += instance.OnHandOrientation;
+                @HandOrientation.performed += instance.OnHandOrientation;
+                @HandOrientation.canceled += instance.OnHandOrientation;
             }
         }
     }
@@ -675,6 +703,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnTurnDirect(InputAction.CallbackContext context);
         void OnDragDirect(InputAction.CallbackContext context);
         void OnAnalogLook(InputAction.CallbackContext context);
+        void OnHandOrientation(InputAction.CallbackContext context);
     }
     public interface ITouchActions
     {
