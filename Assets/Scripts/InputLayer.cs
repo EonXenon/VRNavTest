@@ -19,34 +19,23 @@ public class InputLayer : IPlayerActions
 
     public enum RotationType
     {
-        HeadContinuous,
-        MouseContinuous,
+        Drag,
         DirectionalContinuous,
-        HeadStep,
-        DirectionalStep,
         ClickAndChoose,
-        HeadConverge
+        HeadConverge,
+        DevMode
     }
 
     public enum TranslationType
     {
         Directional,
-        DragTowardsGaze,
-        DragToPoint,
-        Teleport
-    }
-
-    public enum InputType
-    {
-        KeyboardAndMouse,
-        Gamepad,
-        HandheldControllers,
-        TouchSurface
+        Paddling,
+        DragNGo,
+        DevMode
     }
 
     public RotationType rotationType;
     public TranslationType translationType;
-    public InputType inputType;
 
     [Serializable]
     public struct MouseSettings
@@ -174,27 +163,12 @@ public class InputLayer : IPlayerActions
     {
         switch (rotationType)
         {
-            case RotationType.MouseContinuous:
+            case RotationType.Drag:
                 {
-                    if (inputType == InputType.TouchSurface)
-                    {
-                        float x = handInfoAction().leftHandDelta.x + handInfoAction().rightHandDelta.x;
-                        if (handInfoAction().leftHandPress && handInfoAction().rightHandPress) x /= 2f;
-                        targetRotation = Vector3.up * touchSettings.rotationSensitivity * -x * Time.unscaledDeltaTime;
-                    }
-                    else
-                    {
-                        float x = abstractedInput.turnDirect;
-                        targetRotation = Vector3.up * mouseSetttings.sensitivity * x * Time.unscaledDeltaTime;
-                    }
-                    return;
-                }
+                    float x = handInfoAction().leftHandDelta.x + handInfoAction().rightHandDelta.x;
+                    if (handInfoAction().leftHandPress && handInfoAction().rightHandPress) x /= 2f;
+                    targetRotation = Vector3.up * touchSettings.rotationSensitivity * -x * Time.unscaledDeltaTime;
 
-            case RotationType.HeadContinuous:
-                {
-                    float headAngle = Vector3.SignedAngle(controllerTransform.forward, Vector3.Scale(headTransform.forward, Vector3.one - Vector3.up), controllerTransform.up);
-                    float resultInput = (headAngle - Mathf.Clamp(headAngle, -headSetttings.deadzoneDegrees, headSetttings.deadzoneDegrees)) * headSetttings.sensitivity;
-                    targetRotation = Vector3.up * resultInput * Time.unscaledDeltaTime;
                     return;
                 }
 
@@ -202,27 +176,6 @@ public class InputLayer : IPlayerActions
                 {
                     float x = abstractedInput.turnAxis;
                     targetRotation = Vector3.up * directionalSettings.sensitivity * x * Time.unscaledDeltaTime;
-                    return;
-                }
-
-            case RotationType.DirectionalStep:
-                {
-                    float x = Mathf.Round(abstractedInput.turnAxis);
-
-                    if (x != 0f)
-                        mono.StartCoroutine(DoRotateStep(x * directionalSettings.stepSize, controllerTransform));
-
-                    return;
-                }
-
-            case RotationType.HeadStep:
-                {
-                    float headAngle = Vector3.SignedAngle(controllerTransform.forward, Vector3.Scale(headTransform.forward, Vector3.one - Vector3.up), controllerTransform.up);
-                    float resultInput = (headAngle - Mathf.Clamp(headAngle, -headSetttings.deadzoneDegrees, headSetttings.deadzoneDegrees));
-
-                    if (resultInput != 0f)
-                        mono.StartCoroutine(DoRotateStep(Mathf.Sign(resultInput) * headSetttings.stepSize, controllerTransform));
-
                     return;
                 }
 
@@ -264,6 +217,12 @@ public class InputLayer : IPlayerActions
 
                     return;
                 }
+            case RotationType.DevMode:
+                {
+                    float x = abstractedInput.turnDirect;
+                    targetRotation = Vector3.up * mouseSetttings.sensitivity * x * Time.unscaledDeltaTime;
+                    return;
+                }
         }
 
         Debug.LogError("The requested configuration scheme does not exist!");
@@ -299,37 +258,24 @@ public class InputLayer : IPlayerActions
         {
             case TranslationType.Directional:
                 {
-                    if (inputType == InputType.HandheldControllers)
-                    {
-                        Quaternion finalTransformation = controllerTransform.rotation * abstractedInput.handDirection;
-                        targetTranslation = (finalTransformation  * Vector3.right * abstractedInput.directionalInput.x
+                    Quaternion finalTransformation = controllerTransform.rotation * abstractedInput.handDirection;
+                    targetTranslation = (finalTransformation  * Vector3.right * abstractedInput.directionalInput.x
                             + finalTransformation * Vector3.forward * abstractedInput.directionalInput.z
                             + finalTransformation * Vector3.up * abstractedInput.directionalInput.y);
-                    }
-                    else targetTranslation = (controllerTransform.right * abstractedInput.directionalInput.x + controllerTransform.forward * abstractedInput.directionalInput.z + controllerTransform.up * abstractedInput.directionalInput.y);
+
                     return;
                 }
 
-            case TranslationType.DragTowardsGaze:
+            case TranslationType.Paddling:
                 {
-                    if (inputType == InputType.TouchSurface)
-                    {
-                        float y = handInfoAction().leftHandDelta.y + handInfoAction().rightHandDelta.y;
-                        if (handInfoAction().leftHandPress && handInfoAction().rightHandPress) y /= 2f;
-                        targetTranslation += headTransform.forward * -y * touchSettings.dragSensitivity * Time.unscaledDeltaTime;
-                    }
-                    else
-                    {
-                        float y = abstractedInput.dragDirect;
-
-                        if (abstractedInput.translationFunction)
-                            targetTranslation += headTransform.forward * -y * mouseSetttings.sensitivity * Time.unscaledDeltaTime;
-                    }
+                    float y = handInfoAction().leftHandDelta.y + handInfoAction().rightHandDelta.y;
+                    if (handInfoAction().leftHandPress && handInfoAction().rightHandPress) y /= 2f;
+                    targetTranslation += headTransform.forward * -y * touchSettings.dragSensitivity * Time.unscaledDeltaTime;
 
                     return;
                 }
 
-            case TranslationType.DragToPoint:
+            case TranslationType.DragNGo:
                 {
                     float y = abstractedInput.dragDirect;
 
@@ -399,13 +345,13 @@ public class InputLayer : IPlayerActions
                     return;
                 }
 
-            case TranslationType.Teleport:
-                //bool teleport = false;
-
-                //if (teleport && !teleporting)
-                //StartCoroutine(Teleport(Vector3.up, Quaternion.identity));
-
-                Debug.LogError("Teleport is not yet functional!");
+            case TranslationType.DevMode:
+                {
+                    targetTranslation
+                        =(controllerTransform.right * abstractedInput.directionalInput.x
+                        + controllerTransform.forward * abstractedInput.directionalInput.z
+                        + controllerTransform.up * abstractedInput.directionalInput.y);
+                }
 
                 return;
         }
@@ -416,12 +362,15 @@ public class InputLayer : IPlayerActions
     public Vector3 GetCumulativeTranslationInput()
     {
         Vector3 normalizedResult = targetTranslation;
-        if (translationType == TranslationType.Directional)
+        if (translationType == TranslationType.Directional || translationType == TranslationType.DevMode)
             normalizedResult /= Mathf.Max(1f, targetTranslation.magnitude);
 
         targetTranslation = Vector3.zero;
         return normalizedResult;
     }
+
+    public bool GetTranslationIntent() => targetTranslation.magnitude > 0f;
+    public bool GetRotationIntent() => targetTranslation.magnitude > 0f;
 
     public Vector3 GetCumulativeRotationInput()
     {
@@ -432,7 +381,7 @@ public class InputLayer : IPlayerActions
 
     public float GetIntendedSpeedMultiplier(float baseSpeed, float topSpeed)
     {
-        if (translationType == TranslationType.Directional)
+        if (translationType == TranslationType.Directional || translationType == TranslationType.DevMode)
         {
             if (abstractedInput.translationFunction) return topSpeed;
             else return baseSpeed;
@@ -454,13 +403,6 @@ public class InputLayer : IPlayerActions
     public void OnTurnAxis(InputAction.CallbackContext context) => abstractedInput.turnAxis = context.ReadValue<float>();
     public void OnTurnDirect(InputAction.CallbackContext context) => abstractedInput.turnDirect = context.ReadValue<Vector2>().x;
     public void OnDragDirect(InputAction.CallbackContext context) => abstractedInput.dragDirect = context.ReadValue<float>();
-
-    public void OnAnalogLook(InputAction.CallbackContext context)
-    {
-        abstractedInput.analogLook = context.ReadValue<Vector2>();
-        if (inputType == InputType.KeyboardAndMouse)
-            abstractedInput.analogLook = (abstractedInput.analogLook - Vector2.one * 0.5f) * 2f;
-    }
-
+    public void OnAnalogLook(InputAction.CallbackContext context) => abstractedInput.analogLook = context.ReadValue<Vector2>();
     public void OnHandOrientation(InputAction.CallbackContext context) => abstractedInput.handDirection = context.ReadValue<Quaternion>();
 }

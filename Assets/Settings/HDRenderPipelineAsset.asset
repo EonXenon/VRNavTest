@@ -160,7 +160,7 @@ MonoBehaviour:
   m_RenderingPathDefaultCameraFrameSettings:
     bitDatas:
       data1: 111213791664157
-      data2: 4539628425346809880
+      data2: 4539628425413918744
     lodBias: 1
     lodBiasMode: 0
     lodBiasQualityLevel: 0
@@ -242,7 +242,7 @@ MonoBehaviour:
     decalLayerName5: Decal Layer 5
     decalLayerName6: Decal Layer 6
     decalLayerName7: Decal Layer 7
-    msaaSampleCount: 1
+    msaaSampleCount: 4
     supportMotionVectors: 0
     supportRuntimeDebugDisplay: 0
     supportRuntimeAOVAPI: 0
@@ -322,9 +322,9 @@ MonoBehaviour:
       maxPercentage: 100
       minPercentage: 50
       dynResType: 1
-      upsampleFilter: 0
-      forceResolution: 0
-      forcedPercentage: 50
+      upsampleFilter: 3
+      forceResolution: 1
+      forcedPercentage: 100
     lowresTransparentSettings:
       enabled: 0
       checkerboardDepthBuffer: 1
@@ -375,7 +375,7 @@ MonoBehaviour:
       AOBilateralUpsample: 010101
       AODirectionCount: 020000000200000004000000
       ContactShadowSampleCount: 060000000a00000010000000
-      SSRMaxRaySteps: 100000002000000040000000
+      SSRMaxRaySteps: 300000004000000080000000
       RTAORayLength:
       - 0.5
       - 3

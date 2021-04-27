@@ -20,6 +20,9 @@ public class TouchController : MonoBehaviour
     Dictionary<int, TouchControl> rightHandTouches;
     Dictionary<int, TouchControl> leftHandTouches;
 
+    public Transform handInputUI;
+    public Transform[] fingers;
+
     //public GameObject rightHandObj;
     //public GameObject leftHandObj;
 
@@ -28,6 +31,8 @@ public class TouchController : MonoBehaviour
     private int tapCounter = 0;
     private DateTime tapTimeStamp;
     public float tapTimeSeconds = 0.3f;
+
+    Vector2 centerCalibration = new Vector2(-960f, -380f);
 
     // Use this for initialization
     void Start()
@@ -38,6 +43,7 @@ public class TouchController : MonoBehaviour
         leftHandLastTouchCount = 0;
         rightHandTouches = new Dictionary<int, TouchControl>();
         leftHandTouches = new Dictionary<int, TouchControl>();
+        handInputUI.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -48,10 +54,18 @@ public class TouchController : MonoBehaviour
         Dictionary<int, TouchControl> newRightHandTouches = new Dictionary<int, TouchControl>();
         Dictionary<int, TouchControl> newLeftHandTouches = new Dictionary<int, TouchControl>();
 
+        if (Touchscreen.current == null) return;
+
+        handInputUI.gameObject.SetActive(true);
+
         for (int i = 0; i < Touchscreen.current.touches.Count; i++)
         {
             TouchControl t = Touchscreen.current.touches[i];
-            if (!t.IsPressed()) continue;
+            if (t.press.ReadValue() == 0f)
+            {
+                fingers[i].gameObject.SetActive(false);
+                continue;
+            }
             if (rightHandTouches.ContainsKey(t.touchId.ReadValue()))
             {
                 newRightHandTouches[t.touchId.ReadValue()] = t;
@@ -68,6 +82,9 @@ public class TouchController : MonoBehaviour
             {
                 newLeftHandTouches[t.touchId.ReadValue()] = t;
             }
+            Vector2 temp = t.position.ReadValue();
+            fingers[i].localPosition = Vector3.up * (temp.y + centerCalibration.y) + Vector3.right * (temp.x + centerCalibration.x);
+            fingers[i].gameObject.SetActive(true);
         }
 
         rightHandTouches = new Dictionary<int, TouchControl>(newRightHandTouches);

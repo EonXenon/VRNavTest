@@ -40,7 +40,7 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 422
   updateMode:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   updatePeriod:
     m_OverrideState: 0
@@ -54,7 +54,7 @@ MonoBehaviour:
     m_Value: {fileID: 8900000, guid: dafaaa1d3c9a3ab45bf5e49adf11da51, type: 3}
   enableDistortion:
     m_OverrideState: 0
-    m_Value: 1
+    m_Value: 0
   procedural:
     m_OverrideState: 0
     m_Value: 1

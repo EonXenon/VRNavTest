@@ -23,17 +23,15 @@ public class CourseController : MonoBehaviour
     int currentCheckpoint;
     bool inProgress;
 
-    [SerializeField]
-    bool debugNext = false;
-
     float countStartTime;
 
     bool preStart = false;
+    int debugCount = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        this.gameObject.SetActive(false);
+        gameObject.SetActive(false);
         preStart = true;
     }
 
@@ -56,13 +54,17 @@ public class CourseController : MonoBehaviour
         }
     }
 
-    void StartCourse()
+    void ReadyCourse()
     {
         checkpoints[0].SetColor(currentCheckpointColor);
-        inProgress = true;
         currentCheckpoint = 0;
+        player.SetNextCheckpoint(checkpoints[0].transform.position, currentCheckpoint, checkpoints.Length);
+    }
+
+    void StartCourse()
+    {
+        inProgress = true;
         countStartTime = Time.unscaledTime;
-        player.SetNextCheckpoint(checkpoints[0].transform.position);
     }
 
     void OnCourseComplete()
@@ -70,19 +72,19 @@ public class CourseController : MonoBehaviour
         float resultTime = Time.unscaledTime - countStartTime;
         inProgress = false;
         _ = DataOutput.Write(string.Format("{0}", TimeSpan.FromSeconds(resultTime)), "results.csv");
-        OnDisable();
-        this.gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     void OnCheckpointReached()
     {
         checkpoints[currentCheckpoint].SetColor(previousCheckpointColor);
+        
 
         if (++currentCheckpoint >= checkpoints.Length) OnCourseComplete();
         else
         {
             checkpoints[currentCheckpoint].SetColor(currentCheckpointColor);
-            player.SetNextCheckpoint(checkpoints[currentCheckpoint].transform.position);
+            player.SetNextCheckpoint(checkpoints[currentCheckpoint].transform.position, currentCheckpoint, checkpoints.Length);
         }
     }
 
@@ -93,21 +95,39 @@ public class CourseController : MonoBehaviour
             c.transform.gameObject.SetActive(false);
         }
         player.DisableCheckpoint();
+        player.ReleaseMoveLock();
     }
 
     private void OnEnable()
     {
         if (!preStart) return;
 
-        if (player.IsMoveLocked()) return;
+        if (player.IsMoveLocked())
+        {
+            gameObject.SetActive(false);
+            return;
+        }
 
         ResetCourse();
-        StartCoroutine(player.Teleport(startingLine.position, startingLine.rotation, true, OnPlayerReady));
+        player.StartCoroutine(player.Teleport(startingLine.position, startingLine.rotation, true, OnPlayerReady));
     }
 
     private void OnPlayerReady()
     {
-        //TODO: WAIT FOR INPUT
+        if (!gameObject.activeSelf)
+        {
+            player.ReleaseMoveLock();
+            return;
+        }
+        ReadyCourse();
+        StartCoroutine(WaitForPlayerInput());
+    }
+
+    IEnumerator WaitForPlayerInput()
+    {
+        while (!player.GetTranslationIntent())
+            yield return null;
+
         player.ReleaseMoveLock();
         StartCourse();
     }

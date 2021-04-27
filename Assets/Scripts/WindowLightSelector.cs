@@ -22,6 +22,7 @@ public class WindowLightSelector : MonoBehaviour
     }
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(WindowLightSelector))]
 public class WindowLightEditor : Editor
 {
@@ -39,3 +40,4 @@ public class WindowLightEditor : Editor
 
     }
 }
+#endif

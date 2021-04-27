@@ -14,13 +14,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody body;
     private CapsuleCollider coll;
     [SerializeField]
-    private MeshRenderer flightGrid;
-    [SerializeField]
-    private Volume postVolume;
-    private Vignette vignetteEffect;
-    [SerializeField]
     private MeshRenderer fadeOut;
-    private Material flightGridEffect;
     private Material fadeOutEffect;
     [SerializeField]
     private Transform head;
@@ -30,6 +24,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Transform checkpointGuide;
     private Vector3 nextCheckpoint;
+    [SerializeField]
+    private TextHolder checkpointText;
+    [SerializeField]
+    private TextHolder checkpointLabel;
 
     [SerializeField]
     private TouchController touch;
@@ -40,7 +38,6 @@ public class PlayerController : MonoBehaviour
     private bool grounded = true;
     private bool movedLastFrame = true;
     private bool moveLocked = false;
-    private float gridOpacity = 0f;
 
     public float fadeTime = 0.5f;
 
@@ -52,9 +49,6 @@ public class PlayerController : MonoBehaviour
 
     void RecenterCamera()
     {
-        //TODO: Replace this with a proper system
-        //XRDevice.SetTrackingSpaceType(TrackingSpaceType.Stationary);
-        //InputTracking.Recenter();
         trackingOffset.localEulerAngles = -head.localEulerAngles.y * Vector3.up;
         trackingOffset.localPosition = -head.localPosition.x * Vector3.right - head.localPosition.z * Vector3.forward + (intendedHeight - head.localPosition.y) * Vector3.up;
     }
@@ -63,17 +57,17 @@ public class PlayerController : MonoBehaviour
     {
 
         intendedHeight = 1.75f; //trackingOffset.localPosition.y; //TODO: get a better solution that isn't hardcoded
-        //Cursor.lockState = CursorLockMode.Locked;
 
         RecenterCamera();
 
         body = GetComponent<Rigidbody>();
         coll = GetComponent<CapsuleCollider>();
-        flightGridEffect = flightGrid.material;
         fadeOutEffect = fadeOut.material;
-        postVolume.profile.TryGet<Vignette>(out vignetteEffect);
 
         inputLayer.Initialize(this, RecenterCamera, touch.GetHandInfo);
+
+        SetFade(1f);
+        StartCoroutine(FadeIn());
     }
 
     // Update is called once per frame
@@ -85,12 +79,7 @@ public class PlayerController : MonoBehaviour
         //Apply camera orientation to camera, NOT body!
         cameraHolder.localEulerAngles += inputLayer.GetCumulativeRotationInput();
 
-        //Grid effect code
-        gridOpacity = Mathf.Clamp01(gridOpacity - (grounded||!movedLastFrame ? 1 : -1) * Time.unscaledDeltaTime / fadeTime);
-
         checkpointGuide.LookAt(nextCheckpoint, Vector3.up);
-        //flightGridEffect.SetFloat("_fadeEffect", gridOpacity);
-        //vignetteEffect.intensity.value = gridOpacity * comfortVignetteStrength;
     }
 
     void FixedUpdate()
@@ -106,6 +95,8 @@ public class PlayerController : MonoBehaviour
 
         if (!moveLocked)
             body.AddForce(move + stop, ForceMode.VelocityChange);
+        else
+            body.AddForce(stop, ForceMode.VelocityChange);
 
         movedLastFrame = stop.magnitude != 0f;
         grounded = Physics.Raycast(body.transform.position, -transform.up, coll.bounds.extents.y + 0.1f, ~(1 << 8));
@@ -147,15 +138,46 @@ public class PlayerController : MonoBehaviour
         action?.Invoke();
     }
 
+    public IEnumerator FadeIn(Action action = null)
+    {
+        float fade = 1f;
+
+        while (fade > 0f)
+        {
+            fade = Mathf.Clamp01(fade - Time.unscaledDeltaTime / fadeTime);
+            SetFade(fade);
+            yield return null;
+        }
+
+        action?.Invoke();
+    }
+
     public void ReleaseMoveLock() => moveLocked = false;
 
     public bool IsMoveLocked() => moveLocked;
 
-    public void SetNextCheckpoint(Vector3 targetPosition)
+    public void SetNextCheckpoint(Vector3 targetPosition, int currentCheckpoint, int totalCheckpoints)
     {
         nextCheckpoint = targetPosition;
         checkpointGuide.gameObject.SetActive(true);
+        checkpointText.text = String.Format("{0}/{1}", currentCheckpoint, totalCheckpoints);
+        checkpointLabel.text = "Checkpoint";
     }
 
-    public void DisableCheckpoint() => checkpointGuide.gameObject.SetActive(false);
+    public void DisableCheckpoint()
+    {
+        checkpointGuide.gameObject.SetActive(false);
+        checkpointText.text = "";
+        checkpointLabel.text = "";
+    }
+
+    public void SetFade(float perc)
+    {
+        fadeOutEffect.SetColor("_UnlitColor", Color.Lerp(blackZero, blackOne, perc));
+    }
+
+    public bool GetTranslationIntent()
+    {
+        return inputLayer.GetTranslationIntent();
+    }
 }
