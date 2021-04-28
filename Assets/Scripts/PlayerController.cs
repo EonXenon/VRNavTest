@@ -35,9 +35,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private InputLayer inputLayer;
 
+
+    [SerializeField]
+    AudioClip startActSound;
+    [SerializeField]
+    AudioClip doActSound;
+    [SerializeField]
+    AudioClip endActSound;
+    [SerializeField]
+    AudioSource soundSource;
+
     private bool grounded = true;
     private bool movedLastFrame = true;
     private bool moveLocked = false;
+    private bool rotateLocked = false;
 
     public float fadeTime = 0.5f;
 
@@ -67,7 +78,8 @@ public class PlayerController : MonoBehaviour
         inputLayer.Initialize(this, RecenterCamera, touch.GetHandInfo);
 
         SetFade(1f);
-        StartCoroutine(FadeIn());
+        moveLocked = rotateLocked = true;
+        StartCoroutine(FadeIn(0f, 5f, ReleaseAllLock));
     }
 
     // Update is called once per frame
@@ -77,7 +89,9 @@ public class PlayerController : MonoBehaviour
         inputLayer.ResolveInput(in head, in cameraHolder);
 
         //Apply camera orientation to camera, NOT body!
-        cameraHolder.localEulerAngles += inputLayer.GetCumulativeRotationInput();
+
+        if (!rotateLocked)
+            cameraHolder.localEulerAngles += inputLayer.GetCumulativeRotationInput();
 
         checkpointGuide.LookAt(nextCheckpoint, Vector3.up);
     }
@@ -108,15 +122,15 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator Teleport(Vector3 targetPosition, Quaternion targetRotation, bool keepOnHold = false, Action action = null)
     {
-        if (moveLocked) yield break;
+        if (moveLocked || rotateLocked) yield break;
 
-        moveLocked = true;
+        rotateLocked = moveLocked = true;
 
         float fade = 0f;
         while (fade < 1f)
         {
             fade = Mathf.Clamp01(fade + Time.unscaledDeltaTime / fadeTime);
-            fadeOutEffect.SetColor("_UnlitColor", Color.Lerp(blackZero, blackOne, fade));
+            SetFade(fade);
             yield return null;
         }
 
@@ -128,23 +142,23 @@ public class PlayerController : MonoBehaviour
         while (fade > 0f)
         {
             fade = Mathf.Clamp01(fade - Time.unscaledDeltaTime / fadeTime);
-            fadeOutEffect.SetColor("_UnlitColor", Color.Lerp(blackZero, blackOne, fade));
+            SetFade(fade);
             yield return null;
         }
 
         if (!keepOnHold)
-            moveLocked = false;
+            rotateLocked = moveLocked = false;
 
         action?.Invoke();
     }
 
-    public IEnumerator FadeIn(Action action = null)
+    public IEnumerator FadeIn(float waitTime, float fadeInTime, Action action = null)
     {
         float fade = 1f;
 
         while (fade > 0f)
         {
-            fade = Mathf.Clamp01(fade - Time.unscaledDeltaTime / fadeTime);
+            fade = Mathf.Clamp01(fade - Time.unscaledDeltaTime / fadeInTime);
             SetFade(fade);
             yield return null;
         }
@@ -156,12 +170,32 @@ public class PlayerController : MonoBehaviour
 
     public bool IsMoveLocked() => moveLocked;
 
+    public void ReleaseRotateLock() => rotateLocked = false;
+
+    public bool IsRotateLocked() => rotateLocked;
+
+    public void ReleaseAllLock() => moveLocked = rotateLocked = false;
+
+    public bool IsAnyLocked() => rotateLocked || moveLocked;
+
     public void SetNextCheckpoint(Vector3 targetPosition, int currentCheckpoint, int totalCheckpoints)
     {
         nextCheckpoint = targetPosition;
         checkpointGuide.gameObject.SetActive(true);
         checkpointText.text = String.Format("{0}/{1}", currentCheckpoint, totalCheckpoints);
         checkpointLabel.text = "Checkpoint";
+        soundSource.PlayOneShot(doActSound);
+    }
+
+    public void SetCourseReady()
+    {
+        checkpointText.text = "MOVE TO START";
+        checkpointLabel.text = "Awaiting input...";
+    }
+
+    public void StartActGeneric()
+    {
+        soundSource.PlayOneShot(startActSound);
     }
 
     public void DisableCheckpoint()
@@ -169,15 +203,24 @@ public class PlayerController : MonoBehaviour
         checkpointGuide.gameObject.SetActive(false);
         checkpointText.text = "";
         checkpointLabel.text = "";
+        soundSource.PlayOneShot(endActSound);
     }
 
-    public void SetFade(float perc)
-    {
-        fadeOutEffect.SetColor("_UnlitColor", Color.Lerp(blackZero, blackOne, perc));
-    }
+    public void SetFade(float perc) => fadeOutEffect.SetColor("_UnlitColor", Color.Lerp(blackZero, blackOne, perc));
 
     public bool GetTranslationIntent()
     {
         return inputLayer.GetTranslationIntent();
+    }
+
+    public bool GetRotationIntent()
+    {
+        Debug.Log(inputLayer.GetRotationIntent());
+        return inputLayer.GetRotationIntent();
+    }
+
+    public bool GetAnyIntent()
+    {
+        return inputLayer.GetRotationIntent() || inputLayer.GetTranslationIntent();
     }
 }

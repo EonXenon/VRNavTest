@@ -5,13 +5,24 @@ using UnityEngine;
 
 public class CourseController : MonoBehaviour
 {
+
+    public enum CourseType
+    {
+        Hybrid,
+        TranslationOnly,
+        RotationOnly
+    }
+
+    [SerializeField]
+    CourseType courseType;
+
     [SerializeField]
     PlayerController player;
 
     [SerializeField]
     Transform startingLine;
     [SerializeField]
-    Checkpoint[] checkpoints;
+    CourseObjective[] checkpoints;
 
     [SerializeField]
     Color previousCheckpointColor;
@@ -26,7 +37,6 @@ public class CourseController : MonoBehaviour
     float countStartTime;
 
     bool preStart = false;
-    int debugCount = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -47,7 +57,7 @@ public class CourseController : MonoBehaviour
     void ResetCourse()
     {
         inProgress = false;
-        foreach (Checkpoint c in checkpoints)
+        foreach (CourseObjective c in checkpoints)
         {
             c.SetColor(nextCheckpointColor);
             c.transform.gameObject.SetActive(true);
@@ -58,20 +68,21 @@ public class CourseController : MonoBehaviour
     {
         checkpoints[0].SetColor(currentCheckpointColor);
         currentCheckpoint = 0;
-        player.SetNextCheckpoint(checkpoints[0].transform.position, currentCheckpoint, checkpoints.Length);
+        player.SetCourseReady();
     }
 
     void StartCourse()
     {
         inProgress = true;
         countStartTime = Time.unscaledTime;
+        player.SetNextCheckpoint(checkpoints[currentCheckpoint].transform.position, currentCheckpoint, checkpoints.Length);
     }
 
     void OnCourseComplete()
     {
         float resultTime = Time.unscaledTime - countStartTime;
         inProgress = false;
-        _ = DataOutput.Write(string.Format("{0}", TimeSpan.FromSeconds(resultTime)), "results.csv");
+        _ = DataOutput.Write(String.Format("{0}", resultTime), "results.csv");
         gameObject.SetActive(false);
     }
 
@@ -90,25 +101,29 @@ public class CourseController : MonoBehaviour
 
     private void OnDisable()
     {
-        foreach (Checkpoint c in checkpoints)
+        foreach (CourseObjective c in checkpoints)
         {
             c.transform.gameObject.SetActive(false);
         }
+
+        if (!preStart) return;
+
         player.DisableCheckpoint();
-        player.ReleaseMoveLock();
+        player.ReleaseAllLock();
     }
 
     private void OnEnable()
     {
         if (!preStart) return;
 
-        if (player.IsMoveLocked())
+        if (player.IsAnyLocked())
         {
             gameObject.SetActive(false);
             return;
         }
 
         ResetCourse();
+        player.StartActGeneric();
         player.StartCoroutine(player.Teleport(startingLine.position, startingLine.rotation, true, OnPlayerReady));
     }
 
@@ -116,7 +131,7 @@ public class CourseController : MonoBehaviour
     {
         if (!gameObject.activeSelf)
         {
-            player.ReleaseMoveLock();
+            player.ReleaseAllLock();
             return;
         }
         ReadyCourse();
@@ -125,10 +140,27 @@ public class CourseController : MonoBehaviour
 
     IEnumerator WaitForPlayerInput()
     {
-        while (!player.GetTranslationIntent())
-            yield return null;
+        if (courseType == CourseType.TranslationOnly)
+        {
+            while (!player.GetTranslationIntent())
+                yield return null;
 
-        player.ReleaseMoveLock();
+            player.ReleaseMoveLock();
+        }
+        else if (courseType == CourseType.RotationOnly)
+        {
+            while (!player.GetRotationIntent())
+                yield return null;
+
+            player.ReleaseRotateLock();
+        }
+        else
+        {
+            while (!player.GetAnyIntent())
+                yield return null;
+
+            player.ReleaseAllLock();
+        }
         StartCourse();
     }
 }

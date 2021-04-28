@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 
-public class Checkpoint : MonoBehaviour
+public class Checkpoint: CourseObjective
 {
     [SerializeField]
     Transform cube;
@@ -34,7 +32,7 @@ public class Checkpoint : MonoBehaviour
         vfx.SetFloat("Cube Height", cubeHeight);
     }
 
-    public bool CheckTrigger(Transform target)
+    public override bool CheckTrigger(Transform target)
     {
         Vector3 diff = target.position - transform.position;
         float verDiff = diff.y;
@@ -42,8 +40,5 @@ public class Checkpoint : MonoBehaviour
         return verDiff > 0f && verDiff < height && horDiff < radius;
     }
 
-    public void SetColor(Color color)
-    {
-        vfx.SetVector4("Color", color);
-    }
+    public override void SetColor(Color color) => vfx.SetVector4("Color", color);
 }

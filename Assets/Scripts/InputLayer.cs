@@ -370,7 +370,7 @@ public class InputLayer : IPlayerActions
     }
 
     public bool GetTranslationIntent() => targetTranslation.magnitude > 0f;
-    public bool GetRotationIntent() => targetTranslation.magnitude > 0f;
+    public bool GetRotationIntent() => targetRotation.magnitude > 0f;
 
     public Vector3 GetCumulativeRotationInput()
     {
