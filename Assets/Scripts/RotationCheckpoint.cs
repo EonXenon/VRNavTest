@@ -41,10 +41,13 @@ public class RotationCheckpoint : CourseObjective
         }
         glyphMat = glyph.material;
         lineMat = line.material;
+
+        percentage = 0f;
+        UpdateState();
     }
 
     // Update is called once per frame
-    void Update()
+    void UpdateState()
     {
         float currentTime = totalDuration * percentage;
 
@@ -70,6 +73,8 @@ public class RotationCheckpoint : CourseObjective
             percentage = Mathf.Min(1f, percentage + Time.deltaTime / holdDuration);
         else
             percentage = 0f;
+
+        UpdateState();
 
         return percentage == 1f;
     }

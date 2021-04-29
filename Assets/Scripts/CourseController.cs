@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CourseController : MonoBehaviour
@@ -15,6 +14,9 @@ public class CourseController : MonoBehaviour
 
     [SerializeField]
     CourseType courseType;
+
+    [SerializeField]
+    string courseID;
 
     [SerializeField]
     PlayerController player;
@@ -82,7 +84,7 @@ public class CourseController : MonoBehaviour
     {
         float resultTime = Time.unscaledTime - countStartTime;
         inProgress = false;
-        _ = DataOutput.Write(String.Format("{0}", resultTime), "results.csv");
+        _ = DataOutput.Write(String.Format("{0}", resultTime), "results_"+ courseID + ".csv");
         gameObject.SetActive(false);
     }
 
@@ -109,6 +111,7 @@ public class CourseController : MonoBehaviour
         if (!preStart) return;
 
         player.DisableCheckpoint();
+        player.DisableRotationAid();
         player.ReleaseAllLock();
     }
 
@@ -118,7 +121,9 @@ public class CourseController : MonoBehaviour
 
         if (player.IsAnyLocked())
         {
+            preStart = true;
             gameObject.SetActive(false);
+            preStart = false;
             return;
         }
 
@@ -149,6 +154,8 @@ public class CourseController : MonoBehaviour
         }
         else if (courseType == CourseType.RotationOnly)
         {
+            player.EnableRotationAid();
+
             while (!player.GetRotationIntent())
                 yield return null;
 

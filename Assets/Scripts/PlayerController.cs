@@ -30,6 +30,9 @@ public class PlayerController : MonoBehaviour
     private TextHolder checkpointLabel;
 
     [SerializeField]
+    private GameObject rotationAid;
+
+    [SerializeField]
     private TouchController touch;
 
     [SerializeField]
@@ -69,8 +72,6 @@ public class PlayerController : MonoBehaviour
 
         intendedHeight = 1.75f; //trackingOffset.localPosition.y; //TODO: get a better solution that isn't hardcoded
 
-        RecenterCamera();
-
         body = GetComponent<Rigidbody>();
         coll = GetComponent<CapsuleCollider>();
         fadeOutEffect = fadeOut.material;
@@ -79,7 +80,8 @@ public class PlayerController : MonoBehaviour
 
         SetFade(1f);
         moveLocked = rotateLocked = true;
-        StartCoroutine(FadeIn(0f, 5f, ReleaseAllLock));
+        RecenterCamera();
+        StartCoroutine(StartDelay(1f, fadeTime, RecenterCamera, ReleaseAllLock));
     }
 
     // Update is called once per frame
@@ -152,8 +154,12 @@ public class PlayerController : MonoBehaviour
         action?.Invoke();
     }
 
-    public IEnumerator FadeIn(float waitTime, float fadeInTime, Action action = null)
+    public IEnumerator StartDelay(float waitTime, float fadeInTime, Action preAction = null, Action postAction = null)
     {
+        yield return new WaitForSecondsRealtime(waitTime);
+
+        preAction?.Invoke();
+
         float fade = 1f;
 
         while (fade > 0f)
@@ -163,7 +169,7 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
 
-        action?.Invoke();
+        postAction?.Invoke();
     }
 
     public void ReleaseMoveLock() => moveLocked = false;
@@ -223,4 +229,7 @@ public class PlayerController : MonoBehaviour
     {
         return inputLayer.GetRotationIntent() || inputLayer.GetTranslationIntent();
     }
+
+    public void EnableRotationAid() => rotationAid.SetActive(true);
+    public void DisableRotationAid() => rotationAid.SetActive(false);
 }
