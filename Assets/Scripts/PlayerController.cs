@@ -33,9 +33,6 @@ public class PlayerController : MonoBehaviour
     private GameObject rotationAid;
 
     [SerializeField]
-    private TouchController touch;
-
-    [SerializeField]
     private InputLayer inputLayer;
 
 
@@ -76,7 +73,7 @@ public class PlayerController : MonoBehaviour
         coll = GetComponent<CapsuleCollider>();
         fadeOutEffect = fadeOut.material;
 
-        inputLayer.Initialize(this, RecenterCamera, touch.GetHandInfo);
+        inputLayer.Initialize(this, RecenterCamera);
 
         SetFade(1f);
         moveLocked = rotateLocked = true;

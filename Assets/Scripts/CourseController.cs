@@ -33,6 +33,8 @@ public class CourseController : MonoBehaviour
     [SerializeField]
     Color nextCheckpointColor;
 
+    CourseRuleSet rules;
+
     int currentCheckpoint;
     bool inProgress;
 
@@ -41,6 +43,11 @@ public class CourseController : MonoBehaviour
     bool preStart = false;
 
     // Start is called before the first frame update
+    private void Awake()
+    {
+        rules = GetComponent<CourseRuleSet>();
+    }
+
     void Start()
     {
         gameObject.SetActive(false);
@@ -118,6 +125,8 @@ public class CourseController : MonoBehaviour
     private void OnEnable()
     {
         if (!preStart) return;
+
+        rules?.ApplyRules();
 
         if (player.IsAnyLocked())
         {
