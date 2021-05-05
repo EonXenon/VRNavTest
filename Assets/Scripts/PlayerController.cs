@@ -88,7 +88,6 @@ public class PlayerController : MonoBehaviour
         inputLayer.ResolveInput(in head, in cameraHolder);
 
         //Apply camera orientation to camera, NOT body!
-
         if (!rotateLocked)
             cameraHolder.localEulerAngles += inputLayer.GetCumulativeRotationInput();
 
@@ -110,6 +109,18 @@ public class PlayerController : MonoBehaviour
             body.AddForce(move + stop, ForceMode.VelocityChange);
         else
             body.AddForce(stop, ForceMode.VelocityChange);
+
+        Vector3? movePosition = inputLayer.GetPositionalInput();
+
+        if (movePosition != null)
+        {
+            body.isKinematic = true;
+            body.MovePosition((Vector3)movePosition - (head.position - transform.position));
+        }
+        else
+        {
+            body.isKinematic = false;
+        }
 
         movedLastFrame = stop.magnitude != 0f;
         grounded = Physics.Raycast(body.transform.position, -transform.up, coll.bounds.extents.y + 0.1f, ~(1 << 8));

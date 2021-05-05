@@ -9,12 +9,8 @@ using System.Linq;
 public class InputLayer
 {
     private MonoBehaviour mono;
-
     private Action recenterAction;
-
     private InputMaster config;
-
-    public Transform hitPoint;
 
     public enum RotationType
     {
@@ -47,22 +43,27 @@ public class InputLayer
     public DevModeSettings devModeSettings;
 
     private Vector3 targetTranslation = Vector3.zero;
+    private Vector3? targetPosition = null;
     private Vector3 targetRotation = Vector3.zero;
     private Vector2 targetOrientation = Vector2.up;
 
     public float transitionTime = 0.15f;
     private bool rotating = false;
 
-    private Vector3 targetPos = Vector3.zero;
-    private Vector3 startPos = Vector3.zero;
-    private Vector3 savedNormal = Vector3.forward;
-    private float defaultDistance = 500f;
-    private bool wasDragging = false;
     private bool wasHolding = false;
-    private float cumulativeY = 0f;
-    private bool hasShot = false;
-    private bool hasHit = false;
 
+
+    //Drag'n'Go
+    bool isTargetSet = false;
+    Vector3 setPosition = Vector3.one;
+    Vector3 initialPosition = Vector3.zero;
+    float initialValue = 0f;
+
+    public Transform hitPoint;
+    Vector3 castPos;
+    Quaternion castRot;
+
+    //Input system
     struct InputData
     {
         public float drag_delta;
@@ -79,9 +80,11 @@ public class InputLayer
 
     InputData data;
 
+    //Method Settings
     public float dragRotationSensitivity;
     public float directionalContinuousRotationSpeed;
     public float paddlingTranslationSpeed;
+    public float dragNGoDefaultDistance;
 
 
     //Touch related
@@ -114,10 +117,12 @@ public class InputLayer
         this.recenterAction = resetAction;
 
         handData.rightHandTouches = new Dictionary<int, SimpleTouch>();
+        handData.rightHandPosition = Vector2.zero;
         handData.rightHandDelta = Vector2.zero;
         handData.rightHandTouch = false;
         
         handData.leftHandTouches = new Dictionary<int, SimpleTouch>();
+        handData.leftHandPosition = Vector2.zero;
         handData.leftHandDelta = Vector2.zero;
         handData.leftHandTouch = false;
 
@@ -176,6 +181,9 @@ public class InputLayer
         config.T_Directional.HandPosition.performed += T_Directional_Pos;
         config.T_Directional.HandPosition.canceled += T_Directional_Pos;
         config.T_Directional.Disable();
+
+        //T_DragNGo
+        hitPoint.gameObject.SetActive(false);
 
     }
 
@@ -265,6 +273,12 @@ public class InputLayer
                         break;
                     }
 
+                case TranslationType.DragNGo:
+                    {
+                        hitPoint.gameObject.SetActive(false);
+                        break;
+                    }
+
             }
 
             oldTranslationType = translationType;
@@ -283,6 +297,12 @@ public class InputLayer
                         break;
                     }
 
+                case TranslationType.DragNGo:
+                    {
+                        hitPoint.gameObject.SetActive(true);
+                        break;
+                    }
+
             }
         }
     }
@@ -296,6 +316,7 @@ public class InputLayer
         if (Touchscreen.current == null)
         {
             Debug.LogError("Touchscreen hardware appears to be missing! Restart application and try again!");
+            return;
         }
 
         for (int i = 0; i < Touchscreen.current.touches.Count; i++)
@@ -344,6 +365,7 @@ public class InputLayer
             handData.rightHandPosition = SimpleTouch.CalculateHandPosition(rightHandTouchesList);
             handData.rightHandDelta = SimpleTouch.CalculateHandDelta(rightHandTouchesList);
         }
+        else handData.rightHandDelta = Vector2.zero;
 
         // Left Hand
         handData.leftHandTouch = leftHandTouchesList.Count > 0;
@@ -354,6 +376,7 @@ public class InputLayer
             handData.leftHandPosition = SimpleTouch.CalculateHandPosition(leftHandTouchesList);
             handData.leftHandDelta = SimpleTouch.CalculateHandDelta(leftHandTouchesList);
         }
+        else handData.leftHandDelta = Vector2.zero;
 
     }
 
@@ -470,73 +493,58 @@ public class InputLayer
 
             case TranslationType.DragNGo:
                 {
-                    //This needs to be done from the ground up
-                    /*
-                    float y = abstractedInput.dragDirect;
+                    float y = 0f;
 
-                    bool hasHitOnce = Physics.Raycast(headTransform.position, headTransform.forward, out RaycastHit hit, defaultDistance);
-
-                    if (abstractedInput.translationFunction)
+                    if(handData.leftHandTouch)
                     {
-                        if (!hasShot)
+                        if(handData.rightHandTouch)
                         {
-                            if (hasHitOnce)
-                            {
-                                hasHit = true;
-
-                                startPos = controllerTransform.position;
-                                targetPos = hit.point - headTransform.localPosition; //Correct for head height
-                                lastPickup.position = hit.point;
-                                savedNormal = -hit.normal;
-                                lastPickup.rotation = Quaternion.LookRotation(savedNormal);
-                            }
-                            else
-                            {
-                                startPos = controllerTransform.position;
-                                targetPos = headTransform.position + headTransform.forward * defaultDistance - headTransform.localPosition; //Correct for head height
-                                lastPickup.position = headTransform.position + headTransform.forward * defaultDistance;
-                                savedNormal = headTransform.forward;
-                                lastPickup.rotation = Quaternion.LookRotation(savedNormal);
-                            }
-
-                            hasShot = true;
+                            y = Mathf.Min(handData.leftHandPosition.y, handData.rightHandPosition.y);
                         }
-
-                        if (!wasDragging)
-                        {
-                            wasDragging = true;
-                        }
-                        else if (hasHit)
-                        {
-                            targetTranslation = Vector3.Lerp(startPos, targetPos, cumulativeY) - controllerTransform.position;
-                            lastPickup.position = targetPos + headTransform.localPosition;
-                            lastPickup.rotation = Quaternion.LookRotation(savedNormal);
-                        }
-
-                        cumulativeY = Mathf.Clamp01(cumulativeY + -y * mouseSetttings.sensitivity * Time.unscaledDeltaTime);
+                        else y = handData.leftHandPosition.y;
                     }
-                    else
-                    {
-                        wasDragging = false;
-                        cumulativeY = 0f;
-                        hasShot = false;
-                        hasHit = false;
+                    else if(handData.rightHandTouch) y = handData.rightHandPosition.y;
 
-                        if (hasHitOnce)
+                    if (isTargetSet)
+                    {
+                        if (!(handData.leftHandTouch || handData.rightHandTouch))
                         {
-                            lastPickup.position = hit.point;
-                            lastPickup.rotation = Quaternion.LookRotation(-hit.normal);
+                            isTargetSet = false;
                         }
                         else
                         {
-                            lastPickup.position = headTransform.position + headTransform.forward * defaultDistance;
-                            lastPickup.rotation = Quaternion.LookRotation(headTransform.forward);
+                            targetPosition = Vector3.LerpUnclamped(setPosition, initialPosition, Mathf.Max(0f, y / initialValue));
                         }
                     }
 
+                    if (!isTargetSet)
+                    {
+                        bool hasHit = Physics.Raycast(headTransform.position, headTransform.forward, out RaycastHit hit, dragNGoDefaultDistance);
 
-                    lastPickup.localScale = Vector3.one * (0.1f + Vector3.Distance(headTransform.position, lastPickup.position) / 15f);
-                    */
+                        if (hasHit)
+                        {
+                            castPos = hit.point;
+                            castRot = Quaternion.LookRotation(-hit.normal);
+                        }
+                        else
+                        {
+                            castPos = headTransform.position + headTransform.forward * dragNGoDefaultDistance;
+                            castRot = Quaternion.LookRotation(headTransform.forward);
+                        }
+
+                        if (handData.leftHandTouch || handData.rightHandTouch)
+                        {
+                            setPosition = castPos;
+                            initialPosition = headTransform.position;
+                            initialValue = y;
+                            isTargetSet = true;
+                        }
+
+                    }
+
+                    hitPoint.position = castPos;
+                    hitPoint.rotation = castRot;
+
                     return;
                 }
 
@@ -562,6 +570,13 @@ public class InputLayer
 
         targetTranslation = Vector3.zero;
         return normalizedResult;
+    }
+
+    public Vector3? GetPositionalInput()
+    {
+        Vector3? result = targetPosition;
+        targetPosition = null;
+        return result;
     }
 
     public bool GetTranslationIntent() => targetTranslation.magnitude > 0f;
