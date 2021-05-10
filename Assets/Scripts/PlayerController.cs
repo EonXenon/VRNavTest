@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
+using UnityEngine.UI;
 using UnityEngine.XR;
 
 public class PlayerController : MonoBehaviour
 {
     // Start is called before the first frame update
+
     [SerializeField]
     private Transform cameraHolder;
     private Rigidbody body;
@@ -64,9 +66,13 @@ public class PlayerController : MonoBehaviour
         trackingOffset.localPosition = -head.localPosition.x * Vector3.right - head.localPosition.z * Vector3.forward + (intendedHeight - head.localPosition.y) * Vector3.up;
     }
 
+    public void HookMonitor(MonitorHandler handler)
+    {
+        handler.HookInput(inputLayer);
+    }
+
     void Start()
     {
-
         intendedHeight = 1.75f; //trackingOffset.localPosition.y; //TODO: get a better solution that isn't hardcoded
 
         body = GetComponent<Rigidbody>();
@@ -92,6 +98,7 @@ public class PlayerController : MonoBehaviour
             cameraHolder.localEulerAngles += inputLayer.GetCumulativeRotationInput();
 
         checkpointGuide.LookAt(nextCheckpoint, Vector3.up);
+
     }
 
     void FixedUpdate()
@@ -229,7 +236,6 @@ public class PlayerController : MonoBehaviour
 
     public bool GetRotationIntent()
     {
-        Debug.Log(inputLayer.GetRotationIntent());
         return inputLayer.GetRotationIntent();
     }
 
@@ -240,4 +246,6 @@ public class PlayerController : MonoBehaviour
 
     public void EnableRotationAid() => rotationAid.SetActive(true);
     public void DisableRotationAid() => rotationAid.SetActive(false);
+    public Transform GetHeadTransform() => head;
+
 }

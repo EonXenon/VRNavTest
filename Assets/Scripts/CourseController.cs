@@ -59,7 +59,7 @@ public class CourseController : MonoBehaviour
     {
         if(inProgress)
         {
-            if(checkpoints[currentCheckpoint].CheckTrigger(player.transform)) OnCheckpointReached();
+            if(checkpoints[currentCheckpoint].CheckTrigger(player.GetHeadTransform())) OnCheckpointReached();
         }
     }
 
@@ -91,7 +91,7 @@ public class CourseController : MonoBehaviour
     {
         float resultTime = Time.unscaledTime - countStartTime;
         inProgress = false;
-        _ = DataOutput.Write(String.Format("{0}", resultTime), "results_"+ courseID + ".csv");
+        _ = DataInOut.Write($"{courseID},{resultTime}");
         gameObject.SetActive(false);
     }
 

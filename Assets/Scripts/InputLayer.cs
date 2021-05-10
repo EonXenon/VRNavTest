@@ -71,7 +71,7 @@ public class InputLayer
         public Vector2 cnC_thumb;
         public bool headConv_conv;
         public float devMode_delta;
-        public bool direct_func;
+        public float direct_func;
         public Quaternion direct_handOri;
         public Vector3 direct_handPos;
         public bool devMode_boost;
@@ -79,6 +79,9 @@ public class InputLayer
     }
 
     InputData data;
+
+    [SerializeField]
+    Transform directionalHand;
 
     //Method Settings
     public float dragRotationSensitivity;
@@ -106,6 +109,7 @@ public class InputLayer
 
     public RectTransform handInputUI;
     public Transform[] fingers;
+    public int handInputCallers;
 
 
 
@@ -116,6 +120,11 @@ public class InputLayer
         this.mono = mono;
         this.recenterAction = resetAction;
 
+        dragRotationSensitivity = DataInOut.config.dragRotationSensitivity;
+        directionalContinuousRotationSpeed = DataInOut.config.directionalContinuousRotationSpeed;
+        paddlingTranslationSpeed = DataInOut.config.paddlingTranslationSpeed;
+        dragNGoDefaultDistance = DataInOut.config.dragNGoDefaultDistance;
+
         handData.rightHandTouches = new Dictionary<int, SimpleTouch>();
         handData.rightHandPosition = Vector2.zero;
         handData.rightHandDelta = Vector2.zero;
@@ -125,6 +134,9 @@ public class InputLayer
         handData.leftHandPosition = Vector2.zero;
         handData.leftHandDelta = Vector2.zero;
         handData.leftHandTouch = false;
+
+        handInputCallers = 0;
+        handInputUI.gameObject.SetActive(false);
 
         config = new InputMaster();
         config.Enable();
@@ -181,16 +193,22 @@ public class InputLayer
         config.T_Directional.HandPosition.performed += T_Directional_Pos;
         config.T_Directional.HandPosition.canceled += T_Directional_Pos;
         config.T_Directional.Disable();
+        directionalHand.gameObject.SetActive(false);
 
         //T_DragNGo
         hitPoint.gameObject.SetActive(false);
 
     }
 
+    public void HookMonitor(MonitorHandler handler)
+    {
+        handler.HookConfig(config);
+    }
+
     public void ResolveInput(in Transform headTransform, in Transform controllerTransform)
     {
         CheckforInputSwap();
-        ProcessHands();
+        if(handInputCallers > 0) ProcessHands();
 
         ResolveRotation(in headTransform, in controllerTransform);
         ResolveTranslation(in headTransform, in controllerTransform);
@@ -202,6 +220,12 @@ public class InputLayer
         {
             switch (oldRotationType)
             {
+                case RotationType.Drag:
+                    {
+                        if(--handInputCallers <= 0) handInputUI.gameObject.SetActive(false);
+                        break;
+                    }
+
                 case RotationType.DirectionalContinuous:
                     {
                         config.R_DirectionalContinuous.Disable();
@@ -231,6 +255,12 @@ public class InputLayer
 
             switch (rotationType)
             {
+                case RotationType.Drag:
+                    {
+                        if (++handInputCallers > 0) handInputUI.gameObject.SetActive(true);
+                        break;
+                    }
+
                 case RotationType.DirectionalContinuous:
                     {
                         config.R_DirectionalContinuous.Enable();
@@ -264,6 +294,7 @@ public class InputLayer
                 case TranslationType.Directional:
                     {
                         config.T_Directional.Disable();
+                        directionalHand.gameObject.SetActive(false);
                         break;
                     }
 
@@ -275,7 +306,14 @@ public class InputLayer
 
                 case TranslationType.DragNGo:
                     {
+                        if (--handInputCallers <= 0) handInputUI.gameObject.SetActive(false);
                         hitPoint.gameObject.SetActive(false);
+                        break;
+                    }
+
+                case TranslationType.Paddling:
+                    {
+                        if (--handInputCallers <= 0) handInputUI.gameObject.SetActive(false);
                         break;
                     }
 
@@ -288,6 +326,7 @@ public class InputLayer
                 case TranslationType.Directional:
                     {
                         config.T_Directional.Enable();
+                        directionalHand.gameObject.SetActive(true);
                         break;
                     }
 
@@ -299,7 +338,14 @@ public class InputLayer
 
                 case TranslationType.DragNGo:
                     {
+                        if (++handInputCallers > 0) handInputUI.gameObject.SetActive(true);
                         hitPoint.gameObject.SetActive(true);
+                        break;
+                    }
+
+                case TranslationType.Paddling:
+                    {
+                        if (++handInputCallers > 0) handInputUI.gameObject.SetActive(true);
                         break;
                     }
 
@@ -475,9 +521,10 @@ public class InputLayer
         {
             case TranslationType.Directional:
                 {
-                    Quaternion finalTransformation = controllerTransform.rotation * data.direct_handOri;
-                    if(data.direct_func)
-                        targetTranslation = finalTransformation * Vector3.forward;
+                    //I really stopped understanding this spaghetti, but for whatever reason, this works perfectly
+                    directionalHand.localRotation = data.direct_handOri;
+                    targetTranslation = directionalHand.rotation * Vector3.forward * data.direct_func;
+                    directionalHand.localPosition = data.direct_handPos;
 
                     return;
                 }
@@ -519,7 +566,7 @@ public class InputLayer
 
                     if (!isTargetSet)
                     {
-                        bool hasHit = Physics.Raycast(headTransform.position, headTransform.forward, out RaycastHit hit, dragNGoDefaultDistance);
+                        bool hasHit = Physics.Raycast(headTransform.position, headTransform.forward, out RaycastHit hit);
 
                         if (hasHit)
                         {
@@ -565,7 +612,7 @@ public class InputLayer
     public Vector3 GetCumulativeTranslationInput()
     {
         Vector3 normalizedResult = targetTranslation;
-        if (translationType == TranslationType.Directional || translationType == TranslationType.DevMode)
+        if (translationType == TranslationType.DevMode)
             normalizedResult /= Mathf.Max(1f, targetTranslation.magnitude);
 
         targetTranslation = Vector3.zero;
@@ -612,7 +659,11 @@ public class InputLayer
     void T_DevMode_TX(InputAction.CallbackContext context) => data.devMode_trans.x = context.ReadValue<float>();
     void T_DevMode_TY(InputAction.CallbackContext context) => data.devMode_trans.y = context.ReadValue<float>();
     void T_DevMode_TZ(InputAction.CallbackContext context) => data.devMode_trans.z = context.ReadValue<float>();
-    void T_Directional_Move(InputAction.CallbackContext context) => data.direct_func = context.ReadValue<float>() > 0f;
+    void T_Directional_Move(InputAction.CallbackContext context)
+    {
+        data.direct_func = context.ReadValue<float>();
+    }
+
     void T_Directional_Ori(InputAction.CallbackContext context) => data.direct_handOri = context.ReadValue<Quaternion>();
     void T_Directional_Pos(InputAction.CallbackContext context) => data.direct_handPos = context.ReadValue<Vector3>();
 

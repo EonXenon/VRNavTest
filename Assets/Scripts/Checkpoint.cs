@@ -16,6 +16,8 @@ public class Checkpoint: CourseObjective
     float cubeHeightLoopDuration = 5f;
     float cubeRotationRate = 15f;
 
+    Vector3 lastKnownPosition = Vector3.zero;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,7 +39,10 @@ public class Checkpoint: CourseObjective
         Vector3 diff = target.position - transform.position;
         float verDiff = diff.y;
         float horDiff = Mathf.Sqrt(diff.x * diff.x + diff.z * diff.z);
-        return verDiff > 0f && verDiff < height && horDiff < radius;
+
+        bool result = (verDiff > 0f && verDiff < height && horDiff < radius && (lastKnownPosition - target.position).magnitude <= 0f);
+
+        return result;
     }
 
     public override void SetColor(Color color) => vfx.SetVector4("Color", color);

@@ -50,7 +50,10 @@ public class DynamicPerformanceController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        targetFramerate = Mathf.Max(80f,XRDevice.refreshRate);
+        targetFramerate = Mathf.Max(DataInOut.config.targetFramerate,XRDevice.refreshRate);
+        maximumResolutionPercentage = DataInOut.config.maximumResolutionPercentage;
+        minimumResolutionPercentage = DataInOut.config.minimumResolutionPercentage;
+        safetyMarginPercentage = DataInOut.config.safetyMarginPercentage;
 
         shortSmoothedCPU = smoothedCPU = shortSmoothedGPU = smoothedGPU = GetTargetTime();
 

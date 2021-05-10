@@ -52,6 +52,28 @@
                     "action": "Rotate",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3315d3c4-8e26-4827-bebc-49144d5b6a28",
+                    "path": "<ViveWand>{RightHand}/trackpad/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Default Control Scheme",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9b530486-2107-4a34-acc6-0eaf20b4ed84",
+                    "path": "<OpenVRControllerWMR>{RightHand}/joystick/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Default Control Scheme",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -79,6 +101,28 @@
                     "action": "Direction",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cb96ee49-4cfd-4e74-890d-6c120939b679",
+                    "path": "<ViveWand>{RightHand}/trackpad",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Direction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2c11515f-7e21-48c4-b2b7-cd59828956fa",
+                    "path": "<OpenVRControllerWMR>{RightHand}/joystick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Default Control Scheme",
+                    "action": "Direction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -99,7 +143,7 @@
                 {
                     "name": "",
                     "id": "c7b3795b-6951-447a-9b31-6db2c0ce8d0c",
-                    "path": "<OculusTouchController>{RightHand}/triggerpressed",
+                    "path": "<XRController>{RightHand}/triggerPressed",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -142,15 +186,15 @@
             "actions": [
                 {
                     "name": "Move",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "8ebff63d-4238-4a40-a1d5-b916d4a9b1d2",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": ""
                 },
                 {
                     "name": "Hand Orientation",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "3ed1dc9d-b3d2-444d-a464-e6ab7ab20102",
                     "expectedControlType": "Quaternion",
                     "processors": "NormalizeVector2",
@@ -158,7 +202,7 @@
                 },
                 {
                     "name": "Hand Position",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "5311ef21-460f-4d60-843f-21d0f04f9fec",
                     "expectedControlType": "Vector3",
                     "processors": "",
@@ -169,7 +213,7 @@
                 {
                     "name": "",
                     "id": "da8f3660-eff7-4081-b53b-403c05053408",
-                    "path": "<OculusTouchController>{LeftHand}/triggerPressed",
+                    "path": "<XRController>{LeftHand}/trigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -319,7 +363,7 @@
                 {
                     "name": "negative",
                     "id": "3e65f159-3826-4332-a88b-3a5526efe600",
-                    "path": "<Keyboard>/c",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -350,12 +394,115 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Monitor",
+            "id": "b5299d7f-3aae-4984-91ce-7057ead138b7",
+            "actions": [
+                {
+                    "name": "MenuUp",
+                    "type": "Button",
+                    "id": "f648dccf-e820-4a2e-8921-b8ffc6e1821f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "MenuDown",
+                    "type": "Button",
+                    "id": "1891a6d3-2fce-48e1-87ba-3c93f73de89b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "MenuLeft",
+                    "type": "Button",
+                    "id": "1b9be84c-aad4-4ad9-854f-cf7249bbd97b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "MenuRight",
+                    "type": "Button",
+                    "id": "89f0ac5e-259e-45b3-a291-7a8b922aa95e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "MenuSelect",
+                    "type": "Button",
+                    "id": "8370cda5-8a0d-4234-9e45-ca2e93b3e830",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f7d2b6b9-9ca5-47e8-ad2f-717fe099a89e",
+                    "path": "<Keyboard>/numpad8",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MenuUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "83ecaa7b-57c3-4791-980a-0ebfc09ac104",
+                    "path": "<Keyboard>/numpad2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MenuDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3f9474af-5532-4768-b15b-15896d6efb05",
+                    "path": "<Keyboard>/numpad4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MenuLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a676ca0a-9189-4500-9646-3975990c63d3",
+                    "path": "<Keyboard>/numpad6",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MenuRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "26b04622-55d8-46fa-82ad-f2edc1b8f73d",
+                    "path": "<Keyboard>/numpad5",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MenuSelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [
         {
-            "name": "New control scheme",
-            "bindingGroup": "New control scheme",
+            "name": "Default Control Scheme",
+            "bindingGroup": "Default Control Scheme",
             "devices": [
                 {
                     "devicePath": "<Keyboard>",

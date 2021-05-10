@@ -323,7 +323,7 @@ MonoBehaviour:
       minPercentage: 50
       dynResType: 1
       upsampleFilter: 3
-      forceResolution: 1
+      forceResolution: 0
       forcedPercentage: 100
     lowresTransparentSettings:
       enabled: 0

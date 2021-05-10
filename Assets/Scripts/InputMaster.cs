@@ -65,6 +65,28 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""Rotate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3315d3c4-8e26-4827-bebc-49144d5b6a28"",
+                    ""path"": ""<ViveWand>{RightHand}/trackpad/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Default Control Scheme"",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9b530486-2107-4a34-acc6-0eaf20b4ed84"",
+                    ""path"": ""<OpenVRControllerWMR>{RightHand}/joystick/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Default Control Scheme"",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -92,6 +114,28 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""Direction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cb96ee49-4cfd-4e74-890d-6c120939b679"",
+                    ""path"": ""<ViveWand>{RightHand}/trackpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Direction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2c11515f-7e21-48c4-b2b7-cd59828956fa"",
+                    ""path"": ""<OpenVRControllerWMR>{RightHand}/joystick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Default Control Scheme"",
+                    ""action"": ""Direction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -112,7 +156,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""c7b3795b-6951-447a-9b31-6db2c0ce8d0c"",
-                    ""path"": ""<OculusTouchController>{RightHand}/triggerpressed"",
+                    ""path"": ""<XRController>{RightHand}/triggerPressed"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -155,15 +199,15 @@ public class @InputMaster : IInputActionCollection, IDisposable
             ""actions"": [
                 {
                     ""name"": ""Move"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""8ebff63d-4238-4a40-a1d5-b916d4a9b1d2"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """"
                 },
                 {
                     ""name"": ""Hand Orientation"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Value"",
                     ""id"": ""3ed1dc9d-b3d2-444d-a464-e6ab7ab20102"",
                     ""expectedControlType"": ""Quaternion"",
                     ""processors"": ""NormalizeVector2"",
@@ -171,7 +215,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""Hand Position"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Value"",
                     ""id"": ""5311ef21-460f-4d60-843f-21d0f04f9fec"",
                     ""expectedControlType"": ""Vector3"",
                     ""processors"": """",
@@ -182,7 +226,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""da8f3660-eff7-4081-b53b-403c05053408"",
-                    ""path"": ""<OculusTouchController>{LeftHand}/triggerPressed"",
+                    ""path"": ""<XRController>{LeftHand}/trigger"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -332,7 +376,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": ""negative"",
                     ""id"": ""3e65f159-3826-4332-a88b-3a5526efe600"",
-                    ""path"": ""<Keyboard>/c"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -363,12 +407,115 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Monitor"",
+            ""id"": ""b5299d7f-3aae-4984-91ce-7057ead138b7"",
+            ""actions"": [
+                {
+                    ""name"": ""MenuUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""f648dccf-e820-4a2e-8921-b8ffc6e1821f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""MenuDown"",
+                    ""type"": ""Button"",
+                    ""id"": ""1891a6d3-2fce-48e1-87ba-3c93f73de89b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""MenuLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""1b9be84c-aad4-4ad9-854f-cf7249bbd97b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""MenuRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""89f0ac5e-259e-45b3-a291-7a8b922aa95e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""MenuSelect"",
+                    ""type"": ""Button"",
+                    ""id"": ""8370cda5-8a0d-4234-9e45-ca2e93b3e830"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""f7d2b6b9-9ca5-47e8-ad2f-717fe099a89e"",
+                    ""path"": ""<Keyboard>/numpad8"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MenuUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""83ecaa7b-57c3-4791-980a-0ebfc09ac104"",
+                    ""path"": ""<Keyboard>/numpad2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MenuDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3f9474af-5532-4768-b15b-15896d6efb05"",
+                    ""path"": ""<Keyboard>/numpad4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MenuLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a676ca0a-9189-4500-9646-3975990c63d3"",
+                    ""path"": ""<Keyboard>/numpad6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MenuRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""26b04622-55d8-46fa-82ad-f2edc1b8f73d"",
+                    ""path"": ""<Keyboard>/numpad5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MenuSelect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
         {
-            ""name"": ""New control scheme"",
-            ""bindingGroup"": ""New control scheme"",
+            ""name"": ""Default Control Scheme"",
+            ""bindingGroup"": ""Default Control Scheme"",
             ""devices"": [
                 {
                     ""devicePath"": ""<Keyboard>"",
@@ -410,6 +557,13 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_T_DevMode_TranslationXAxis = m_T_DevMode.FindAction("Translation X Axis", throwIfNotFound: true);
         m_T_DevMode_TranslationYAxis = m_T_DevMode.FindAction("Translation Y Axis", throwIfNotFound: true);
         m_T_DevMode_TranslationZAxis = m_T_DevMode.FindAction("Translation Z Axis", throwIfNotFound: true);
+        // Monitor
+        m_Monitor = asset.FindActionMap("Monitor", throwIfNotFound: true);
+        m_Monitor_MenuUp = m_Monitor.FindAction("MenuUp", throwIfNotFound: true);
+        m_Monitor_MenuDown = m_Monitor.FindAction("MenuDown", throwIfNotFound: true);
+        m_Monitor_MenuLeft = m_Monitor.FindAction("MenuLeft", throwIfNotFound: true);
+        m_Monitor_MenuRight = m_Monitor.FindAction("MenuRight", throwIfNotFound: true);
+        m_Monitor_MenuSelect = m_Monitor.FindAction("MenuSelect", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -726,13 +880,78 @@ public class @InputMaster : IInputActionCollection, IDisposable
         }
     }
     public T_DevModeActions @T_DevMode => new T_DevModeActions(this);
-    private int m_NewcontrolschemeSchemeIndex = -1;
-    public InputControlScheme NewcontrolschemeScheme
+
+    // Monitor
+    private readonly InputActionMap m_Monitor;
+    private IMonitorActions m_MonitorActionsCallbackInterface;
+    private readonly InputAction m_Monitor_MenuUp;
+    private readonly InputAction m_Monitor_MenuDown;
+    private readonly InputAction m_Monitor_MenuLeft;
+    private readonly InputAction m_Monitor_MenuRight;
+    private readonly InputAction m_Monitor_MenuSelect;
+    public struct MonitorActions
+    {
+        private @InputMaster m_Wrapper;
+        public MonitorActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @MenuUp => m_Wrapper.m_Monitor_MenuUp;
+        public InputAction @MenuDown => m_Wrapper.m_Monitor_MenuDown;
+        public InputAction @MenuLeft => m_Wrapper.m_Monitor_MenuLeft;
+        public InputAction @MenuRight => m_Wrapper.m_Monitor_MenuRight;
+        public InputAction @MenuSelect => m_Wrapper.m_Monitor_MenuSelect;
+        public InputActionMap Get() { return m_Wrapper.m_Monitor; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MonitorActions set) { return set.Get(); }
+        public void SetCallbacks(IMonitorActions instance)
+        {
+            if (m_Wrapper.m_MonitorActionsCallbackInterface != null)
+            {
+                @MenuUp.started -= m_Wrapper.m_MonitorActionsCallbackInterface.OnMenuUp;
+                @MenuUp.performed -= m_Wrapper.m_MonitorActionsCallbackInterface.OnMenuUp;
+                @MenuUp.canceled -= m_Wrapper.m_MonitorActionsCallbackInterface.OnMenuUp;
+                @MenuDown.started -= m_Wrapper.m_MonitorActionsCallbackInterface.OnMenuDown;
+                @MenuDown.performed -= m_Wrapper.m_MonitorActionsCallbackInterface.OnMenuDown;
+                @MenuDown.canceled -= m_Wrapper.m_MonitorActionsCallbackInterface.OnMenuDown;
+                @MenuLeft.started -= m_Wrapper.m_MonitorActionsCallbackInterface.OnMenuLeft;
+                @MenuLeft.performed -= m_Wrapper.m_MonitorActionsCallbackInterface.OnMenuLeft;
+                @MenuLeft.canceled -= m_Wrapper.m_MonitorActionsCallbackInterface.OnMenuLeft;
+                @MenuRight.started -= m_Wrapper.m_MonitorActionsCallbackInterface.OnMenuRight;
+                @MenuRight.performed -= m_Wrapper.m_MonitorActionsCallbackInterface.OnMenuRight;
+                @MenuRight.canceled -= m_Wrapper.m_MonitorActionsCallbackInterface.OnMenuRight;
+                @MenuSelect.started -= m_Wrapper.m_MonitorActionsCallbackInterface.OnMenuSelect;
+                @MenuSelect.performed -= m_Wrapper.m_MonitorActionsCallbackInterface.OnMenuSelect;
+                @MenuSelect.canceled -= m_Wrapper.m_MonitorActionsCallbackInterface.OnMenuSelect;
+            }
+            m_Wrapper.m_MonitorActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @MenuUp.started += instance.OnMenuUp;
+                @MenuUp.performed += instance.OnMenuUp;
+                @MenuUp.canceled += instance.OnMenuUp;
+                @MenuDown.started += instance.OnMenuDown;
+                @MenuDown.performed += instance.OnMenuDown;
+                @MenuDown.canceled += instance.OnMenuDown;
+                @MenuLeft.started += instance.OnMenuLeft;
+                @MenuLeft.performed += instance.OnMenuLeft;
+                @MenuLeft.canceled += instance.OnMenuLeft;
+                @MenuRight.started += instance.OnMenuRight;
+                @MenuRight.performed += instance.OnMenuRight;
+                @MenuRight.canceled += instance.OnMenuRight;
+                @MenuSelect.started += instance.OnMenuSelect;
+                @MenuSelect.performed += instance.OnMenuSelect;
+                @MenuSelect.canceled += instance.OnMenuSelect;
+            }
+        }
+    }
+    public MonitorActions @Monitor => new MonitorActions(this);
+    private int m_DefaultControlSchemeSchemeIndex = -1;
+    public InputControlScheme DefaultControlSchemeScheme
     {
         get
         {
-            if (m_NewcontrolschemeSchemeIndex == -1) m_NewcontrolschemeSchemeIndex = asset.FindControlSchemeIndex("New control scheme");
-            return asset.controlSchemes[m_NewcontrolschemeSchemeIndex];
+            if (m_DefaultControlSchemeSchemeIndex == -1) m_DefaultControlSchemeSchemeIndex = asset.FindControlSchemeIndex("Default Control Scheme");
+            return asset.controlSchemes[m_DefaultControlSchemeSchemeIndex];
         }
     }
     public interface IPlayerActions
@@ -767,5 +986,13 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnTranslationXAxis(InputAction.CallbackContext context);
         void OnTranslationYAxis(InputAction.CallbackContext context);
         void OnTranslationZAxis(InputAction.CallbackContext context);
+    }
+    public interface IMonitorActions
+    {
+        void OnMenuUp(InputAction.CallbackContext context);
+        void OnMenuDown(InputAction.CallbackContext context);
+        void OnMenuLeft(InputAction.CallbackContext context);
+        void OnMenuRight(InputAction.CallbackContext context);
+        void OnMenuSelect(InputAction.CallbackContext context);
     }
 }
