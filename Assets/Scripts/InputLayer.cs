@@ -60,6 +60,7 @@ public class InputLayer
     float initialValue = 0f;
 
     public Transform hitPoint;
+    int hitPointCallers;
     Vector3 castPos;
     Quaternion castRot;
 
@@ -109,7 +110,7 @@ public class InputLayer
 
     public RectTransform handInputUI;
     public Transform[] fingers;
-    public int handInputCallers;
+    int handInputCallers;
 
 
 
@@ -137,6 +138,9 @@ public class InputLayer
 
         handInputCallers = 0;
         handInputUI.gameObject.SetActive(false);
+
+        hitPointCallers = 0;
+        hitPoint.gameObject.SetActive(false);
 
         config = new InputMaster();
         config.Enable();
@@ -196,7 +200,6 @@ public class InputLayer
         directionalHand.gameObject.SetActive(false);
 
         //T_DragNGo
-        hitPoint.gameObject.SetActive(false);
 
     }
 
@@ -240,6 +243,7 @@ public class InputLayer
 
                 case RotationType.HeadConverge:
                     {
+                        if (--hitPointCallers <= 0) hitPoint.gameObject.SetActive(false);
                         config.R_HeadConverge.Disable();
                         break;
                     }
@@ -275,6 +279,7 @@ public class InputLayer
 
                 case RotationType.HeadConverge:
                     {
+                        if (++hitPointCallers > 0) hitPoint.gameObject.SetActive(true);
                         config.R_HeadConverge.Enable();
                         break;
                     }
@@ -307,7 +312,7 @@ public class InputLayer
                 case TranslationType.DragNGo:
                     {
                         if (--handInputCallers <= 0) handInputUI.gameObject.SetActive(false);
-                        hitPoint.gameObject.SetActive(false);
+                        if (--hitPointCallers <= 0) hitPoint.gameObject.SetActive(false);
                         break;
                     }
 
@@ -339,7 +344,7 @@ public class InputLayer
                 case TranslationType.DragNGo:
                     {
                         if (++handInputCallers > 0) handInputUI.gameObject.SetActive(true);
-                        hitPoint.gameObject.SetActive(true);
+                        if (++hitPointCallers > 0) hitPoint.gameObject.SetActive(true);
                         break;
                     }
 
@@ -478,6 +483,23 @@ public class InputLayer
                         data.headConv_conv = false;
                     }
 
+                    bool hasHit = Physics.Raycast(headTransform.position, headTransform.forward, out RaycastHit hit);
+
+                    if (hasHit)
+                    {
+                        castPos = hit.point;
+                        castRot = Quaternion.LookRotation(-hit.normal);
+                    }
+                    else
+                    {
+                        castPos = headTransform.position + headTransform.forward * dragNGoDefaultDistance;
+                        castRot = Quaternion.LookRotation(headTransform.forward);
+                    }
+
+                    hitPoint.position = castPos;
+                    hitPoint.rotation = castRot;
+                    hitPoint.localScale = Vector3.one * (0.1f + Vector3.Distance(headTransform.position, hitPoint.position) / 15f);
+
                     return;
                 }
             case RotationType.DevMode:
@@ -591,6 +613,7 @@ public class InputLayer
 
                     hitPoint.position = castPos;
                     hitPoint.rotation = castRot;
+                    hitPoint.localScale = Vector3.one * (0.1f + Vector3.Distance(headTransform.position, hitPoint.position) / 15f);
 
                     return;
                 }

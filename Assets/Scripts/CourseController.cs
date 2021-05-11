@@ -34,6 +34,7 @@ public class CourseController : MonoBehaviour
     Color nextCheckpointColor;
 
     CourseRuleSet rules;
+    float measure;
 
     int currentCheckpoint;
     bool inProgress;
@@ -59,6 +60,9 @@ public class CourseController : MonoBehaviour
     {
         if(inProgress)
         {
+            if (rules != null)
+                measure += (float)rules?.TakeMeasurement(player.transform);
+
             if(checkpoints[currentCheckpoint].CheckTrigger(player.GetHeadTransform())) OnCheckpointReached();
         }
     }
@@ -91,7 +95,7 @@ public class CourseController : MonoBehaviour
     {
         float resultTime = Time.unscaledTime - countStartTime;
         inProgress = false;
-        _ = DataInOut.Write($"{courseID},{resultTime}");
+        _ = DataInOut.Write($"{courseID},{resultTime},{measure}");
         gameObject.SetActive(false);
     }
 
@@ -127,6 +131,7 @@ public class CourseController : MonoBehaviour
         if (!preStart) return;
 
         rules?.ApplyRules();
+        measure = 0f;
 
         if (player.IsAnyLocked())
         {

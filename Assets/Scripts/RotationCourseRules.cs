@@ -31,6 +31,17 @@ public class RotationCourseRules : CourseRuleSet
             checkpoints[i].transform.position = startReference.position + Quaternion.Euler(0f, curAng, 0f) * startReference.forward * distanceFromCenter;
             checkpoints[i].transform.localRotation = Quaternion.Euler(0f, curAng, 0f);
         }
+
+        lastOrientation = startReference.rotation;
+    }
+
+    Quaternion lastOrientation;
+
+    public override float TakeMeasurement(in Transform player)
+    {
+        float angle = Quaternion.Angle(player.rotation, lastOrientation);
+        lastOrientation = player.rotation;
+        return angle;
     }
 
     private static System.Random rng = new System.Random();

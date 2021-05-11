@@ -42,8 +42,14 @@ public class Checkpoint: CourseObjective
 
         bool result = (verDiff > 0f && verDiff < height && horDiff < radius && (lastKnownPosition - target.position).magnitude <= 0f);
 
+        lastKnownPosition = target.position;
+
         return result;
     }
 
-    public override void SetColor(Color color) => vfx.SetVector4("Color", color);
+    public override void SetColor(Color color)
+    {
+        vfx.SetVector4("Color", color);
+        cube.localScale = Vector3.one * color.a;
+    }
 }

@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class CourseRuleSet : MonoBehaviour
+public abstract class CourseRuleSet : MonoBehaviour
 {
-    public virtual void ApplyRules(){}
+    public abstract void ApplyRules();
+    public abstract float TakeMeasurement(in Transform player);
 }

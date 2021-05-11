@@ -85,7 +85,8 @@ public class MonitorHandler : MonoBehaviour
 
     void MenuSelect(InputAction.CallbackContext context)
     {
-        courses[horizontalIndex].gameObject.SetActive(!courses[horizontalIndex].gameObject.activeSelf);
+        if((VerticalMenu)verticalIndex == VerticalMenu.Courses)
+            courses[horizontalIndex].gameObject.SetActive(!courses[horizontalIndex].gameObject.activeSelf);
     }
 
     // Update is called once per frame

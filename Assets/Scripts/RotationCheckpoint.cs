@@ -87,8 +87,8 @@ public class RotationCheckpoint : CourseObjective
             glyphMat = glyph.material;
         }
         glyphMat.SetColor("_EmissiveColor", color * 4096f);
-        glyphMat.SetColor("_Color", color);
+        glyphMat.SetColor("_UnlitColor", color);
         lineMat.SetColor("_EmissiveColor", color * 4096f);
-        lineMat.SetColor("_Color", color);
+        lineMat.SetColor("_UnlitColor", color);
     }
 }
