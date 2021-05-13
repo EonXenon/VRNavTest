@@ -36,13 +36,14 @@ public class Checkpoint: CourseObjective
 
     public override bool CheckTrigger(Transform target)
     {
-        Vector3 diff = target.position - transform.position;
+        Vector3 targetPos = target.position + Vector3.up;
+        Vector3 diff = targetPos - transform.position;
         float verDiff = diff.y;
         float horDiff = Mathf.Sqrt(diff.x * diff.x + diff.z * diff.z);
 
-        bool result = (verDiff > 0f && verDiff < height && horDiff < radius && (lastKnownPosition - target.position).magnitude <= 0f);
+        bool result = (verDiff > 0f && verDiff < height && horDiff < radius && (lastKnownPosition - targetPos).magnitude <= 0f);
 
-        lastKnownPosition = target.position;
+        lastKnownPosition = targetPos;
 
         return result;
     }

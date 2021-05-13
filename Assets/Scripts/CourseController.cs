@@ -63,7 +63,7 @@ public class CourseController : MonoBehaviour
             if (rules != null)
                 measure += (float)rules?.TakeMeasurement(player.transform);
 
-            if(checkpoints[currentCheckpoint].CheckTrigger(player.GetHeadTransform())) OnCheckpointReached();
+            if(checkpoints[currentCheckpoint].CheckTrigger(player.transform)) OnCheckpointReached();
         }
     }
 
@@ -95,7 +95,7 @@ public class CourseController : MonoBehaviour
     {
         float resultTime = Time.unscaledTime - countStartTime;
         inProgress = false;
-        _ = DataInOut.Write($"{courseID},{resultTime},{measure}");
+        _ = DataInOut.Write($"{courseID},{resultTime},{measure},{rules?.ExecutionInfo(player)}");
         gameObject.SetActive(false);
     }
 

@@ -28,7 +28,7 @@ public class RotationCourseRules : CourseRuleSet
         for (int i = 0; i < checkpoints.Length; i++)
         {
             curAng += rotations[i];
-            checkpoints[i].transform.position = startReference.position + Quaternion.Euler(0f, curAng, 0f) * startReference.forward * distanceFromCenter;
+            checkpoints[i].transform.position = startReference.position + Quaternion.Euler(0f, curAng, 0f) * startReference.forward * distanceFromCenter - startReference.up * startReference.localPosition.y;
             checkpoints[i].transform.localRotation = Quaternion.Euler(0f, curAng, 0f);
         }
 
@@ -58,4 +58,6 @@ public class RotationCourseRules : CourseRuleSet
             list[n] = value;
         }
     }
+
+    public override string ExecutionInfo(in PlayerController player) => player.GetCurrentRotationMethod();
 }

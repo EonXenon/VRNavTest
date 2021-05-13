@@ -54,6 +54,7 @@ public class InputLayer
 
 
     //Drag'n'Go
+    Queue<float> interpolatedDragNGo = new Queue<float>();
     bool isTargetSet = false;
     Vector3 setPosition = Vector3.one;
     Vector3 initialPosition = Vector3.zero;
@@ -108,9 +109,18 @@ public class InputLayer
 
     HandData handData;
 
+    //Drag
+    Queue<float> interpolatedDrag = new Queue<float>();
+
+    //Paddling
+    Queue<float> interpolatedPaddling = new Queue<float>();
+
     public RectTransform handInputUI;
     public Transform[] fingers;
     int handInputCallers;
+
+    public Transform cncLine;
+    public Transform cncWorldLine;
 
 
 
@@ -166,6 +176,14 @@ public class InputLayer
         config.R_ClickAndChoose.Direction.performed += R_ClickAndChoose_Direction;
         config.R_ClickAndChoose.Direction.canceled += R_ClickAndChoose_Direction;
         config.R_ClickAndChoose.Disable();
+        cncLine.parent.gameObject.SetActive(false);
+        cncWorldLine.gameObject.SetActive(false);
+
+        //R_Drag
+        interpolatedDrag.Enqueue(0f);
+        interpolatedDrag.Enqueue(0f);
+        interpolatedDrag.Enqueue(0f);
+        interpolatedDrag.Enqueue(0f);
 
         //R_HeadConverge
         config.R_HeadConverge.RotationFunction.started += R_HeadConverge_Function;
@@ -199,7 +217,10 @@ public class InputLayer
         config.T_Directional.Disable();
         directionalHand.gameObject.SetActive(false);
 
-        //T_DragNGo
+        //T_Paddling
+        interpolatedPaddling.Enqueue(0f);
+        interpolatedPaddling.Enqueue(0f);
+        interpolatedPaddling.Enqueue(0f);
 
     }
 
@@ -238,6 +259,8 @@ public class InputLayer
                 case RotationType.ClickAndChoose:
                     {
                         config.R_ClickAndChoose.Disable();
+                        cncLine.parent.gameObject.SetActive(false);
+                        cncWorldLine.gameObject.SetActive(false);
                         break;
                     }
 
@@ -439,7 +462,20 @@ public class InputLayer
                 {
                     float x = handData.leftHandDelta.x + handData.rightHandDelta.x;
                     if (handData.leftHandTouch && handData.rightHandTouch) x /= 2f;
-                    targetRotation = Vector3.up * dragRotationSensitivity * -x * Time.unscaledDeltaTime;
+                    interpolatedDrag.Enqueue(x);
+
+                    float interpolatedX = 0f;
+
+                    foreach (float inX in interpolatedDrag)
+                    {
+                        interpolatedX += inX;
+                    }
+
+                    interpolatedX /= interpolatedDrag.Count;
+
+                    interpolatedDrag.Dequeue();
+
+                    targetRotation = Vector3.up * dragRotationSensitivity * -interpolatedX * Time.unscaledDeltaTime;
 
                     return;
                 }
@@ -453,14 +489,19 @@ public class InputLayer
 
             case RotationType.ClickAndChoose:
                 {
-                    if (data.cnC_thumb.magnitude > 0.75f)
+                    if (data.cnC_thumb.magnitude > 0.95f)
                     {
                         targetOrientation = data.cnC_thumb;
                         wasHolding = true;
+                        cncLine.parent.gameObject.SetActive(true);
+                        cncWorldLine.gameObject.SetActive(true);
+                        cncWorldLine.localRotation = cncLine.localRotation = Quaternion.Euler(0f,0f,-Vector2.SignedAngle(targetOrientation.normalized, Vector2.up));
                     }
                     else if (wasHolding)
                     {
                         wasHolding = false;
+                        cncLine.parent.gameObject.SetActive(false);
+                        cncWorldLine.gameObject.SetActive(false);
                         float resultInput = Vector2.SignedAngle(targetOrientation.normalized, Vector2.up);
                         if (resultInput != 0f)
                             mono.StartCoroutine(DoRotateStep(resultInput, controllerTransform));
@@ -555,7 +596,20 @@ public class InputLayer
                 {
                     float y = handData.leftHandDelta.y + handData.rightHandDelta.y;
                     if (handData.leftHandTouch && handData.rightHandTouch) y /= 2f;
-                    targetTranslation += headTransform.forward * -y * paddlingTranslationSpeed * Time.unscaledDeltaTime;
+                    interpolatedPaddling.Enqueue(y);
+
+                    float interpolatedY = 0f;
+
+                    foreach (float inY in interpolatedPaddling)
+                    {
+                        interpolatedY += inY;
+                    }
+
+                    interpolatedY /= interpolatedPaddling.Count;
+
+                    interpolatedPaddling.Dequeue();
+
+                    targetTranslation += headTransform.forward * -interpolatedY * paddlingTranslationSpeed * Time.unscaledDeltaTime;
 
                     return;
                 }
@@ -582,7 +636,19 @@ public class InputLayer
                         }
                         else
                         {
-                            targetPosition = Vector3.LerpUnclamped(setPosition, initialPosition, Mathf.Max(0f, y / initialValue));
+                            interpolatedDragNGo.Enqueue(y);
+
+                            float interpolatedY = 0f;
+
+                            foreach (float inY in interpolatedDragNGo)
+                            {
+                                interpolatedY += inY;
+                            }
+
+                            interpolatedY /= interpolatedDragNGo.Count;
+
+                            targetPosition = Vector3.LerpUnclamped(setPosition, initialPosition, Mathf.Max(0f, interpolatedY / initialValue));
+                            if (interpolatedDragNGo.Count >= 4) interpolatedDragNGo.Dequeue();
                         }
                     }
 
@@ -607,6 +673,8 @@ public class InputLayer
                             initialPosition = headTransform.position;
                             initialValue = y;
                             isTargetSet = true;
+                            interpolatedDragNGo.Clear();
+                            interpolatedDragNGo.Enqueue(y);
                         }
 
                     }
@@ -649,7 +717,7 @@ public class InputLayer
         return result;
     }
 
-    public bool GetTranslationIntent() => targetTranslation.magnitude > 0f;
+    public bool GetTranslationIntent() => targetTranslation.magnitude > 0f || isTargetSet;
     public bool GetRotationIntent() => targetRotation.magnitude > 0f;
 
     public Vector3 GetCumulativeRotationInput()
@@ -684,7 +752,7 @@ public class InputLayer
     void T_DevMode_TZ(InputAction.CallbackContext context) => data.devMode_trans.z = context.ReadValue<float>();
     void T_Directional_Move(InputAction.CallbackContext context)
     {
-        data.direct_func = context.ReadValue<float>();
+        data.direct_func = Mathf.Clamp01(context.ReadValue<float>() * 1.05f - 0.025f);
     }
 
     void T_Directional_Ori(InputAction.CallbackContext context) => data.direct_handOri = context.ReadValue<Quaternion>();

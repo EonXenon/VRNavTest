@@ -31,7 +31,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""9e8bfc4d-ebbb-4ca8-8c54-1e780eeb2d31"",
-                    ""path"": ""<XRInputV1::Oculus::OculusTouchControllerOpenXR>{RightHand}/primarybutton"",
+                    ""path"": ""<Keyboard>/numpad0"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

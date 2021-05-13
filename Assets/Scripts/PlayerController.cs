@@ -229,20 +229,12 @@ public class PlayerController : MonoBehaviour
 
     public void SetFade(float perc) => fadeOutEffect.SetColor("_UnlitColor", Color.Lerp(blackZero, blackOne, perc));
 
-    public bool GetTranslationIntent()
-    {
-        return inputLayer.GetTranslationIntent();
-    }
+    public bool GetTranslationIntent() => inputLayer.GetTranslationIntent();
+    public bool GetRotationIntent() => inputLayer.GetRotationIntent();
+    public bool GetAnyIntent() => inputLayer.GetRotationIntent() || inputLayer.GetTranslationIntent();
 
-    public bool GetRotationIntent()
-    {
-        return inputLayer.GetRotationIntent();
-    }
-
-    public bool GetAnyIntent()
-    {
-        return inputLayer.GetRotationIntent() || inputLayer.GetTranslationIntent();
-    }
+    public string GetCurrentRotationMethod() => inputLayer.rotationType.ToString();
+    public string GetCurrentTranslationMethod() => inputLayer.translationType.ToString();
 
     public void EnableRotationAid() => rotationAid.SetActive(true);
     public void DisableRotationAid() => rotationAid.SetActive(false);
