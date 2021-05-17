@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4236528093545481606}
-  - component: {fileID: 4561526801954782733}
   m_Layer: 0
   m_Name: window2_3x2
   m_TagString: Untagged
@@ -32,31 +31,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!205 &4561526801954782733
-LODGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 905348878271461269}
-  serializedVersion: 2
-  m_LocalReferencePoint: {x: 0, y: 1.5, z: 0}
-  m_Size: 3.0078125
-  m_FadeMode: 0
-  m_AnimateCrossFading: 0
-  m_LastLODIsBillboard: 0
-  m_LODs:
-  - screenRelativeHeight: 0.0036956714
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 6288211882633133506}
-  - screenRelativeHeight: 0.0036956714
-    fadeTransitionWidth: 0
-    renderers: []
-  - screenRelativeHeight: 0.0036956714
-    fadeTransitionWidth: 0
-    renderers: []
-  m_Enabled: 1
 --- !u!114 &4381731830250505457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,12 +128,6 @@ Transform:
 --- !u!1 &3035313583698805079 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2534866581884222612, guid: b32d582fd72647643883f1017549146b,
-    type: 3}
-  m_PrefabInstance: {fileID: 662660431134768579}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &6288211882633133506 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -2416733968201007103, guid: b32d582fd72647643883f1017549146b,
     type: 3}
   m_PrefabInstance: {fileID: 662660431134768579}
   m_PrefabAsset: {fileID: 0}

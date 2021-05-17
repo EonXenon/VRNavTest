@@ -179,7 +179,7 @@ Material:
     - Vector1_CA42EC2B: 1
     - Vector1_EB0E1A30: 0
     - Vector1_c1690c2dc1c544ed8d63715b95a20a1b: 7.06
-    - Vector1_d4d5bb348e8a4078bc98e10528ceec3f: 0.35
+    - Vector1_d4d5bb348e8a4078bc98e10528ceec3f: 0.5
     - _AORemapMax: 1
     - _AORemapMin: 0
     - _ATDistance: 1
@@ -274,7 +274,7 @@ Material:
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
     - _SSRefractionProjectionModel: 0
-    - _Smoothness: 0.35
+    - _Smoothness: 0.25
     - _SmoothnessRemapMax: 0.17
     - _SmoothnessRemapMin: 0
     - _SmoothnessTextureChannel: 0

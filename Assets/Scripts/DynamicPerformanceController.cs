@@ -6,6 +6,9 @@ using UnityEngine.Rendering;
 using UnityEngine.UI;
 using UnityEngine.XR;
 using UnityEngine.Rendering.HighDefinition;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class DynamicPerformanceController : MonoBehaviour
 {
@@ -16,9 +19,30 @@ public class DynamicPerformanceController : MonoBehaviour
     [Range(0f, 100f)]
     public float safetyMarginPercentage = 5f;
 
-    [Range(50f, 100f)]
-    public float resolutionScale = 100.0f;
+    [Range(50f, 5000f)]
+    public float normalFarClip = 5000f;
+    [Range(50f, 5000f)]
+    public float maximumReducedFarClip = 500f;
+    [Range(50f, 5000f)]
+    public float minimumReducedFarClip = 50f;
+    [Range(10f, 90f)]
+    public float angleReducedFarClip = 50f;
 
+    [Range(10f, 180f)]
+    public float fieldOfViewOcclusionAngle = 50f;
+
+    [Range(8, 128)]
+    public int maximumSRRRays = 128;
+    [Range(8, 128)]
+    public int minimumSRRRays = 8;
+
+
+    float resolutionScale = 100.0f;
+
+
+
+    [SerializeField]
+    Camera headCamera;
     public Volume postProcess;
     private ColorAdjustments colorAdjustments;
     private ScreenSpaceReflection ssr;
@@ -31,7 +55,7 @@ public class DynamicPerformanceController : MonoBehaviour
     float shortSmoothedGPU = 0f;
     float smoothedRatio = 1f;
     float longSmoothedRatio = 1f;
-    double gpuTime = 0f;
+    float gpuTime = 0f;
     bool askForTime = false;
 
     public bool debugMode = false;
@@ -64,8 +88,11 @@ public class DynamicPerformanceController : MonoBehaviour
         postProcess.profile.TryGet<ColorAdjustments>(out colorAdjustments);
         postProcess.profile.TryGet<ScreenSpaceReflection>(out ssr);
 
-        ssr.quality.value = (int)ScalableSettingLevelParameter.Level.Medium;
+        //ssr.quality.value = (int)ScalableSettingLevelParameter.Level.Medium;
         colorAdjustments.active = true;
+
+        RenderPipelineManager.beginFrameRendering += StartWatch;
+        RenderPipelineManager.endFrameRendering += StopWatch;
     }
 
     // Update is called once per frame
@@ -87,16 +114,35 @@ public class DynamicPerformanceController : MonoBehaviour
 
         longSmoothedRatio = ((targetFramerate * 30f - 1f) * longSmoothedRatio + finalRatio) / (targetFramerate * 30f);
 
-        float ratioError = Mathf.Min(smoothedRatio, finalRatio) - (100f - safetyMarginPercentage);
+        float ratioError = Mathf.Min(smoothedRatio, finalRatio, (GetTargetTime() / (float)gpuTime) * 100f) - (100f - safetyMarginPercentage);
 
-        if (ratioError < 0f)
+        /*if (ratioError < 0f)
         {
-            resolutionScale = Mathf.Max(resolutionScale + ratioError, minimumResolutionPercentage);
+            resolutionScale = minimumResolutionPercentage;//Mathf.Max(resolutionScale - Time.deltaTime * (100f - minimumResolutionPercentage), minimumResolutionPercentage);
         }
         else if (ratioError > safetyMarginPercentage)
         {
-            resolutionScale = Mathf.Min(resolutionScale + Time.deltaTime * (100f - minimumResolutionPercentage), maximumResolutionPercentage);
+            resolutionScale = maximumResolutionPercentage;//Mathf.Min(resolutionScale + Time.deltaTime * (100f - minimumResolutionPercentage), maximumResolutionPercentage);
+        }*/
+
+        if (gpuTime > GetTargetTime())
+        {
+            ssr.rayMaxIterations = minimumSRRRays;
+            resolutionScale = minimumResolutionPercentage;
         }
+        else
+        {
+            ssr.rayMaxIterations = maximumSRRRays;
+            resolutionScale = maximumResolutionPercentage;
+        }
+            
+
+        /*float totalAng = Mathf.Abs(headCamera.transform.rotation.eulerAngles.x - 90f);
+
+        if (totalAng < angleReducedFarClip)
+            headCamera.farClipPlane = Mathf.Lerp(minimumReducedFarClip, maximumReducedFarClip, Mathf.Pow(totalAng / angleReducedFarClip,3f));
+        else
+            headCamera.farClipPlane = normalFarClip;*/
 
         /*if (resolutionScale <= minimumResolutionPercentage) //Performance too low, reduce quality further
         {
@@ -111,25 +157,45 @@ public class DynamicPerformanceController : MonoBehaviour
 
         }*/
 
-
         if (debugMode)
-            screenText.text = string.Format("Scale: {0:F1}%\nPerformance Target: {1:F1}%\nFrametime (total): {2:F2}ms\nFrametime (GPU):{3:F2}ms",
+            screenText.text = string.Format("Scale: {0:F1}%\nPerformance Target: {1:F1}%\nFrametime (total): {2:F2}ms\nFrametime (GPU): {3:F2}ms\nRender Distance: {4:F2}m\nQueued Frames: {5:F2}",
                 resolutionScale,
                 ratioError,
                 smoothedCPU * 1000f,
-                smoothedGPU * 1000f);
-
-        gpuTime = Time.realtimeSinceStartupAsDouble;
-        askForTime = true;
-
+                smoothedGPU * 1000f,
+                headCamera.farClipPlane,
+                gpuTimeQueue.Count);
     }
 
-    void OnGUI()
+    Queue<double> gpuTimeQueue = new Queue<double>();
+
+    void StartWatch(ScriptableRenderContext context, Camera[] cameras)
     {
-        if (askForTime)
+        gpuTimeQueue.Enqueue(Time.realtimeSinceStartupAsDouble);
+    }
+
+    void StopWatch(ScriptableRenderContext context, Camera[] cameras)
+    {
+        gpuTime = (float)(Time.realtimeSinceStartupAsDouble - gpuTimeQueue.Dequeue());
+    }
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(DynamicPerformanceController))]
+    public class DPCEditor : Editor
+    {
+        public override void OnInspectorGUI()
         {
-            gpuTime = Time.realtimeSinceStartupAsDouble - gpuTime;
-            askForTime = false;
+            DrawDefaultInspector();
+
+            DynamicPerformanceController myScript = (DynamicPerformanceController)target;
+
+            if (GUILayout.Button("Select objects"))
+            {
+                
+            }
+
+
         }
     }
+#endif
 }

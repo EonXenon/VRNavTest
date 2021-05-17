@@ -20,15 +20,20 @@ public class DataInOut
 
     public static GameConfig config;
 
+    public static string sessionID;
+
     public static async Task Write(string s)
     {
-        using StreamWriter file = new StreamWriter("results.csv", append: true);
+        using StreamWriter file = new StreamWriter("results_" + sessionID + ".csv", append: true);
         await file.WriteLineAsync(s);
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
     static void ReadINIConfig()
     {
+
+        sessionID = String.Format("{0:d9}", (DateTime.Now.Ticks / 10) % 1000000000);
+
         try
         {
             using (StreamReader sr = new StreamReader("config.ini"))
@@ -62,6 +67,9 @@ public class DataInOut
                             continue;
                         case "dragngodefaultdistance":
                             config.dragNGoDefaultDistance = float.Parse(temp[1]);
+                            continue;
+                        case "overrideid":
+                            sessionID = temp[1].Trim(' ').ToLower();
                             continue;
                         default:
                             continue;

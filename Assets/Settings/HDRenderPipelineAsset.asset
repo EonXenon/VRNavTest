@@ -159,8 +159,8 @@ MonoBehaviour:
     type: 2}
   m_RenderingPathDefaultCameraFrameSettings:
     bitDatas:
-      data1: 111213791664157
-      data2: 4539628425413918744
+      data1: 111256741206045
+      data2: 4035225267148423192
     lodBias: 1
     lodBiasMode: 0
     lodBiasQualityLevel: 0
@@ -173,7 +173,7 @@ MonoBehaviour:
     materialQuality: 4
   m_RenderingPathDefaultBakedOrCustomReflectionFrameSettings:
     bitDatas:
-      data1: 139742655312669
+      data1: 140167865463581
       data2: 4539628424389459992
     lodBias: 1
     lodBiasMode: 0
@@ -187,7 +187,7 @@ MonoBehaviour:
     materialQuality: 0
   m_RenderingPathDefaultRealtimeReflectionFrameSettings:
     bitDatas:
-      data1: 139991494955789
+      data1: 140163293647629
       data2: 4539628424389459992
     lodBias: 1
     lodBiasMode: 0
@@ -242,7 +242,7 @@ MonoBehaviour:
     decalLayerName5: Decal Layer 5
     decalLayerName6: Decal Layer 6
     decalLayerName7: Decal Layer 7
-    msaaSampleCount: 4
+    msaaSampleCount: 1
     supportMotionVectors: 0
     supportRuntimeDebugDisplay: 0
     supportRuntimeAOVAPI: 0
@@ -255,14 +255,14 @@ MonoBehaviour:
       atlasResolution: 128
       atlasOctahedralDepthResolution: 2048
     lightLoopSettings:
-      cookieAtlasSize: 1024
+      cookieAtlasSize: 64
       cookieFormat: 74
       cookieAtlasLastValidMip: 0
       cookieTexArraySize: 16
       planarReflectionAtlasSize: 64
       reflectionProbeCacheSize: 1
       reflectionCubemapSize: 128
-      reflectionCacheCompressed: 1
+      reflectionCacheCompressed: 0
       reflectionProbeFormat: 74
       skyReflectionSize: 128
       skyLightingOverrideLayerMask:
@@ -270,12 +270,12 @@ MonoBehaviour:
         m_Bits: 0
       supportFabricConvolution: 0
       maxDirectionalLightsOnScreen: 1
-      maxPunctualLightsOnScreen: 64
-      maxAreaLightsOnScreen: 8
+      maxPunctualLightsOnScreen: 1
+      maxAreaLightsOnScreen: 1
       maxEnvLightsOnScreen: 1
       maxDecalsOnScreen: 512
       maxPlanarReflectionOnScreen: 1
-      maxLightsPerClusterCell: 8
+      maxLightsPerClusterCell: 1
     hdShadowInitParams:
       maxShadowRequests: 16
       directionalShadowsDepthBits: 16
@@ -318,13 +318,13 @@ MonoBehaviour:
       lutFormat: 74
       bufferFormat: 74
     dynamicResolutionSettings:
-      enabled: 1
+      enabled: 0
       maxPercentage: 100
       minPercentage: 50
       dynResType: 1
-      upsampleFilter: 3
-      forceResolution: 0
-      forcedPercentage: 100
+      upsampleFilter: 0
+      forceResolution: 1
+      forcedPercentage: 95
     lowresTransparentSettings:
       enabled: 0
       checkerboardDepthBuffer: 1
