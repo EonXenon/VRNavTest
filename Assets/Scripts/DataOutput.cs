@@ -8,10 +8,8 @@ public class DataInOut
 
     public struct GameConfig
     {
-        public float targetFramerate;
-        public float maximumResolutionPercentage;
-        public float minimumResolutionPercentage;
-        public float safetyMarginPercentage;
+        public int rayCount;
+        public bool disableSSR;
         public float dragRotationSensitivity;
         public float directionalContinuousRotationSpeed;
         public float paddlingTranslationSpeed;
@@ -44,17 +42,11 @@ public class DataInOut
                     string[] temp = line.Split('=');
                     switch (temp[0].Trim(' ').ToLower())
                     {
-                        case "targetframerate":
-                            config.targetFramerate = float.Parse(temp[1]);
+                        case "disablessr":
+                            config.disableSSR = bool.Parse(temp[1]);
                             continue;
-                        case "maximumresolutionpercentage":
-                            config.maximumResolutionPercentage = float.Parse(temp[1]);
-                            continue;
-                        case "minimumresolutionpercentage":
-                            config.minimumResolutionPercentage = float.Parse(temp[1]);
-                            continue;
-                        case "safetymarginpercentage":
-                            config.safetyMarginPercentage = float.Parse(temp[1]);
+                        case "raycount":
+                            config.rayCount = int.Parse(temp[1]);
                             continue;
                         case "dragrotationsensitivity":
                             config.dragRotationSensitivity = float.Parse(temp[1]);
@@ -72,6 +64,7 @@ public class DataInOut
                             sessionID = temp[1].Trim(' ').ToLower();
                             continue;
                         default:
+                            Debug.Log("Could not read: " + line);
                             continue;
                     }
                 }

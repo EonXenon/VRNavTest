@@ -18,7 +18,8 @@ public class TargetMergerEditor : Editor
             foreach(FilterTarget filteredTarget in FindObjectsOfType<FilterTarget>())
             {
                 Instantiate(filteredTarget.gameObject, merger.transform, true);
-                filteredTarget.gameObject.SetActive(false);
+                //filteredTarget.gameObject.SetActive(false);
+                filteredTarget.GetComponent<MeshRenderer>().enabled = false;
             }
         }
 

@@ -45,32 +45,10 @@
                 {
                     "name": "",
                     "id": "7583c655-a375-437b-8fb3-e45f36b28c87",
-                    "path": "<OculusTouchController>{RightHand}/thumbstick/x",
+                    "path": "<XRController>{LeftHand}/thumbstick/x",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Rotate",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3315d3c4-8e26-4827-bebc-49144d5b6a28",
-                    "path": "<ViveWand>{RightHand}/trackpad/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Default Control Scheme",
-                    "action": "Rotate",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9b530486-2107-4a34-acc6-0eaf20b4ed84",
-                    "path": "<OpenVRControllerWMR>{RightHand}/joystick/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Default Control Scheme",
                     "action": "Rotate",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -94,32 +72,10 @@
                 {
                     "name": "",
                     "id": "d7a2acda-182a-4fc4-920b-cbce413ad186",
-                    "path": "<OculusTouchController>{RightHand}/thumbstick",
+                    "path": "<XRController>{LeftHand}/thumbstick",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Direction",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "cb96ee49-4cfd-4e74-890d-6c120939b679",
-                    "path": "<ViveWand>{RightHand}/trackpad",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Direction",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "2c11515f-7e21-48c4-b2b7-cd59828956fa",
-                    "path": "<OpenVRControllerWMR>{RightHand}/joystick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Default Control Scheme",
                     "action": "Direction",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -143,7 +99,7 @@
                 {
                     "name": "",
                     "id": "c7b3795b-6951-447a-9b31-6db2c0ce8d0c",
-                    "path": "<XRController>{RightHand}/triggerPressed",
+                    "path": "<XRController>{LeftHand}/gripPressed",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -438,6 +394,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "ExitGame",
+                    "type": "Button",
+                    "id": "a02872b4-a41f-4cc3-9174-23c38a97e74c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -493,6 +457,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "MenuSelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f07b3e5d-8258-4924-acc3-ff6c8251ed73",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ExitGame",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

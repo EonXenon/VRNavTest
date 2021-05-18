@@ -56,8 +56,17 @@ public class MonitorHandler : MonoBehaviour
         config.Monitor.MenuLeft.started += MenuLeft;
         config.Monitor.MenuRight.started += MenuRight;
         config.Monitor.MenuSelect.started += MenuSelect;
+        config.Monitor.ExitGame.started += ExitGame;
 
     }
+
+    void ExitGame(InputAction.CallbackContext context) =>
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+
 
     void MenuUp(InputAction.CallbackContext context)
     {

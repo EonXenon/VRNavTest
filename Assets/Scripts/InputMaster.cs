@@ -58,32 +58,10 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""7583c655-a375-437b-8fb3-e45f36b28c87"",
-                    ""path"": ""<OculusTouchController>{RightHand}/thumbstick/x"",
+                    ""path"": ""<XRController>{LeftHand}/thumbstick/x"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Rotate"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""3315d3c4-8e26-4827-bebc-49144d5b6a28"",
-                    ""path"": ""<ViveWand>{RightHand}/trackpad/x"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Default Control Scheme"",
-                    ""action"": ""Rotate"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""9b530486-2107-4a34-acc6-0eaf20b4ed84"",
-                    ""path"": ""<OpenVRControllerWMR>{RightHand}/joystick/x"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Default Control Scheme"",
                     ""action"": ""Rotate"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -107,32 +85,10 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""d7a2acda-182a-4fc4-920b-cbce413ad186"",
-                    ""path"": ""<OculusTouchController>{RightHand}/thumbstick"",
+                    ""path"": ""<XRController>{LeftHand}/thumbstick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Direction"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""cb96ee49-4cfd-4e74-890d-6c120939b679"",
-                    ""path"": ""<ViveWand>{RightHand}/trackpad"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Direction"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""2c11515f-7e21-48c4-b2b7-cd59828956fa"",
-                    ""path"": ""<OpenVRControllerWMR>{RightHand}/joystick"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Default Control Scheme"",
                     ""action"": ""Direction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -156,7 +112,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""c7b3795b-6951-447a-9b31-6db2c0ce8d0c"",
-                    ""path"": ""<XRController>{RightHand}/triggerPressed"",
+                    ""path"": ""<XRController>{LeftHand}/gripPressed"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -451,6 +407,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""ExitGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""a02872b4-a41f-4cc3-9174-23c38a97e74c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -506,6 +470,17 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""MenuSelect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f07b3e5d-8258-4924-acc3-ff6c8251ed73"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ExitGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -564,6 +539,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Monitor_MenuLeft = m_Monitor.FindAction("MenuLeft", throwIfNotFound: true);
         m_Monitor_MenuRight = m_Monitor.FindAction("MenuRight", throwIfNotFound: true);
         m_Monitor_MenuSelect = m_Monitor.FindAction("MenuSelect", throwIfNotFound: true);
+        m_Monitor_ExitGame = m_Monitor.FindAction("ExitGame", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -889,6 +865,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Monitor_MenuLeft;
     private readonly InputAction m_Monitor_MenuRight;
     private readonly InputAction m_Monitor_MenuSelect;
+    private readonly InputAction m_Monitor_ExitGame;
     public struct MonitorActions
     {
         private @InputMaster m_Wrapper;
@@ -898,6 +875,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @MenuLeft => m_Wrapper.m_Monitor_MenuLeft;
         public InputAction @MenuRight => m_Wrapper.m_Monitor_MenuRight;
         public InputAction @MenuSelect => m_Wrapper.m_Monitor_MenuSelect;
+        public InputAction @ExitGame => m_Wrapper.m_Monitor_ExitGame;
         public InputActionMap Get() { return m_Wrapper.m_Monitor; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -922,6 +900,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @MenuSelect.started -= m_Wrapper.m_MonitorActionsCallbackInterface.OnMenuSelect;
                 @MenuSelect.performed -= m_Wrapper.m_MonitorActionsCallbackInterface.OnMenuSelect;
                 @MenuSelect.canceled -= m_Wrapper.m_MonitorActionsCallbackInterface.OnMenuSelect;
+                @ExitGame.started -= m_Wrapper.m_MonitorActionsCallbackInterface.OnExitGame;
+                @ExitGame.performed -= m_Wrapper.m_MonitorActionsCallbackInterface.OnExitGame;
+                @ExitGame.canceled -= m_Wrapper.m_MonitorActionsCallbackInterface.OnExitGame;
             }
             m_Wrapper.m_MonitorActionsCallbackInterface = instance;
             if (instance != null)
@@ -941,6 +922,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @MenuSelect.started += instance.OnMenuSelect;
                 @MenuSelect.performed += instance.OnMenuSelect;
                 @MenuSelect.canceled += instance.OnMenuSelect;
+                @ExitGame.started += instance.OnExitGame;
+                @ExitGame.performed += instance.OnExitGame;
+                @ExitGame.canceled += instance.OnExitGame;
             }
         }
     }
@@ -994,5 +978,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnMenuLeft(InputAction.CallbackContext context);
         void OnMenuRight(InputAction.CallbackContext context);
         void OnMenuSelect(InputAction.CallbackContext context);
+        void OnExitGame(InputAction.CallbackContext context);
     }
 }

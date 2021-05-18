@@ -14,10 +14,10 @@ public class InputLayer
 
     public enum RotationType
     {
-        Drag,
         DirectionalContinuous,
         ClickAndChoose,
         HeadConverge,
+        Drag,
         DevMode
     }
 
@@ -524,7 +524,7 @@ public class InputLayer
                         data.headConv_conv = false;
                     }
 
-                    bool hasHit = Physics.Raycast(headTransform.position, headTransform.forward, out RaycastHit hit);
+                    bool hasHit = Physics.Raycast(headTransform.position + headTransform.forward * 0.5f, headTransform.forward, out RaycastHit hit);
 
                     if (hasHit)
                     {
