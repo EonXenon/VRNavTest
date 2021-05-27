@@ -122,7 +122,10 @@ public class InputLayer
     public Transform cncLine;
     public Transform cncWorldLine;
 
-
+    public bool rotationLocked = false;
+    private bool wasRotationLocked = false;
+    public bool translationLocked = false;
+    private bool wasTranslationLocked = false;
 
     //Generalized input
 
@@ -240,6 +243,114 @@ public class InputLayer
 
     private void CheckforInputSwap()
     {
+        if (rotationLocked && !wasRotationLocked)
+        {
+            switch (rotationType)
+            {
+                case RotationType.Drag:
+                    {
+                        handInputUI.gameObject.SetActive(false);
+                        break;
+                    }
+
+                case RotationType.ClickAndChoose:
+                    {
+                        cncLine.parent.gameObject.SetActive(false);
+                        cncWorldLine.gameObject.SetActive(false);
+                        break;
+                    }
+
+                case RotationType.HeadConverge:
+                    {
+                        hitPoint.gameObject.SetActive(false);
+                        break;
+                    }
+            }
+
+            wasRotationLocked = true;
+        }
+        else if(!rotationLocked && wasRotationLocked)
+        {
+            switch (rotationType)
+            {
+                case RotationType.Drag:
+                    {
+                        handInputUI.gameObject.SetActive(true);
+                        break;
+                    }
+
+                case RotationType.ClickAndChoose:
+                    {
+                        cncLine.parent.gameObject.SetActive(true);
+                        cncWorldLine.gameObject.SetActive(true);
+                        break;
+                    }
+
+                case RotationType.HeadConverge:
+                    {
+                        hitPoint.gameObject.SetActive(true);
+                        break;
+                    }
+            }
+
+            wasRotationLocked = false;
+        }
+
+        if (translationLocked && !wasTranslationLocked)
+        {
+            switch (translationType)
+            {
+                case TranslationType.Directional:
+                    {
+                        directionalHand.gameObject.SetActive(false);
+                        break;
+                    }
+
+                case TranslationType.DragNGo:
+                    {
+                        handInputUI.gameObject.SetActive(false);
+                        hitPoint.gameObject.SetActive(false);
+                        break;
+                    }
+
+                case TranslationType.Paddling:
+                    {
+                        handInputUI.gameObject.SetActive(false);
+                        break;
+                    }
+
+            }
+
+            wasTranslationLocked = true;
+        }
+        else if(!translationLocked && wasTranslationLocked)
+        {
+            switch (translationType)
+            {
+                case TranslationType.Directional:
+                    {
+                        directionalHand.gameObject.SetActive(true);
+                        break;
+                    }
+
+                case TranslationType.DragNGo:
+                    {
+                        handInputUI.gameObject.SetActive(true);
+                        hitPoint.gameObject.SetActive(true);
+                        break;
+                    }
+
+                case TranslationType.Paddling:
+                    {
+                        handInputUI.gameObject.SetActive(true);
+                        break;
+                    }
+
+            }
+
+            wasTranslationLocked = false;
+        }
+
         if (rotationType != oldRotationType)
         {
             switch (oldRotationType)

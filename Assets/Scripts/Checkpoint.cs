@@ -45,6 +45,8 @@ public class Checkpoint: CourseObjective
 
         lastKnownPosition = targetPos;
 
+        cube.localScale = Vector3.one * Mathf.Clamp01(Mathf.Min((verDiff - height) / height, (horDiff - radius) / radius));
+
         return result;
     }
 

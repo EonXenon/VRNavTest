@@ -161,26 +161,29 @@ public class CourseController : MonoBehaviour
     {
         if (courseType == CourseType.TranslationOnly)
         {
+            player.ReleaseMoveLock();
+
             while (!player.GetTranslationIntent())
                 yield return null;
-
-            player.ReleaseMoveLock();
+            
         }
         else if (courseType == CourseType.RotationOnly)
         {
+            player.ReleaseRotateLock();
+
             player.EnableRotationAid();
 
             while (!player.GetRotationIntent())
                 yield return null;
 
-            player.ReleaseRotateLock();
         }
         else
         {
+            player.ReleaseAllLock();
+
             while (!player.GetAnyIntent())
                 yield return null;
 
-            player.ReleaseAllLock();
         }
         StartCourse();
     }

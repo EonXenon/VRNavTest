@@ -44,8 +44,8 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "7583c655-a375-437b-8fb3-e45f36b28c87",
-                    "path": "<XRController>{LeftHand}/thumbstick/x",
+                    "id": "db5e997c-9e85-4737-85f6-63b18c6be81c",
+                    "path": "<XRController>{RightHand}/thumbstick/x",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -71,8 +71,8 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "d7a2acda-182a-4fc4-920b-cbce413ad186",
-                    "path": "<XRController>{LeftHand}/thumbstick",
+                    "id": "4b10f1e2-08e5-4cec-b5bf-4225f765754b",
+                    "path": "<XRController>{RightHand}/thumbstick",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -98,8 +98,8 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "c7b3795b-6951-447a-9b31-6db2c0ce8d0c",
-                    "path": "<XRController>{LeftHand}/gripPressed",
+                    "id": "ea576112-f9b9-4e01-8e07-431f8ec627f2",
+                    "path": "<XRController>{RightHand}/gripPressed",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -168,8 +168,8 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "da8f3660-eff7-4081-b53b-403c05053408",
-                    "path": "<XRController>{LeftHand}/trigger",
+                    "id": "813745c5-0b93-4fb2-9977-99ef003b70eb",
+                    "path": "<XRController>{RightHand}/trigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -179,8 +179,8 @@
                 },
                 {
                     "name": "",
-                    "id": "77e8e530-903b-4699-8db0-7073759b73ab",
-                    "path": "<XRController>{LeftHand}/deviceRotation",
+                    "id": "fb4476be-a33b-4280-98c4-60a78a9a69c2",
+                    "path": "<XRController>{RightHand}/deviceRotation",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -190,8 +190,8 @@
                 },
                 {
                     "name": "",
-                    "id": "b103f794-b025-4ef5-bc33-de4903671f84",
-                    "path": "<XRController>{LeftHand}/devicePosition",
+                    "id": "54876b23-843a-4e51-84fa-5bd463fa072c",
+                    "path": "<XRController>{RightHand}/devicePosition",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

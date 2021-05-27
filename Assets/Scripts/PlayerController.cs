@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
 
         Vector3? movePosition = inputLayer.GetPositionalInput();
 
-        if (movePosition != null)
+        if (movePosition != null && !moveLocked)
         {
             body.isKinematic = true;
             body.MovePosition((Vector3)movePosition - (head.position - transform.position));
@@ -141,7 +141,7 @@ public class PlayerController : MonoBehaviour
     {
         if (moveLocked || rotateLocked) yield break;
 
-        rotateLocked = moveLocked = true;
+        inputLayer.translationLocked = inputLayer.rotationLocked = rotateLocked = moveLocked = true;
 
         float fade = 0f;
         while (fade < 1f)
@@ -164,7 +164,7 @@ public class PlayerController : MonoBehaviour
         }
 
         if (!keepOnHold)
-            rotateLocked = moveLocked = false;
+            inputLayer.translationLocked = inputLayer.rotationLocked = rotateLocked = moveLocked = false;
 
         action?.Invoke();
     }
@@ -187,15 +187,15 @@ public class PlayerController : MonoBehaviour
         postAction?.Invoke();
     }
 
-    public void ReleaseMoveLock() => moveLocked = false;
+    public void ReleaseMoveLock() => inputLayer.translationLocked = moveLocked = false;
 
     public bool IsMoveLocked() => moveLocked;
 
-    public void ReleaseRotateLock() => rotateLocked = false;
+    public void ReleaseRotateLock() => inputLayer.rotationLocked = rotateLocked = false;
 
     public bool IsRotateLocked() => rotateLocked;
 
-    public void ReleaseAllLock() => moveLocked = rotateLocked = false;
+    public void ReleaseAllLock() => inputLayer.translationLocked = inputLayer.rotationLocked = moveLocked = rotateLocked = false;
 
     public bool IsAnyLocked() => rotateLocked || moveLocked;
 

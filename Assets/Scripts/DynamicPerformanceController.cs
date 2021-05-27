@@ -14,6 +14,11 @@ public class DynamicPerformanceController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+#if UNITY_EDITOR
+        Debug.unityLogger.logEnabled = true;
+#else
+        Debug.unityLogger.logEnabled = false;
+#endif
         Application.targetFrameRate = 9999;
         postProcess.profile.TryGet<ScreenSpaceReflection>(out ssr);
         ssr.active = !DataInOut.config.disableSSR;

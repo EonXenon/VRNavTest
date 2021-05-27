@@ -9,7 +9,6 @@ public class MeshCombineWizard : ScriptableWizard
 {
     public GameObject combineParent;
     public bool is32bit = true;
-    public Gradient gradient;
 
     [MenuItem("E.S. Tools/Mesh Combine Wizard")]
     static void CreateWizard()
@@ -80,8 +79,6 @@ public class MeshCombineWizard : ScriptableWizard
             else materialToMeshFilterList.Add(material, new List<MeshFilter>() { meshFilter });
         }
 
-        //System.Random rng = new System.Random(0);
-
         // For each material, create a new merged object, in the scene and in the assets folder.
         foreach (var entry in materialToMeshFilterList)
         {
@@ -94,15 +91,6 @@ public class MeshCombineWizard : ScriptableWizard
             {
                 combine[i].mesh = meshesWithSameMaterial[i].sharedMesh;
                 combine[i].transform = meshesWithSameMaterial[i].transform.localToWorldMatrix;
-
-                /*float colorBase = (float)rng.NextDouble();
-                float colorMult = rng.Next();
-                combine[i].mesh.colors = new Color[combine[i].mesh.vertexCount];
-
-                for (int v = 0; v < combine[i].mesh.colors.Length; v++)
-                {
-                    combine[i].mesh.colors[v] = gradient.Evaluate(Mathf.Repeat(colorBase + colorMult * combine[i].mesh.uv[v].x, 1f));
-                }*/
 
             }
 
@@ -139,8 +127,6 @@ public class MeshCombineWizard : ScriptableWizard
         }
 
         // Create prefab
-        //Object prefab = PrefabUtility.CreateEmptyPrefab("Assets/" + resultGO.name + ".prefab");
-        //PrefabUtility.ReplacePrefab(resultGO, prefab, ReplacePrefabOptions.ConnectToPrefab);
 
         PrefabUtility.SaveAsPrefabAssetAndConnect(resultGO, "Assets/" + resultGO.name + ".prefab", InteractionMode.AutomatedAction);
 

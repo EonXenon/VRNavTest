@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <asset>
+    <contributor>
+      <author>Blender User</author>
+      <authoring_tool>Blender 2.92.0 commit date:2021-02-24, commit time:16:25, hash:02948a2cab44</authoring_tool>
+    </contributor>
+    <created>2021-05-25T03:08:35</created>
+    <modified>2021-05-25T03:08:35</modified>
+    <unit name="meter" meter="1"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_effects>
+    <effect id="Default_OBJ_002-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <lambert>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <diffuse>
+              <color sid="diffuse">0.8 0.8 0.8 1</color>
+            </diffuse>
+            <index_of_refraction>
+              <float sid="ior">1.45</float>
+            </index_of_refraction>
+          </lambert>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_images/>
+  <library_materials>
+    <material id="Default_OBJ_002-material" name="Default OBJ.002">
+      <instance_effect url="#Default_OBJ_002-effect"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="building5_005-mesh" name="building5.005">
+      <mesh>
+        <source id="building5_005-mesh-positions">
+          <float_array id="building5_005-mesh-positions-array" count="372">4 1.999999 5 4 1.999999 4 4 5.999999 5.000001 4 6 4.000001 -9 46 5.000008 -9 -10e-7 5 4 0.999999 5 4 1.999999 5 7 0.999999 5 7 1.999999 5 9 -10e-7 5 9 46 5.000008 4 6 4.000001 7 5.999999 5.000001 4 5.999999 5.000001 7 6 4.000001 -7 12 4.000002 -7 12 5.000002 7 12 5.000002 7 12 4.000002 -7 16 4.000002 -7 16 5.000002 7 16 5.000002 7 16 4.000002 -7 20 4.000003 -7 20 5.000003 7 20 5.000003 7 20 4.000003 -7 24 4.000004 -7 24 5.000004 7 24 5.000004 7 24 4.000004 -7 28 4.000005 -7 28 5.000005 7 28 5.000005 7 28 4.000005 -7 32 4.000005 -7 32 5.000005 7 32 5.000005 7 32 4.000005 -7 36 4.000006 -7 36 5.000006 7 36 5.000006 7 36 4.000006 -7 40 4.000007 -7 40 5.000007 7 40 5.000007 7 40 4.000007 -7 44 4.000007 -5 44 5.000007 -7 44 5.000007 -5 44 4.000007 -4 44 4.000007 -2 44 5.000007 -4 44 5.000007 -2 44 4.000007 -1 44 4.000007 1 44 5.000007 -1 44 5.000007 1 44 4.000007 2 44 4.000007 4 44 5.000007 2 44 5.000007 4 44 4.000007 5 44 4.000007 7 44 5.000007 5 44 5.000007 7 44 4.000007 4 1.999999 5 7 1.999999 5 4 1.999999 4 7 1.999999 4 -7 10 5.000001 -5 10 5.000001 -7 10 4.000001 -5 10 4.000001 -4 10 5.000001 -2 10 5.000001 -4 10 4.000001 -2 10 4.000001 -1 10 5.000001 1 10 5.000001 -1 10 4.000001 1 10 4.000001 2 10 5.000001 4 10 5.000001 2 10 4.000001 4 10 4.000001 5 10 5.000001 7 10 5.000001 5 10 4.000001 7 10 4.000001 -7 14 5.000002 -7 14 4.000002 7 14 5.000002 7 14 4.000002 -7 18 5.000003 -7 18 4.000003 7 18 5.000003 7 18 4.000003 -7 22 5.000004 -7 22 4.000004 7 22 5.000004 7 22 4.000004 -7 26 5.000004 -7 26 4.000004 7 26 5.000004 7 26 4.000004 -7 30 5.000005 -7 30 4.000005 7 30 5.000005 7 30 4.000005 -7 34 5.000006 -7 34 4.000006 7 34 5.000006 7 34 4.000006 -7 38 5.000006 -7 38 4.000006 7 38 5.000006 7 38 4.000006 -7 42 5.000007 -7 42 4.000007 7 42 5.000007 7 42 4.000007</float_array>
+          <technique_common>
+            <accessor source="#building5_005-mesh-positions-array" count="124" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="building5_005-mesh-normals">
+          <float_array id="building5_005-mesh-normals-array" count="45">0 -1.8232e-7 1 1 0 0 8.97576e-7 -1.8232e-7 1 0 0 1 0 0 1 0 -4.76837e-7 1 0 -1.66339e-7 1 0 -1 -1.27157e-6 0 1 0 -1 0 0 0 -7.15256e-7 1 0 -1 0 0 -1.76222e-7 1 0 0 1 0 -1.76222e-7 1</float_array>
+          <technique_common>
+            <accessor source="#building5_005-mesh-normals-array" count="15" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="building5_005-mesh-map-0">
+          <float_array id="building5_005-mesh-map-0-array" count="600">0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.994141 0.5 0.994141 0.5 0.994141 0.5 0.994141 0.5 0.994141 0.5 0.994141 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.994141 0.5 0.994141 0.5 0.994141 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.8105471 0.5 0.8105471 0.5 0.8105471 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5</float_array>
+          <technique_common>
+            <accessor source="#building5_005-mesh-map-0-array" count="300" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="building5_005-mesh-vertices">
+          <input semantic="POSITION" source="#building5_005-mesh-positions"/>
+        </vertices>
+        <triangles material="Default_OBJ_002-material" count="100">
+          <input semantic="VERTEX" source="#building5_005-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#building5_005-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#building5_005-mesh-map-0" offset="2" set="0"/>
+          <p>57 0 0 84 0 1 62 0 2 61 0 3 88 0 4 66 0 5 0 1 6 1 1 7 2 1 8 2 1 9 1 1 10 3 1 11 4 2 12 72 2 13 50 2 14 6 3 15 72 3 16 5 3 17 8 4 18 6 4 19 5 4 20 8 4 21 7 4 22 6 4 23 9 4 24 7 4 25 8 4 26 13 4 27 85 4 28 14 4 29 10 4 30 8 4 31 5 4 32 4 5 33 65 5 34 11 5 35 10 6 36 65 6 37 8 6 38 12 7 39 13 7 40 14 7 41 15 7 42 13 7 43 12 7 44 68 8 45 69 8 46 70 8 47 70 8 48 69 8 49 71 8 50 71 9 51 65 9 52 67 9 53 94 4 54 17 4 55 18 4 56 98 5 57 21 5 58 22 5 59 102 5 60 25 5 61 26 5 62 106 4 63 29 4 64 30 4 65 110 4 66 33 4 67 34 4 68 114 10 69 37 10 70 38 10 71 118 4 72 41 4 73 42 4 74 122 4 75 45 4 76 46 4 77 49 0 78 76 0 79 54 0 80 53 0 81 80 0 82 58 0 83 85 9 84 63 9 85 87 9 86 81 9 87 59 9 88 83 9 89 79 9 90 53 9 91 55 9 92 75 9 93 49 9 94 51 9 95 66 1 96 90 1 97 64 1 98 86 1 99 62 1 100 84 1 101 82 1 102 58 1 103 80 1 104 54 1 105 78 1 106 52 1 107 50 1 108 74 1 109 48 1 110 72 8 111 91 8 112 74 8 113 92 8 114 95 8 115 93 8 116 100 8 117 103 8 118 101 8 119 97 8 120 98 8 121 99 8 122 105 8 123 106 8 124 107 8 125 108 8 126 111 8 127 109 8 128 112 8 129 115 8 130 113 8 131 116 8 132 119 8 133 117 8 134 121 8 135 122 8 136 123 8 137 19 11 138 17 11 139 16 11 140 23 11 141 21 11 142 20 11 143 27 11 144 25 11 145 24 11 146 31 11 147 29 11 148 28 11 149 35 11 150 33 11 151 32 11 152 37 11 153 39 11 154 38 11 155 43 11 156 41 11 157 40 11 158 47 11 159 45 11 160 44 11 161 67 11 162 50 11 163 48 11 164 57 0 165 81 0 166 84 0 167 61 0 168 85 0 169 88 0 170 4 12 171 5 12 172 72 12 173 6 13 174 85 13 175 72 13 176 13 4 177 89 4 178 85 4 179 4 5 180 50 5 181 65 5 182 10 14 183 11 14 184 65 14 185 71 9 186 69 9 187 65 9 188 94 4 189 92 4 190 17 4 191 98 5 192 96 5 193 21 5 194 102 5 195 100 5 196 25 5 197 106 4 198 104 4 199 29 4 200 110 4 201 108 4 202 33 4 203 114 10 204 112 10 205 37 10 206 118 4 207 116 4 208 41 4 209 122 4 210 120 4 211 45 4 212 49 0 213 73 0 214 76 0 215 53 0 216 77 0 217 80 0 218 85 9 219 61 9 220 63 9 221 81 9 222 57 9 223 59 9 224 79 9 225 77 9 226 53 9 227 75 9 228 73 9 229 49 9 230 66 1 231 88 1 232 90 1 233 86 1 234 60 1 235 62 1 236 82 1 237 56 1 238 58 1 239 54 1 240 76 1 241 78 1 242 50 1 243 72 1 244 74 1 245 72 8 246 89 8 247 91 8 248 92 8 249 94 8 250 95 8 251 100 8 252 102 8 253 103 8 254 97 8 255 96 8 256 98 8 257 105 8 258 104 8 259 106 8 260 108 8 261 110 8 262 111 8 263 112 8 264 114 8 265 115 8 266 116 8 267 118 8 268 119 8 269 121 8 270 120 8 271 122 8 272 19 11 273 18 11 274 17 11 275 23 11 276 22 11 277 21 11 278 27 11 279 26 11 280 25 11 281 31 11 282 30 11 283 29 11 284 35 11 285 34 11 286 33 11 287 37 11 288 36 11 289 39 11 290 43 11 291 42 11 292 41 11 293 47 11 294 46 11 295 45 11 296 67 11 297 65 11 298 50 11 299</p>
+        </triangles>
+      </mesh>
+    </geometry>
+    <geometry id="building5_001-mesh" name="building5.001">
+      <mesh>
+        <source id="building5_001-mesh-positions">
+          <float_array id="building5_001-mesh-positions-array" count="12">-9 46 5.000008 -9 10e-7 -5 -9 -10e-7 5 -9 46 -4.999992</float_array>
+          <technique_common>
+            <accessor source="#building5_001-mesh-positions-array" count="4" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="building5_001-mesh-normals">
+          <float_array id="building5_001-mesh-normals-array" count="6">-1 0 0 -1 0 0</float_array>
+          <technique_common>
+            <accessor source="#building5_001-mesh-normals-array" count="2" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="building5_001-mesh-map-0">
+          <float_array id="building5_001-mesh-map-0-array" count="12">0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5</float_array>
+          <technique_common>
+            <accessor source="#building5_001-mesh-map-0-array" count="6" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="building5_001-mesh-vertices">
+          <input semantic="POSITION" source="#building5_001-mesh-positions"/>
+        </vertices>
+        <triangles material="Default_OBJ_002-material" count="2">
+          <input semantic="VERTEX" source="#building5_001-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#building5_001-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#building5_001-mesh-map-0" offset="2" set="0"/>
+          <p>0 0 0 1 0 1 2 0 2 0 1 3 3 1 4 1 1 5</p>
+        </triangles>
+      </mesh>
+    </geometry>
+    <geometry id="building5_002-mesh" name="building5.002">
+      <mesh>
+        <source id="building5_002-mesh-positions">
+          <float_array id="building5_002-mesh-positions-array" count="12">-9 10e-7 -5 -9 46 -4.999992 9 10e-7 -5 9 46 -4.999992</float_array>
+          <technique_common>
+            <accessor source="#building5_002-mesh-positions-array" count="4" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="building5_002-mesh-normals">
+          <float_array id="building5_002-mesh-normals-array" count="6">0 1.76222e-7 -1 0 1.76222e-7 -1</float_array>
+          <technique_common>
+            <accessor source="#building5_002-mesh-normals-array" count="2" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="building5_002-mesh-map-0">
+          <float_array id="building5_002-mesh-map-0-array" count="12">0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5</float_array>
+          <technique_common>
+            <accessor source="#building5_002-mesh-map-0-array" count="6" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="building5_002-mesh-vertices">
+          <input semantic="POSITION" source="#building5_002-mesh-positions"/>
+        </vertices>
+        <triangles material="Default_OBJ_002-material" count="2">
+          <input semantic="VERTEX" source="#building5_002-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#building5_002-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#building5_002-mesh-map-0" offset="2" set="0"/>
+          <p>3 0 0 0 0 1 1 0 2 3 1 3 2 1 4 0 1 5</p>
+        </triangles>
+      </mesh>
+    </geometry>
+    <geometry id="building5_003-mesh" name="building5.003">
+      <mesh>
+        <source id="building5_003-mesh-positions">
+          <float_array id="building5_003-mesh-positions-array" count="12">9 -10e-7 5 9 10e-7 -5 9 46 5.000008 9 46 -4.999992</float_array>
+          <technique_common>
+            <accessor source="#building5_003-mesh-positions-array" count="4" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="building5_003-mesh-normals">
+          <float_array id="building5_003-mesh-normals-array" count="6">1 0 0 1 0 0</float_array>
+          <technique_common>
+            <accessor source="#building5_003-mesh-normals-array" count="2" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="building5_003-mesh-map-0">
+          <float_array id="building5_003-mesh-map-0-array" count="12">0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5</float_array>
+          <technique_common>
+            <accessor source="#building5_003-mesh-map-0-array" count="6" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="building5_003-mesh-vertices">
+          <input semantic="POSITION" source="#building5_003-mesh-positions"/>
+        </vertices>
+        <triangles material="Default_OBJ_002-material" count="2">
+          <input semantic="VERTEX" source="#building5_003-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#building5_003-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#building5_003-mesh-map-0" offset="2" set="0"/>
+          <p>0 0 0 1 0 1 2 0 2 2 1 3 1 1 4 3 1 5</p>
+        </triangles>
+      </mesh>
+    </geometry>
+    <geometry id="building5_004-mesh" name="building5.004">
+      <mesh>
+        <source id="building5_004-mesh-positions">
+          <float_array id="building5_004-mesh-positions-array" count="129">-9 46 -2.999993 -9 46 -4.999992 -9 48 -2.999992 -9 48 -4.999992 5 47 -1.999992 5 46 -3.999993 5 46 -1.999992 5 47 -3.999992 -5 46 -2.999993 -5 46 -4.999992 -5 48 -2.999992 -5 48 -4.999992 7 46 -1.999992 7 46 -3.999993 7 47 -1.999992 7 47 -3.999992 7 46 -1.999992 5 47 -1.999992 5 46 -1.999992 7 47 -1.999992 -5 46 -2.999993 -9 48 -2.999992 -9 46 -2.999993 -5 48 -2.999992 5 46 -3.999993 5 47 -3.999992 7 46 -3.999993 7 47 -3.999992 -9 46 -4.999992 -5 46 -4.999992 -9 48 -4.999992 -5 48 -4.999992 -9 46 5.000008 9 46 5.000008 9 46 -4.999992 5 47 -1.999992 7 47 -1.999992 5 47 -3.999992 7 47 -3.999992 -9 48 -2.999992 -5 48 -2.999992 -9 48 -4.999992 -5 48 -4.999992</float_array>
+          <technique_common>
+            <accessor source="#building5_004-mesh-positions-array" count="43" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="building5_004-mesh-normals">
+          <float_array id="building5_004-mesh-normals-array" count="24">-1 0 0 1 0 0 1 -7.15256e-7 0 0 0 1 0 -5.96046e-7 1 0 1.19209e-6 -1 0 0 -1 0 1 0</float_array>
+          <technique_common>
+            <accessor source="#building5_004-mesh-normals-array" count="8" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="building5_004-mesh-map-0">
+          <float_array id="building5_004-mesh-map-0-array" count="132">0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941409 0.5 0.9941409 0.5 0.9941409 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.810547 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5 0.9941411 0.5</float_array>
+          <technique_common>
+            <accessor source="#building5_004-mesh-map-0-array" count="66" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="building5_004-mesh-vertices">
+          <input semantic="POSITION" source="#building5_004-mesh-positions"/>
+        </vertices>
+        <triangles material="Default_OBJ_002-material" count="22">
+          <input semantic="VERTEX" source="#building5_004-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#building5_004-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#building5_004-mesh-map-0" offset="2" set="0"/>
+          <p>2 0 0 1 0 1 0 0 2 3 0 3 1 0 4 2 0 5 4 0 6 5 0 7 6 0 8 7 0 9 5 0 10 4 0 11 8 1 12 9 1 13 10 1 14 10 1 15 9 1 16 11 1 17 12 1 18 13 1 19 14 1 20 14 2 21 13 2 22 15 2 23 16 3 24 17 3 25 18 3 26 19 3 27 17 3 28 16 3 29 20 4 30 21 4 31 22 4 32 23 4 33 21 4 34 20 4 35 24 5 36 25 5 37 26 5 38 26 5 39 25 5 40 27 5 41 28 6 42 30 6 43 29 6 44 29 6 45 30 6 46 31 6 47 34 7 48 28 7 49 32 7 50 34 7 51 32 7 52 33 7 53 35 7 54 36 7 55 37 7 56 37 7 57 36 7 58 38 7 59 39 7 60 40 7 61 41 7 62 41 7 63 40 7 64 42 7 65</p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="Scene" name="Scene">
+      <node id="building5_005" name="building5.005" type="NODE">
+        <matrix sid="transform">1 0 0 0 0 -1.62921e-7 -1 0 0 1 -1.62921e-7 0 0 0 0 1</matrix>
+        <instance_geometry url="#building5_005-mesh" name="building5.005">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="Default_OBJ_002-material" target="#Default_OBJ_002-material">
+                <bind_vertex_input semantic="building5_005-mesh-map-0" input_semantic="TEXCOORD" input_set="0"/>
+              </instance_material>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+      <node id="building5_001" name="building5.001" type="NODE">
+        <matrix sid="transform">1 0 0 0 0 -1.62921e-7 -1 0 0 1 -1.62921e-7 0 0 0 0 1</matrix>
+        <instance_geometry url="#building5_001-mesh" name="building5.001">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="Default_OBJ_002-material" target="#Default_OBJ_002-material">
+                <bind_vertex_input semantic="building5_001-mesh-map-0" input_semantic="TEXCOORD" input_set="0"/>
+              </instance_material>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+      <node id="building5_002" name="building5.002" type="NODE">
+        <matrix sid="transform">1 0 0 0 0 -1.62921e-7 -1 0 0 1 -1.62921e-7 0 0 0 0 1</matrix>
+        <instance_geometry url="#building5_002-mesh" name="building5.002">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="Default_OBJ_002-material" target="#Default_OBJ_002-material">
+                <bind_vertex_input semantic="building5_002-mesh-map-0" input_semantic="TEXCOORD" input_set="0"/>
+              </instance_material>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+      <node id="building5_003" name="building5.003" type="NODE">
+        <matrix sid="transform">1 0 0 0 0 -1.62921e-7 -1 0 0 1 -1.62921e-7 0 0 0 0 1</matrix>
+        <instance_geometry url="#building5_003-mesh" name="building5.003">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="Default_OBJ_002-material" target="#Default_OBJ_002-material">
+                <bind_vertex_input semantic="building5_003-mesh-map-0" input_semantic="TEXCOORD" input_set="0"/>
+              </instance_material>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+      <node id="building5_004" name="building5.004" type="NODE">
+        <matrix sid="transform">1 0 0 0 0 -1.62921e-7 -1 0 0 1 -1.62921e-7 0 0 0 0 1</matrix>
+        <instance_geometry url="#building5_004-mesh" name="building5.004">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="Default_OBJ_002-material" target="#Default_OBJ_002-material">
+                <bind_vertex_input semantic="building5_004-mesh-map-0" input_semantic="TEXCOORD" input_set="0"/>
+              </instance_material>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Scene"/>
+  </scene>
+</COLLADA>
