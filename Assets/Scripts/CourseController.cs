@@ -23,8 +23,8 @@ public class CourseController : MonoBehaviour
 
     [SerializeField]
     Transform startingLine;
-    [SerializeField]
-    CourseObjective[] checkpoints;
+
+    public CourseObjective[] checkpoints;
 
     [SerializeField]
     Color previousCheckpointColor;
@@ -42,6 +42,8 @@ public class CourseController : MonoBehaviour
     float countStartTime;
 
     bool preStart = false;
+
+    public Transform StartingLine { get => startingLine; }
 
     // Start is called before the first frame update
     private void Awake()
