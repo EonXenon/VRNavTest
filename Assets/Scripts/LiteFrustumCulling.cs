@@ -37,7 +37,7 @@ public class LiteFrustumCulling : MonoBehaviour
             tempGOs.Add(obj.gameObject);
 
             Color32[] colors = new Color32[nMesh.vertexCount];
-            Color32 color = new Color(Mathf.Repeat(obj.transform.position.x + 12345.6f * obj.transform.position.y,1f), 0f,0f, 1f);
+            Color32 color = new Color(Mathf.Repeat(obj.transform.parent.position.x + 12345.6f * obj.transform.parent.position.y,1f), 0f,0f, 1f);
             for (int i = 0; i < colors.Length; i++)
             {
                 colors[i] = color;//Color.Lerp(Color.black, Color.red, color);
@@ -62,11 +62,18 @@ public class LiteFrustumCulling : MonoBehaviour
             foreach (OrientationCulling obj in cullingList)
             {
                 Vector3 faceDirection = obj.transform.rotation * obj.faceOrientation;
+                bool prevState = obj.objRenderer.enabled;
                 obj.objRenderer.enabled = (
                     (obj.neverCull
                     || Vector3.Dot(faceDirection, ((obj.objRenderer.bounds.ClosestPoint(headCamera.transform.position) - ((obj.thicknessCompensation) ? faceDirection : Vector3.zero)) - headCamera.transform.position).normalized) < cullingPoint)
                     && GeometryUtility.TestPlanesAABB(GeometryUtility.CalculateFrustumPlanes(headCamera), obj.objRenderer.bounds));
                 visObj += (obj.objRenderer.enabled) ? 1 : 0;
+
+                /*if(obj.objRenderer.enabled != prevState)
+                    foreach (Renderer extra in obj.extraRenderers)
+                    {
+                        extra.enabled = obj.objRenderer.enabled;
+                    }*/
             }
 
             hiddenObjects = totalObj - visObj;
