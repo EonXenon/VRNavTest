@@ -147,7 +147,7 @@ MonoBehaviour:
   m_ImportDependencies: []
   m_GraphVersion: 6
   m_ResourceVersion: 1
-  m_saved: 1
+  m_saved: 0
   m_SubgraphDependencies: []
   m_CategoryPath: 
 --- !u!2058629511 &8926484042661614527
@@ -246,7 +246,7 @@ MonoBehaviour:
   m_InputSlots:
   - {fileID: 8926484042661616009}
   m_OutputSlots: []
-  m_Disabled: 0
+  m_Disabled: 1
 --- !u!114 &8926484042661616009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2290,7 +2290,7 @@ MonoBehaviour:
   m_InputSlots:
   - {fileID: 8926484042661616083}
   m_OutputSlots: []
-  m_Disabled: 0
+  m_Disabled: 1
 --- !u!114 &8926484042661616083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5072,7 +5072,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 5000
+      m_SerializableObject: 2500
     m_Space: 2147483647
   m_Property:
     name: Rate
@@ -5446,7 +5446,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616409}
   - {fileID: 8926484042661616586}
   dataType: 0
-  capacity: 25000
+  capacity: 2500
   stripCapacity: 16
   particlePerStripCount: 16
   m_Space: 0
@@ -12555,7 +12555,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 5000
+      m_SerializableObject: 2500
     m_Space: 2147483647
   m_Property:
     name: Rate
@@ -14789,7 +14789,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616841}
   - {fileID: 8926484042661616876}
   dataType: 0
-  capacity: 25000
+  capacity: 2500
   stripCapacity: 16
   particlePerStripCount: 16
   m_Space: 0
