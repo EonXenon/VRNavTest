@@ -71,6 +71,7 @@ public class InputLayer
         public float drag_delta;
         public float dCont_rotate;
         public Vector2 cnC_thumb;
+        public bool cnC_func;
         public bool headConv_conv;
         public float devMode_delta;
         public float direct_func;
@@ -98,10 +99,12 @@ public class InputLayer
         public Vector2 rightHandPosition;
         public Vector2 rightHandDelta;
         public bool rightHandTouch;
+        public bool rightHandTap;
 
         public Vector2 leftHandPosition;
         public Vector2 leftHandDelta;
         public bool leftHandTouch;
+        public bool leftHandTap;
 
         public Dictionary<int, SimpleTouch> rightHandTouches;
         public Dictionary<int, SimpleTouch> leftHandTouches;
@@ -126,6 +129,8 @@ public class InputLayer
     private bool wasRotationLocked = false;
     public bool translationLocked = false;
     private bool wasTranslationLocked = false;
+
+    int castLayerMask;
 
     //Generalized input
 
@@ -155,6 +160,8 @@ public class InputLayer
         hitPointCallers = 0;
         hitPoint.gameObject.SetActive(false);
 
+        castLayerMask = ~((1 << (LayerMask.NameToLayer("Player"))) | (1 << (LayerMask.NameToLayer("Water"))));
+
         config = new InputMaster();
         config.Enable();
 
@@ -178,6 +185,7 @@ public class InputLayer
         config.R_ClickAndChoose.Direction.started += R_ClickAndChoose_Direction;
         config.R_ClickAndChoose.Direction.performed += R_ClickAndChoose_Direction;
         config.R_ClickAndChoose.Direction.canceled += R_ClickAndChoose_Direction;
+        config.R_ClickAndChoose.RotationFunction.started += R_ClickAndChoose_Function;
         config.R_ClickAndChoose.Disable();
         cncLine.parent.gameObject.SetActive(false);
         cncWorldLine.gameObject.SetActive(false);
@@ -249,7 +257,7 @@ public class InputLayer
             {
                 case RotationType.Drag:
                     {
-                        handInputUI.gameObject.SetActive(false);
+                        if (--handInputCallers <= 0) handInputUI.gameObject.SetActive(false);
                         break;
                     }
 
@@ -262,7 +270,7 @@ public class InputLayer
 
                 case RotationType.HeadConverge:
                     {
-                        hitPoint.gameObject.SetActive(false);
+                        if (--hitPointCallers <= 0) hitPoint.gameObject.SetActive(false);
                         break;
                     }
             }
@@ -275,20 +283,20 @@ public class InputLayer
             {
                 case RotationType.Drag:
                     {
-                        handInputUI.gameObject.SetActive(true);
+                        if (++handInputCallers > 0) handInputUI.gameObject.SetActive(true);
                         break;
                     }
 
                 case RotationType.ClickAndChoose:
                     {
-                        cncLine.parent.gameObject.SetActive(true);
-                        cncWorldLine.gameObject.SetActive(true);
+                        //cncLine.parent.gameObject.SetActive(true);
+                        //cncWorldLine.gameObject.SetActive(true);
                         break;
                     }
 
                 case RotationType.HeadConverge:
                     {
-                        hitPoint.gameObject.SetActive(true);
+                        if (++hitPointCallers > 0) hitPoint.gameObject.SetActive(true);
                         break;
                     }
             }
@@ -308,14 +316,14 @@ public class InputLayer
 
                 case TranslationType.DragNGo:
                     {
-                        handInputUI.gameObject.SetActive(false);
-                        hitPoint.gameObject.SetActive(false);
+                        if (--handInputCallers <= 0) handInputUI.gameObject.SetActive(false);
+                        if (--hitPointCallers <= 0) hitPoint.gameObject.SetActive(false);
                         break;
                     }
 
                 case TranslationType.Paddling:
                     {
-                        handInputUI.gameObject.SetActive(false);
+                        if (--handInputCallers <= 0) handInputUI.gameObject.SetActive(false);
                         break;
                     }
 
@@ -335,14 +343,14 @@ public class InputLayer
 
                 case TranslationType.DragNGo:
                     {
-                        handInputUI.gameObject.SetActive(true);
-                        hitPoint.gameObject.SetActive(true);
+                        if (++handInputCallers > 0) handInputUI.gameObject.SetActive(true);
+                        if (++hitPointCallers > 0) hitPoint.gameObject.SetActive(true);
                         break;
                     }
 
                 case TranslationType.Paddling:
                     {
-                        handInputUI.gameObject.SetActive(true);
+                        if (++handInputCallers > 0) handInputUI.gameObject.SetActive(true);
                         break;
                     }
 
@@ -498,6 +506,9 @@ public class InputLayer
         Dictionary<int, SimpleTouch> newRightHandTouches = new Dictionary<int, SimpleTouch>();
         Dictionary<int, SimpleTouch> newLeftHandTouches = new Dictionary<int, SimpleTouch>();
 
+        /*List<Dictionary<int, SimpleTouch>> handList = new List<Dictionary<int, SimpleTouch>>();
+        Dictionary<int, SimpleTouch> lostFingers = new Dictionary<int, SimpleTouch>();*/
+
         if (Touchscreen.current == null)
         {
             Debug.LogError("Touchscreen hardware appears to be missing! Restart application and try again!");
@@ -513,6 +524,19 @@ public class InputLayer
                 fingers[i].gameObject.SetActive(false);
                 continue;
             }
+
+           /* bool foundHand = false;
+
+            foreach (Dictionary<int, SimpleTouch> hand in handList)
+            {
+                if (hand.ContainsKey(t.id))
+                {
+                    hand[t.id] = t;
+                    foundHand = true;
+                }
+            }
+
+            if (!foundHand) lostFingers[t.id] = t;*/
 
             if (handData.rightHandTouches.ContainsKey(t.id))
             {
@@ -538,11 +562,13 @@ public class InputLayer
         handData.rightHandTouches = new Dictionary<int, SimpleTouch>(newRightHandTouches);
         handData.leftHandTouches = new Dictionary<int, SimpleTouch>(newLeftHandTouches);
 
-        List<SimpleTouch> rightHandTouchesList = handData.rightHandTouches.Values.ToList();
-        List<SimpleTouch> leftHandTouchesList = handData.leftHandTouches.Values.ToList();
+        SimpleTouch[] rightHandTouchesList = handData.rightHandTouches.Values.ToArray();
+        SimpleTouch[] leftHandTouchesList = handData.leftHandTouches.Values.ToArray();
 
         // Right Hand
-        handData.rightHandTouch = rightHandTouchesList.Count > 0;
+        bool rTouch = rightHandTouchesList.Length > 0;
+        handData.rightHandTap = rTouch && !handData.rightHandTouch;
+        handData.rightHandTouch = rTouch;
 
         if (handData.rightHandTouch)
         {
@@ -553,7 +579,9 @@ public class InputLayer
         else handData.rightHandDelta = Vector2.zero;
 
         // Left Hand
-        handData.leftHandTouch = leftHandTouchesList.Count > 0;
+        bool lTouch = leftHandTouchesList.Length > 0;
+        handData.leftHandTap = lTouch && !handData.leftHandTouch;
+        handData.leftHandTouch = lTouch;
 
         if (handData.leftHandTouch)
         {
@@ -600,12 +628,15 @@ public class InputLayer
 
             case RotationType.ClickAndChoose:
                 {
-                    if (data.cnC_thumb.magnitude > 0.95f)
+                    if (data.cnC_thumb.magnitude > 0.5f)
                     {
                         targetOrientation = data.cnC_thumb;
                         wasHolding = true;
-                        cncLine.parent.gameObject.SetActive(true);
-                        cncWorldLine.gameObject.SetActive(true);
+                        if(!rotationLocked)
+                        {
+                            cncLine.parent.gameObject.SetActive(true);
+                            cncWorldLine.gameObject.SetActive(true);
+                        }
                         cncWorldLine.localRotation = cncLine.localRotation = Quaternion.Euler(0f,0f,-Vector2.SignedAngle(targetOrientation.normalized, Vector2.up));
                     }
                     else if (wasHolding)
@@ -613,11 +644,19 @@ public class InputLayer
                         wasHolding = false;
                         cncLine.parent.gameObject.SetActive(false);
                         cncWorldLine.gameObject.SetActive(false);
-                        float resultInput = Vector2.SignedAngle(targetOrientation.normalized, Vector2.up);
-                        if (resultInput != 0f)
-                            mono.StartCoroutine(DoRotateStep(resultInput, controllerTransform));
+                    }
 
-                        targetOrientation = Vector2.up;
+                    if (data.cnC_func)
+                    {
+                        if (wasHolding)
+                        {
+                            float resultInput = Vector2.SignedAngle(targetOrientation.normalized, Vector2.up);
+                            if (resultInput != 0f)
+                                mono.StartCoroutine(DoRotateStep(resultInput, controllerTransform));
+
+                            targetOrientation = Vector2.up;
+                        }
+                        data.cnC_func = false;
                     }
 
                     return;
@@ -625,6 +664,11 @@ public class InputLayer
 
             case RotationType.HeadConverge:
                 {
+                    if (translationType == TranslationType.DragNGo && !translationLocked)
+                    {
+                        data.headConv_conv = handData.leftHandTap || handData.rightHandTap;
+                    }
+
                     if (data.headConv_conv)
                     {
                         float headAngle = Vector3.SignedAngle(controllerTransform.forward, Vector3.Scale(headTransform.forward, Vector3.one - Vector3.up), controllerTransform.up);
@@ -635,22 +679,25 @@ public class InputLayer
                         data.headConv_conv = false;
                     }
 
-                    bool hasHit = Physics.Raycast(headTransform.position + headTransform.forward * 0.5f, headTransform.forward, out RaycastHit hit);
-
-                    if (hasHit)
+                    if (translationType != TranslationType.DragNGo || translationLocked)
                     {
-                        castPos = hit.point;
-                        castRot = Quaternion.LookRotation(-hit.normal);
-                    }
-                    else
-                    {
-                        castPos = headTransform.position + headTransform.forward * dragNGoDefaultDistance;
-                        castRot = Quaternion.LookRotation(headTransform.forward);
-                    }
+                        bool hasHit = Physics.Raycast(headTransform.position, headTransform.forward, out RaycastHit hit, Mathf.Infinity, castLayerMask);
 
-                    hitPoint.position = castPos;
-                    hitPoint.rotation = castRot;
-                    hitPoint.localScale = Vector3.one * (0.1f + Vector3.Distance(headTransform.position, hitPoint.position) / 15f);
+                        if (hasHit)
+                        {
+                            castPos = hit.point;
+                            castRot = Quaternion.LookRotation(-hit.normal);
+                        }
+                        else
+                        {
+                            castPos = headTransform.position + headTransform.forward * dragNGoDefaultDistance;
+                            castRot = Quaternion.LookRotation(headTransform.forward);
+                        }
+
+                        hitPoint.position = castPos;
+                        hitPoint.rotation = castRot;
+                        hitPoint.localScale = Vector3.one * (0.1f + Vector3.Distance(headTransform.position, hitPoint.position) / 15f);
+                    }
 
                     return;
                 }
@@ -705,8 +752,25 @@ public class InputLayer
 
             case TranslationType.Paddling:
                 {
-                    float y = handData.leftHandDelta.y + handData.rightHandDelta.y;
-                    if (handData.leftHandTouch && handData.rightHandTouch) y /= 2f;
+                    /*float y = handData.leftHandDelta.y + handData.rightHandDelta.y;
+                    if (handData.leftHandTouch && handData.rightHandTouch) y /= 2f;*/
+
+                    Vector2 handDelta;
+
+                    if (handData.leftHandTouch)
+                        if (handData.rightHandTouch)
+                            handDelta = (handData.leftHandDelta + handData.rightHandDelta) / 2f;
+                        else handDelta = handData.leftHandDelta;
+                    else if (handData.rightHandTouch)
+                        handDelta = handData.rightHandDelta;
+                    else handDelta = Vector2.zero;
+
+                    Vector3 localForward = headTransform.localRotation * Vector3.forward;
+
+                    Vector2 localHorizontalForward = (new Vector2(localForward.x, localForward.z)).normalized;
+
+                    float y = Vector2.Dot(handDelta, localHorizontalForward);
+
                     interpolatedPaddling.Enqueue(y);
 
                     float interpolatedY = 0f;
@@ -765,7 +829,8 @@ public class InputLayer
 
                     if (!isTargetSet)
                     {
-                        bool hasHit = Physics.Raycast(headTransform.position, headTransform.forward, out RaycastHit hit);
+
+                        bool hasHit = Physics.Raycast(headTransform.position, headTransform.forward, out RaycastHit hit, Mathf.Infinity, castLayerMask);
 
                         if (hasHit)
                         {
@@ -856,6 +921,7 @@ public class InputLayer
     void R_DevMode_Delta(InputAction.CallbackContext context) => data.devMode_delta = context.ReadValue<float>();
     void R_DirectionalContinuous_Rotate(InputAction.CallbackContext context) => data.dCont_rotate = context.ReadValue<float>();
     void R_ClickAndChoose_Direction(InputAction.CallbackContext context) => data.cnC_thumb = context.ReadValue<Vector2>();
+    void R_ClickAndChoose_Function(InputAction.CallbackContext context) => data.cnC_func = context.ReadValue<float>()>0f;
     void R_HeadConverge_Function(InputAction.CallbackContext context) => data.headConv_conv = context.ReadValue<float>()>0f;
     void T_DevMode_SpeedBoost(InputAction.CallbackContext context) => data.devMode_boost = context.ReadValue<float>()>0f;
     void T_DevMode_TX(InputAction.CallbackContext context) => data.devMode_trans.x = context.ReadValue<float>();

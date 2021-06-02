@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 using UnityEngine.InputSystem.Controls;
 
 public class SimpleTouch
@@ -18,18 +17,18 @@ public class SimpleTouch
         this.position = t.position.ReadUnprocessedValue();
 
         //Apply corrections
-        this.delta.x /= Screen.width;
+        this.delta.x /= Screen.height;
         this.delta.y /= Screen.height;
         this.position.x /= Screen.width;
         this.position.y /= Screen.height;
     }
 
-    public static Vector2 CalculateHandPosition(List<SimpleTouch> touches)
+    public static Vector2 CalculateHandPosition(SimpleTouch[] touches)
     {
         Vector2 tMax = touches[0].position;
         Vector2 tMin = tMax;
 
-        for (int i = 1; i < touches.Count; i++)
+        for (int i = 1; i < touches.Length; i++)
         {
             Vector2 tPos = touches[i].position;
             tMax = new Vector2(Mathf.Max(tMax.x, tPos.x), Mathf.Max(tMax.y, tPos.y));
@@ -39,14 +38,14 @@ public class SimpleTouch
         return (tMin + tMax) / 2.0f;
     }
 
-    public static Vector2 CalculateHandDelta(List<SimpleTouch> touches)
+    public static Vector2 CalculateHandDelta(SimpleTouch[] touches)
     {
         Vector2 avgDelta = Vector2.zero;
-        for (int i = 0; i < touches.Count; i++)
+        for (int i = 0; i < touches.Length; i++)
         {
             avgDelta += touches[i].delta;
         }
-        avgDelta /= (float)touches.Count;
+        avgDelta /= (float)touches.Length;
 
         return avgDelta;
     }

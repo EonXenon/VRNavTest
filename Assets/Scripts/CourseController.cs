@@ -121,6 +121,8 @@ public class CourseController : MonoBehaviour
             c.transform.gameObject.SetActive(false);
         }
 
+        player.ShowAllObjects();
+
         if (!preStart) return;
 
         player.DisableCheckpoint();
@@ -132,7 +134,7 @@ public class CourseController : MonoBehaviour
     {
         if (!preStart) return;
 
-        rules?.ApplyRules();
+        rules?.ApplyRules(player);
         measure = 0f;
 
         if (player.IsAnyLocked())
@@ -163,28 +165,30 @@ public class CourseController : MonoBehaviour
     {
         if (courseType == CourseType.TranslationOnly)
         {
-            player.ReleaseMoveLock();
 
             while (!player.GetTranslationIntent())
                 yield return null;
-            
+
+            player.ReleaseMoveLock();
+
         }
         else if (courseType == CourseType.RotationOnly)
         {
-            player.ReleaseRotateLock();
-
             player.EnableRotationAid();
 
             while (!player.GetRotationIntent())
                 yield return null;
 
+            player.ReleaseRotateLock();
+
         }
         else
         {
-            player.ReleaseAllLock();
 
             while (!player.GetAnyIntent())
                 yield return null;
+
+            player.ReleaseAllLock();
 
         }
         StartCourse();

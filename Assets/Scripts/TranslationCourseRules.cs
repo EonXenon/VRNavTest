@@ -10,10 +10,12 @@ public class TranslationCourseRules : CourseRuleSet
     Vector3 lastPosition;
     public CourseController CC { get; set; }
 
-    public override void ApplyRules()
+    public override void ApplyRules(in PlayerController player)
     {
         CC = GetComponent<CourseController>();
         lastPosition = CC.StartingLine.position;
+
+        player.HideRotationObjects();
     }
 
     public override string ExecutionInfo(in PlayerController player) => player.GetCurrentTranslationMethod();
@@ -24,6 +26,7 @@ public class TranslationCourseRules : CourseRuleSet
         lastPosition = player.position;
         return distance;
     }
+
 }
 
 

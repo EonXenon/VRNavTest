@@ -79,6 +79,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Rotation Function"",
+                    ""type"": ""Button"",
+                    ""id"": ""b572cdf8-1065-4a6b-a6c9-63db19d3e8b1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -90,6 +98,17 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Direction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ff22aac3-beb0-479a-8518-e4c4b31da30c"",
+                    ""path"": ""<XRController>{RightHand}/gripPressed"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Default Control Scheme"",
+                    ""action"": ""Rotation Function"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -515,6 +534,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         // R_ClickAndChoose
         m_R_ClickAndChoose = asset.FindActionMap("R_ClickAndChoose", throwIfNotFound: true);
         m_R_ClickAndChoose_Direction = m_R_ClickAndChoose.FindAction("Direction", throwIfNotFound: true);
+        m_R_ClickAndChoose_RotationFunction = m_R_ClickAndChoose.FindAction("Rotation Function", throwIfNotFound: true);
         // R_HeadConverge
         m_R_HeadConverge = asset.FindActionMap("R_HeadConverge", throwIfNotFound: true);
         m_R_HeadConverge_RotationFunction = m_R_HeadConverge.FindAction("Rotation Function", throwIfNotFound: true);
@@ -656,11 +676,13 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputActionMap m_R_ClickAndChoose;
     private IR_ClickAndChooseActions m_R_ClickAndChooseActionsCallbackInterface;
     private readonly InputAction m_R_ClickAndChoose_Direction;
+    private readonly InputAction m_R_ClickAndChoose_RotationFunction;
     public struct R_ClickAndChooseActions
     {
         private @InputMaster m_Wrapper;
         public R_ClickAndChooseActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
         public InputAction @Direction => m_Wrapper.m_R_ClickAndChoose_Direction;
+        public InputAction @RotationFunction => m_Wrapper.m_R_ClickAndChoose_RotationFunction;
         public InputActionMap Get() { return m_Wrapper.m_R_ClickAndChoose; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -673,6 +695,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Direction.started -= m_Wrapper.m_R_ClickAndChooseActionsCallbackInterface.OnDirection;
                 @Direction.performed -= m_Wrapper.m_R_ClickAndChooseActionsCallbackInterface.OnDirection;
                 @Direction.canceled -= m_Wrapper.m_R_ClickAndChooseActionsCallbackInterface.OnDirection;
+                @RotationFunction.started -= m_Wrapper.m_R_ClickAndChooseActionsCallbackInterface.OnRotationFunction;
+                @RotationFunction.performed -= m_Wrapper.m_R_ClickAndChooseActionsCallbackInterface.OnRotationFunction;
+                @RotationFunction.canceled -= m_Wrapper.m_R_ClickAndChooseActionsCallbackInterface.OnRotationFunction;
             }
             m_Wrapper.m_R_ClickAndChooseActionsCallbackInterface = instance;
             if (instance != null)
@@ -680,6 +705,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Direction.started += instance.OnDirection;
                 @Direction.performed += instance.OnDirection;
                 @Direction.canceled += instance.OnDirection;
+                @RotationFunction.started += instance.OnRotationFunction;
+                @RotationFunction.performed += instance.OnRotationFunction;
+                @RotationFunction.canceled += instance.OnRotationFunction;
             }
         }
     }
@@ -949,6 +977,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     public interface IR_ClickAndChooseActions
     {
         void OnDirection(InputAction.CallbackContext context);
+        void OnRotationFunction(InputAction.CallbackContext context);
     }
     public interface IR_HeadConvergeActions
     {

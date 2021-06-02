@@ -66,6 +66,14 @@
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Rotation Function",
+                    "type": "Button",
+                    "id": "b572cdf8-1065-4a6b-a6c9-63db19d3e8b1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -77,6 +85,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Direction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ff22aac3-beb0-479a-8518-e4c4b31da30c",
+                    "path": "<XRController>{RightHand}/gripPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Default Control Scheme",
+                    "action": "Rotation Function",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -141,7 +141,7 @@ public class PlayerController : MonoBehaviour
     {
         if (moveLocked || rotateLocked) yield break;
 
-        inputLayer.translationLocked = inputLayer.rotationLocked = rotateLocked = moveLocked = true;
+        rotateLocked = moveLocked = true;
 
         float fade = 0f;
         while (fade < 1f)
@@ -164,7 +164,7 @@ public class PlayerController : MonoBehaviour
         }
 
         if (!keepOnHold)
-            inputLayer.translationLocked = inputLayer.rotationLocked = rotateLocked = moveLocked = false;
+            rotateLocked = moveLocked = false;
 
         action?.Invoke();
     }
@@ -187,15 +187,20 @@ public class PlayerController : MonoBehaviour
         postAction?.Invoke();
     }
 
-    public void ReleaseMoveLock() => inputLayer.translationLocked = moveLocked = false;
+    public void HideTranslationObjects() => inputLayer.translationLocked = true;
+    public void HideRotationObjects() => inputLayer.rotationLocked = true;
+    public void HideAllObjects() => inputLayer.translationLocked = inputLayer.rotationLocked = true;
+    public void ShowAllObjects() => inputLayer.translationLocked = inputLayer.rotationLocked = false;
+
+    public void ReleaseMoveLock() => moveLocked = false;
 
     public bool IsMoveLocked() => moveLocked;
 
-    public void ReleaseRotateLock() => inputLayer.rotationLocked = rotateLocked = false;
+    public void ReleaseRotateLock() => rotateLocked = false;
 
     public bool IsRotateLocked() => rotateLocked;
 
-    public void ReleaseAllLock() => inputLayer.translationLocked = inputLayer.rotationLocked = moveLocked = rotateLocked = false;
+    public void ReleaseAllLock() => moveLocked = rotateLocked = false;
 
     public bool IsAnyLocked() => rotateLocked || moveLocked;
 

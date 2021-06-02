@@ -12,7 +12,7 @@ public class RotationCourseRules : CourseRuleSet
     public float distanceFromCenter = 15f;
     public CourseController CC { get; set; }
 
-    public override void ApplyRules()
+    public override void ApplyRules(in PlayerController player)
     {
         CC = GetComponent<CourseController>();
         Transform startReference = CC.StartingLine;
@@ -35,6 +35,8 @@ public class RotationCourseRules : CourseRuleSet
         }
 
         lastOrientation = startReference.rotation;
+
+        player.HideTranslationObjects();
     }
 
     Quaternion lastOrientation;
