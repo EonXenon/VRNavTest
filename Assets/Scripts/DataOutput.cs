@@ -14,6 +14,7 @@ public class DataInOut
         public float directionalContinuousRotationSpeed;
         public float paddlingTranslationSpeed;
         public float dragNGoDefaultDistance;
+        public int interpolatedInputFrames;
     }
 
     public static GameConfig config;
@@ -62,6 +63,9 @@ public class DataInOut
                             continue;
                         case "overrideid":
                             sessionID = temp[1].Trim(' ').ToLower();
+                            continue;
+                        case "interpolatedinputframes":
+                            config.interpolatedInputFrames = int.Parse(temp[1]);
                             continue;
                         default:
                             Debug.Log("Could not read: " + line);

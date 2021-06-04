@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
-using System.Linq;
+using UnityEngine.UI;
 
 [Serializable]
 public class InputLayer
@@ -96,18 +96,8 @@ public class InputLayer
     //Touch related
     struct HandData
     {
-        public Vector2 rightHandPosition;
-        public Vector2 rightHandDelta;
-        public bool rightHandTouch;
-        public bool rightHandTap;
-
-        public Vector2 leftHandPosition;
-        public Vector2 leftHandDelta;
-        public bool leftHandTouch;
-        public bool leftHandTap;
-
-        public Dictionary<int, SimpleTouch> rightHandTouches;
-        public Dictionary<int, SimpleTouch> leftHandTouches;
+        public SimpleHand[] handList;
+        public SimpleHand allFingers;
     }
 
     HandData handData;
@@ -119,7 +109,7 @@ public class InputLayer
     Queue<float> interpolatedPaddling = new Queue<float>();
 
     public RectTransform handInputUI;
-    public Transform[] fingers;
+    public Text[] fingers;
     int handInputCallers;
 
     public Transform cncLine;
@@ -144,15 +134,9 @@ public class InputLayer
         paddlingTranslationSpeed = DataInOut.config.paddlingTranslationSpeed;
         dragNGoDefaultDistance = DataInOut.config.dragNGoDefaultDistance;
 
-        handData.rightHandTouches = new Dictionary<int, SimpleTouch>();
-        handData.rightHandPosition = Vector2.zero;
-        handData.rightHandDelta = Vector2.zero;
-        handData.rightHandTouch = false;
-        
-        handData.leftHandTouches = new Dictionary<int, SimpleTouch>();
-        handData.leftHandPosition = Vector2.zero;
-        handData.leftHandDelta = Vector2.zero;
-        handData.leftHandTouch = false;
+        handData.handList = new SimpleHand[2];
+        handData.handList[0] = new SimpleHand();
+        handData.handList[1] = new SimpleHand();
 
         handInputCallers = 0;
         handInputUI.gameObject.SetActive(false);
@@ -191,10 +175,8 @@ public class InputLayer
         cncWorldLine.gameObject.SetActive(false);
 
         //R_Drag
-        interpolatedDrag.Enqueue(0f);
-        interpolatedDrag.Enqueue(0f);
-        interpolatedDrag.Enqueue(0f);
-        interpolatedDrag.Enqueue(0f);
+        for (int i = 0; i < DataInOut.config.interpolatedInputFrames; i++)
+            interpolatedDrag.Enqueue(0f);
 
         //R_HeadConverge
         config.R_HeadConverge.RotationFunction.started += R_HeadConverge_Function;
@@ -229,9 +211,8 @@ public class InputLayer
         directionalHand.gameObject.SetActive(false);
 
         //T_Paddling
-        interpolatedPaddling.Enqueue(0f);
-        interpolatedPaddling.Enqueue(0f);
-        interpolatedPaddling.Enqueue(0f);
+        for (int i = 0; i < DataInOut.config.interpolatedInputFrames; i++)
+            interpolatedPaddling.Enqueue(0f);
 
     }
 
@@ -502,12 +483,8 @@ public class InputLayer
 
     void ProcessHands()
     {
-
-        Dictionary<int, SimpleTouch> newRightHandTouches = new Dictionary<int, SimpleTouch>();
-        Dictionary<int, SimpleTouch> newLeftHandTouches = new Dictionary<int, SimpleTouch>();
-
-        /*List<Dictionary<int, SimpleTouch>> handList = new List<Dictionary<int, SimpleTouch>>();
-        Dictionary<int, SimpleTouch> lostFingers = new Dictionary<int, SimpleTouch>();*/
+        Dictionary<int, SimpleTouch> lostFingers = new Dictionary<int, SimpleTouch>();
+        handData.allFingers = new SimpleHand();
 
         if (Touchscreen.current == null)
         {
@@ -515,82 +492,88 @@ public class InputLayer
             return;
         }
 
+        foreach (SimpleHand hand in handData.handList) hand.Decay();
+
         for (int i = 0; i < Touchscreen.current.touches.Count; i++)
         {
-            SimpleTouch t = new SimpleTouch(Touchscreen.current.touches[i]);
+            SimpleTouch t = new SimpleTouch(Touchscreen.current.touches[i], i);
+
+            fingers[i].gameObject.SetActive(false);
+            fingers[i].text = "X";
 
             if (!t.pressed)
             {
-                fingers[i].gameObject.SetActive(false);
+                
+                foreach (SimpleHand hand in handData.handList)
+                {
+                    if (hand.ContainsFinger(t.id))
+                    {
+                        hand.RemoveFinger(t.id);
+                        break;
+                    }
+                }
                 continue;
             }
 
-           /* bool foundHand = false;
+            handData.allFingers[t.id] = t;
 
-            foreach (Dictionary<int, SimpleTouch> hand in handList)
+            bool foundHand = false;
+
+            foreach (SimpleHand hand in handData.handList)
             {
-                if (hand.ContainsKey(t.id))
+                if (hand.ContainsFinger(t.id) && hand.Distance(t.position) < 20f)
                 {
                     hand[t.id] = t;
                     foundHand = true;
+                    break;
                 }
             }
 
-            if (!foundHand) lostFingers[t.id] = t;*/
+            if (!foundHand) lostFingers[t.id] = t;
 
-            if (handData.rightHandTouches.ContainsKey(t.id))
+            
+        }
+
+        foreach (SimpleHand hand in handData.handList) hand.CullRipe();
+
+        foreach (KeyValuePair<int, SimpleTouch> finger in lostFingers)
+        {
+            float bestDist = Mathf.Infinity;
+            SimpleHand bestHand = null;
+
+            foreach (SimpleHand hand in handData.handList)
             {
-                newRightHandTouches[t.id] = t;
+                float dist = hand.Distance(finger.Value.position);
+                if (dist < bestDist && dist < 20f)
+                {
+                    bestDist = dist;
+                    bestHand = hand;
+                }
             }
-            else if (handData.leftHandTouches.ContainsKey(t.id))
+
+            if(bestHand != null)
             {
-                newLeftHandTouches[t.id] = t;
-            }
-            else if (t.position.x > 0.5f)
-            {
-                newRightHandTouches[t.id] = t;
+                bestHand[finger.Key] = finger.Value;
             }
             else
             {
-                newLeftHandTouches[t.id] = t;
+                foreach (SimpleHand hand in handData.handList)
+                {
+                    if (hand.Count <= 0)
+                    {
+                        hand[finger.Key] = finger.Value;
+                        break;
+                    }
+                    
+                }
             }
-
-            fingers[i].localPosition = Vector3.up * (t.position.y - 0.5f) * handInputUI.sizeDelta.y + Vector3.right * (t.position.x - 0.5f) * handInputUI.sizeDelta.x;
-            fingers[i].gameObject.SetActive(true);
         }
 
-        handData.rightHandTouches = new Dictionary<int, SimpleTouch>(newRightHandTouches);
-        handData.leftHandTouches = new Dictionary<int, SimpleTouch>(newLeftHandTouches);
-
-        SimpleTouch[] rightHandTouchesList = handData.rightHandTouches.Values.ToArray();
-        SimpleTouch[] leftHandTouchesList = handData.leftHandTouches.Values.ToArray();
-
-        // Right Hand
-        bool rTouch = rightHandTouchesList.Length > 0;
-        handData.rightHandTap = rTouch && !handData.rightHandTouch;
-        handData.rightHandTouch = rTouch;
-
-        if (handData.rightHandTouch)
+        for (int j = 0; j < handData.handList.Length; j++)
         {
-            // Calc new center
-            handData.rightHandPosition = SimpleTouch.CalculateHandPosition(rightHandTouchesList);
-            handData.rightHandDelta = SimpleTouch.CalculateHandDelta(rightHandTouchesList);
+            SimpleHand hand = handData.handList[j];
+            hand.Update(handInputUI, fingers, j);
         }
-        else handData.rightHandDelta = Vector2.zero;
-
-        // Left Hand
-        bool lTouch = leftHandTouchesList.Length > 0;
-        handData.leftHandTap = lTouch && !handData.leftHandTouch;
-        handData.leftHandTouch = lTouch;
-
-        if (handData.leftHandTouch)
-        {
-            // Calc new center
-            handData.leftHandPosition = SimpleTouch.CalculateHandPosition(leftHandTouchesList);
-            handData.leftHandDelta = SimpleTouch.CalculateHandDelta(leftHandTouchesList);
-        }
-        else handData.leftHandDelta = Vector2.zero;
-
     }
 
     private void ResolveRotation(in Transform headTransform, in Transform controllerTransform)
@@ -599,8 +582,7 @@ public class InputLayer
         {
             case RotationType.Drag:
                 {
-                    float x = handData.leftHandDelta.x + handData.rightHandDelta.x;
-                    if (handData.leftHandTouch && handData.rightHandTouch) x /= 2f;
+                    float x = handData.allFingers.Delta.x;
                     interpolatedDrag.Enqueue(x);
 
                     float interpolatedX = 0f;
@@ -666,7 +648,7 @@ public class InputLayer
                 {
                     if (translationType == TranslationType.DragNGo && !translationLocked)
                     {
-                        data.headConv_conv = handData.leftHandTap || handData.rightHandTap;
+                        data.headConv_conv = handData.handList[1].Tap;
                     }
 
                     if (data.headConv_conv)
@@ -757,13 +739,7 @@ public class InputLayer
 
                     Vector2 handDelta;
 
-                    if (handData.leftHandTouch)
-                        if (handData.rightHandTouch)
-                            handDelta = (handData.leftHandDelta + handData.rightHandDelta) / 2f;
-                        else handDelta = handData.leftHandDelta;
-                    else if (handData.rightHandTouch)
-                        handDelta = handData.rightHandDelta;
-                    else handDelta = Vector2.zero;
+                    handDelta = handData.allFingers.Delta;
 
                     Vector3 localForward = headTransform.localRotation * Vector3.forward;
 
@@ -793,19 +769,11 @@ public class InputLayer
                 {
                     float y = 0f;
 
-                    if(handData.leftHandTouch)
-                    {
-                        if(handData.rightHandTouch)
-                        {
-                            y = Mathf.Min(handData.leftHandPosition.y, handData.rightHandPosition.y);
-                        }
-                        else y = handData.leftHandPosition.y;
-                    }
-                    else if(handData.rightHandTouch) y = handData.rightHandPosition.y;
+                    y = handData.handList[0].Position.y;
 
                     if (isTargetSet)
                     {
-                        if (!(handData.leftHandTouch || handData.rightHandTouch))
+                        if (!(handData.handList[0].Touch))
                         {
                             isTargetSet = false;
                         }
@@ -822,8 +790,8 @@ public class InputLayer
 
                             interpolatedY /= interpolatedDragNGo.Count;
 
-                            targetPosition = Vector3.LerpUnclamped(setPosition, initialPosition, Mathf.Max(0f, interpolatedY / initialValue));
-                            if (interpolatedDragNGo.Count >= 4) interpolatedDragNGo.Dequeue();
+                            targetPosition = Vector3.LerpUnclamped(setPosition, initialPosition, Mathf.Max(0.05f, interpolatedY / initialValue));
+                            if (interpolatedDragNGo.Count > DataInOut.config.interpolatedInputFrames) interpolatedDragNGo.Dequeue();
                         }
                     }
 
@@ -843,7 +811,7 @@ public class InputLayer
                             castRot = Quaternion.LookRotation(headTransform.forward);
                         }
 
-                        if (handData.leftHandTouch || handData.rightHandTouch)
+                        if (handData.handList[0].Touch)
                         {
                             setPosition = castPos;
                             initialPosition = headTransform.position;
